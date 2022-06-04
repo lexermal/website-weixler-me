@@ -1,15 +1,16 @@
-import type { NextPage } from 'next';
-import Head from 'next/head';
-import Image from 'next/image';
-import { useEffect } from 'react';
-import FixedNavbar from '../components/Navbar';
-import styles from '../styles/Home.module.css';
-import AOS from 'aos';
+import type { NextPage } from "next";
+import Head from "next/head";
+import Image from "next/image";
+import { useEffect } from "react";
+import FixedNavbar from "../components/Navbar";
+import styles from "../styles/Home.module.css";
+import AOS from "aos";
+import { Projects } from "../views/Projects/Projects";
 
 const Home: NextPage = () => {
-  useEffect(()=>{
-     AOS.init();
-  },[]);
+  useEffect(() => {
+    AOS.init();
+  }, []);
 
   return (
     <div className={styles.container}>
@@ -26,7 +27,7 @@ const Home: NextPage = () => {
         </h1>
 
         <p className={styles.description}>
-          Get started by editing{' '}
+          Get started by editing{" "}
           <code className={styles.code}>pages/index.tsx</code>
         </p>
 
@@ -61,7 +62,10 @@ const Home: NextPage = () => {
         </div>
         <p style={{ height: "600px" }}></p>
 
-        <div style={{background:"yellow"}} data-aos="fade-in">def</div>
+        {/* <div style={{ background: "yellow" }} data-aos="fade-in">
+          def
+        </div> */}
+        <Projects />
       </main>
 
       <footer className={styles.footer}>
@@ -70,7 +74,7 @@ const Home: NextPage = () => {
           target="_blank"
           rel="noopener noreferrer"
         >
-          Powered by{' '}
+          Powered by{" "}
           <span className={styles.logo}>
             <Image src="/vercel.svg" alt="Vercel Logo" width={72} height={16} />
           </span>
