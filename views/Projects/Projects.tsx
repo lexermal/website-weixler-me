@@ -1,14 +1,12 @@
 import { Col, Container, Row } from "react-bootstrap";
 import { ProjectCard } from "../../components/ProjectCard/ProjectCard";
+import SectionHeading from "../../components/SectionHeading/SectionHeading";
 import { projectItems } from "./ProjectItems";
-import css from "./Projects.module.css";
 
 export function Projects() {
   return (
     <Container>
-      <div data-aos="fade-in">
-        <h1 className={css.heading}>Projects</h1>
-      </div>
+      <SectionHeading title="Projects" />
       <Row>
         {projectItems.map((item, index) => {
           return (

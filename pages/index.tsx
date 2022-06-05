@@ -6,6 +6,7 @@ import FixedNavbar from "../components/Navbar";
 import styles from "../styles/Home.module.css";
 import AOS from "aos";
 import { Projects } from "../views/Projects/Projects";
+import Portfolio from "../views/Portfolio/Portfolio";
 
 const Home: NextPage = () => {
   useEffect(() => {
@@ -66,6 +67,7 @@ const Home: NextPage = () => {
           def
         </div> */}
         <Projects />
+        <Portfolio />
       </main>
 
       <footer className={styles.footer}>

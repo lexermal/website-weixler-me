@@ -1,0 +1,9 @@
+.container{
+    margin-bottom: 10px;
+}
+
+.title {
+    font-size: 18px;
+    font-weight: bold;
+    text-align: right;
+}
