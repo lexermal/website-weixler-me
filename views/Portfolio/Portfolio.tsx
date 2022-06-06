@@ -35,12 +35,12 @@ function renderEducation() {
 
       <PortfolioEntry
         year={2018}
-        title={"Completed higher technical collage"}
+        title={"Completed higher technical collage in Kaindorf, Austria"}
         description={"Field of study: Computer science"}
       />
       <PortfolioEntry
         year={2022}
-        title={"Completed university of applied sciences"}
+        title={"Completed university of applied sciences at Campus 02, Austria"}
         description={"Field of study: Innovation management"}
       />
       <PortfolioEntry
@@ -82,7 +82,7 @@ function renderCertificates() {
       <h1>Certificates</h1>
       <Row>
         <CertificateCard url="/pictures/cisco.png" title="Cisco CCNA" />
-        <CertificateCard url="/pictures/efqm.png" title="EFQM Assesor" />
+        <CertificateCard url="/pictures/efqm.png" title="EFQM Assessor" />
         <CertificateCard
           url="/pictures/value_management.png"
           title="Value Management"
