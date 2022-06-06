@@ -1,4 +1,5 @@
 import { Col, Container, Row } from "react-bootstrap";
+import { Flag, MegaphoneFill, PersonFill } from "react-bootstrap-icons";
 import CertificateCard from "../../components/CertificateCard/CertificateCard";
 import ContactButton from "../../components/ContactButton/ContactButton";
 import PortfolioEntry from "../../components/PortfolioEntry/PortfolioEntry";
@@ -9,8 +10,7 @@ import SectionHeading from "../../components/SectionHeading/SectionHeading";
 export default function Portfolio() {
   return (
     <>
-      <SectionHeading title="Portfolio" />
-      {renderMotto()}
+      <SectionHeading title="Portfolio" anchor="portfolio" />
       {renderGeneralInfos()}
 
       {renderEducation()}
@@ -76,15 +76,6 @@ function renderCareer() {
   );
 }
 
-function renderMotto() {
-  return (
-    <Container data-aos="fade-up" className="mt-5">
-      <h1>My Motto</h1>
-      <h2>Life isn&apos;t complicated. Try, fail, learn and win!</h2>
-    </Container>
-  );
-}
-
 function renderCertificates() {
   return (
     <Container data-aos="fade-up" className="mt-5">
@@ -95,7 +86,6 @@ function renderCertificates() {
         <CertificateCard
           url="/pictures/value_management.png"
           title="Value Management"
-          description="VM-Module 1"
         />
       </Row>
     </Container>
@@ -123,42 +113,59 @@ function renderHardSkills() {
     <Container data-aos="fade-up" className="mt-5">
       <h1>Hard skills</h1>
 
-      <PortfolioRating title="Docker" percentage={90} />
+      <PortfolioRating title="Docker" percentage={85} />
       <PortfolioRating
         title="Devops (CI/CD, load balancing, Scaling,...)"
         percentage={80}
       />
-      <PortfolioRating title="Javascript / Typescript" percentage={100} />
-      <PortfolioRating title="React" percentage={100} />
-      <PortfolioRating title="Linux" percentage={90} />
-      <PortfolioRating
-        title="Databases (MySql, OracleDB, PostgreSQL,...)"
-        percentage={100}
-      />
-      <PortfolioRating title="Network Technology (Cisco)" percentage={100} />
+      <PortfolioRating title="Javascript / Typescript" percentage={90} />
+      <PortfolioRating title="React" percentage={80} />
+      <PortfolioRating title="Kubernetes(currently learning)" percentage={40} />
+      <PortfolioRating title="Network Technology (Cisco)" percentage={80} />
       <PortfolioRating title="Flutter(currently learning)" percentage={50} />
-      <Row>
-        <Col>
-          Additional Skills: PHP, Java, C#, C, C++, NodeJS, NoSQL Databases
-          (MongoDB, Cassandra), Kubernetes, WebAPIs (REST, GraphQL, ...), Linux
-        </Col>
-      </Row>
+      <PortfolioRating title="Linux" percentage={70} />
+      <PortfolioRating
+        title="Relational databases (MySQL, OracleDB, PostgreSQL,...)"
+        percentage={85}
+      />
+      <PortfolioRating
+        title="NoSQL Databases (MongoDB, Cassandra, Redis)"
+        percentage={85}
+      />
+      <PortfolioRating title="WebAPIs (REST, GraphQL, ...)" percentage={80} />
+      <PortfolioRating title="PHP, Java" percentage={80} />
+      <PortfolioRating title="C#, C, C++" percentage={60} />
     </Container>
   );
 }
 
 function renderGeneralInfos() {
   return (
-    <Container data-aos="fade-up" className="mt-5">
-      <h1>Short facts</h1>
-      <Row>
-        <Col>Nationality: Austria</Col>
-        <Col>Age: {new Date().getFullYear() - 1997} years</Col>
-      </Row>
-      <Row>
-        <Col>Fluently speaking languages: English, German</Col>
-      </Row>
-    </Container>
+    <>
+      <Container data-aos="fade-up" className="mt-5">
+        <h3>&#8220;Life isn&apos;t complicated. Try, fail, learn and win!”</h3>
+      </Container>
+
+      <Container
+        data-aos="fade-up"
+        className="mt-2"
+        style={{ fontSize: "22px" }}
+      >
+        <Row>
+          <Col>
+            <Flag size={25} /> Austria
+          </Col>
+          <Col>
+            <PersonFill size={25} /> {new Date().getFullYear() - 1997} years old
+          </Col>
+        </Row>
+        <Row>
+          <Col>
+            <MegaphoneFill size={25} /> <span>English, German</span>
+          </Col>
+        </Row>
+      </Container>
+    </>
   );
 }
 

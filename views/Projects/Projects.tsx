@@ -6,7 +6,7 @@ import { projectItems } from "./ProjectItems";
 export function Projects() {
   return (
     <Container>
-      <SectionHeading title="Projects" />
+      <SectionHeading title="Projects" anchor="projects" />
       <Row>
         {projectItems.map((item, index) => {
           return (

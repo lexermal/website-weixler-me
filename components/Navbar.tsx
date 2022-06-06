@@ -12,7 +12,7 @@ export default function FixedNavbar() {
         <Navbar.Toggle aria-controls="basic-navbar-nav" />
         <Navbar.Collapse id="basic-navbar-nav">
           <Nav className="me-auto">
-            <Nav.Link href="#home">Portfolio</Nav.Link>
+            <Nav.Link href="#portfolio">Portfolio</Nav.Link>
             <Nav.Link href="#projects">Projects</Nav.Link>
             <Nav.Link href="https://blog.weixler.me">Blog</Nav.Link>
             {/* <NavDropdown title="Dropdown" id="basic-nav-dropdown">
