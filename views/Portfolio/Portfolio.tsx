@@ -1,4 +1,4 @@
-import { Button, Col, Container, Row } from "react-bootstrap";
+import { Button, Card, Col, Container, Row } from "react-bootstrap";
 import PortfolioEntry from "../../components/PortfolioEntry/PortfolioEntry";
 import PortfolioRating from "../../components/PortfolioRating/PortfolioRating";
 import { ProjectCard } from "../../components/ProjectCard/ProjectCard";
@@ -8,7 +8,9 @@ export default function Portfolio() {
   return (
     <>
       <SectionHeading title="Portfolio" />
-      <p>My Motto is: Life isn&apos;t complicated. Try, fail, learn and win!</p>
+      <h2>
+        My Motto is: Life isn&apos;t complicated. Try, fail, learn and win!
+      </h2>
 
       {renderEducation()}
       {renderCareer()}
@@ -24,7 +26,7 @@ export default function Portfolio() {
 
 function renderEducation() {
   return (
-    <Container>
+    <Container data-aos="fade-up">
       <h1>Education</h1>
 
       <PortfolioEntry
@@ -48,7 +50,7 @@ function renderEducation() {
 
 function renderCareer() {
   return (
-    <Container>
+    <Container data-aos="fade-up">
       <h1>Career</h1>
 
       <PortfolioEntry
@@ -72,9 +74,10 @@ function renderCareer() {
 
 function renderSoftSkills() {
   return (
-    <Container>
+    <Container data-aos="fade-up">
       <h1>Soft skills</h1>
 
+      <PortfolioRating title="Rhetorics" percentage={90} />
       <PortfolioRating title="Creativity" percentage={90} />
       <PortfolioRating title="Flexibility" percentage={90} />
       <PortfolioRating title="Reliability" percentage={100} />
@@ -87,33 +90,27 @@ function renderSoftSkills() {
 
 function renderHardSkills() {
   return (
-    <Container>
+    <Container data-aos="fade-up">
       <h1>Hard skills</h1>
 
       <PortfolioRating title="Docker" percentage={90} />
       <PortfolioRating
         title="Devops (CI/CD, load balancing, Scaling,...)"
-        percentage={90}
+        percentage={80}
       />
-      <PortfolioRating title="Kubernetes" percentage={50} />
       <PortfolioRating title="Javascript / Typescript" percentage={100} />
       <PortfolioRating title="React" percentage={100} />
-      <PortfolioRating title="Flutter" percentage={100} />
-      <PortfolioRating title="NodeJS" percentage={100} />
       <PortfolioRating title="Linux" percentage={90} />
-      <PortfolioRating title="Rhetorics" percentage={90} />
       <PortfolioRating
-        title="Databases (MySql, OracleDB, PostgresDB,...)"
+        title="Databases (MySql, OracleDB, PostgreSQL,...)"
         percentage={100}
       />
       <PortfolioRating title="Network Technology (Cisco)" percentage={100} />
-      <PortfolioRating title="WebAPIs (REST, GraphQL, ...)" percentage={100} />
-      <PortfolioRating title="Autonomy" percentage={100} />
-      <PortfolioRating title="Autonomy" percentage={100} />
-      <PortfolioRating title="Autonomy" percentage={100} />
+      <PortfolioRating title="Flutter(currently learning)" percentage={50} />
       <Row>
         <Col>
-          Additional Skills: PHP, Java, C#, NoSQL Databases (MongoDB, Cassandra)
+          Additional Skills: PHP, Java, C#, C, C++, NodeJS, NoSQL Databases
+          (MongoDB, Cassandra), Kubernetes, WebAPIs (REST, GraphQL, ...), Linux
         </Col>
       </Row>
     </Container>
@@ -122,7 +119,7 @@ function renderHardSkills() {
 
 function renderGeneralInfos() {
   return (
-    <Container>
+    <Container data-aos="fade-up">
       <h1>Short facts</h1>
       <Row>
         <Col>Nationality: Austria</Col>
@@ -135,7 +132,7 @@ function renderGeneralInfos() {
 
 function renderHobbies() {
   return (
-    <Container>
+    <Container data-aos="fade-up">
       <h1>Hobbies</h1>
       <Row>
         <Col>
@@ -185,7 +182,7 @@ function renderHobbies() {
 
 function renderContact() {
   return (
-    <Container>
+    <Container data-aos="zoom-in">
       <Row>
         <Col>
           <Button>Contact now</Button>
