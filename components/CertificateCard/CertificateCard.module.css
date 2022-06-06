@@ -1,0 +1,17 @@
+.card {
+    padding-left: 0;
+    padding-right: 0;
+    width: 18rem;
+    margin: 10px;
+}
+
+.body {
+    border-top: solid 1px black;
+}
+
+.image {
+    height: 150px;
+    background-size: contain;
+    background-position: center;
+    background-repeat: no-repeat;
+}

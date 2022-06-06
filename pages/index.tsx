@@ -10,7 +10,7 @@ import Portfolio from "../views/Portfolio/Portfolio";
 
 const Home: NextPage = () => {
   useEffect(() => {
-    AOS.init();
+    AOS.init({ delay: 100 });
   }, []);
 
   return (

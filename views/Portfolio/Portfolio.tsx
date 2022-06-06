@@ -1,4 +1,5 @@
-import { Button, Card, Col, Container, Row } from "react-bootstrap";
+import { Col, Container, Row } from "react-bootstrap";
+import CertificateCard from "../../components/CertificateCard/CertificateCard";
 import ContactButton from "../../components/ContactButton/ContactButton";
 import PortfolioEntry from "../../components/PortfolioEntry/PortfolioEntry";
 import PortfolioRating from "../../components/PortfolioRating/PortfolioRating";
@@ -9,15 +10,17 @@ export default function Portfolio() {
   return (
     <>
       <SectionHeading title="Portfolio" />
-      <h2>
-        My Motto is: Life isn&apos;t complicated. Try, fail, learn and win!
-      </h2>
+      {renderMotto()}
+      {renderGeneralInfos()}
 
       {renderEducation()}
       {renderCareer()}
+
+      {renderCertificates()}
+
       {renderSoftSkills()}
-      {renderGeneralInfos()}
       {renderHardSkills()}
+
       {renderHobbies()}
 
       {renderContact()}
@@ -27,7 +30,7 @@ export default function Portfolio() {
 
 function renderEducation() {
   return (
-    <Container data-aos="fade-up">
+    <Container data-aos="fade-up" className="mt-5">
       <h1>Education</h1>
 
       <PortfolioEntry
@@ -51,7 +54,7 @@ function renderEducation() {
 
 function renderCareer() {
   return (
-    <Container data-aos="fade-up">
+    <Container data-aos="fade-up" className="mt-5">
       <h1>Career</h1>
 
       <PortfolioEntry
@@ -73,9 +76,35 @@ function renderCareer() {
   );
 }
 
+function renderMotto() {
+  return (
+    <Container data-aos="fade-up" className="mt-5">
+      <h1>My Motto</h1>
+      <h2>Life isn&apos;t complicated. Try, fail, learn and win!</h2>
+    </Container>
+  );
+}
+
+function renderCertificates() {
+  return (
+    <Container data-aos="fade-up" className="mt-5">
+      <h1>Certificates</h1>
+      <Row>
+        <CertificateCard url="/pictures/cisco.png" title="Cisco CCNA" />
+        <CertificateCard url="/pictures/efqm.png" title="EFQM Assesor" />
+        <CertificateCard
+          url="/pictures/value_management.png"
+          title="Value Management"
+          description="VM-Module 1"
+        />
+      </Row>
+    </Container>
+  );
+}
+
 function renderSoftSkills() {
   return (
-    <Container data-aos="fade-up">
+    <Container data-aos="fade-up" className="mt-5">
       <h1>Soft skills</h1>
 
       <PortfolioRating title="Rhetorics" percentage={90} />
@@ -91,7 +120,7 @@ function renderSoftSkills() {
 
 function renderHardSkills() {
   return (
-    <Container data-aos="fade-up">
+    <Container data-aos="fade-up" className="mt-5">
       <h1>Hard skills</h1>
 
       <PortfolioRating title="Docker" percentage={90} />
@@ -120,11 +149,13 @@ function renderHardSkills() {
 
 function renderGeneralInfos() {
   return (
-    <Container data-aos="fade-up">
+    <Container data-aos="fade-up" className="mt-5">
       <h1>Short facts</h1>
       <Row>
         <Col>Nationality: Austria</Col>
         <Col>Age: {new Date().getFullYear() - 1997} years</Col>
+      </Row>
+      <Row>
         <Col>Fluently speaking languages: English, German</Col>
       </Row>
     </Container>
@@ -133,7 +164,7 @@ function renderGeneralInfos() {
 
 function renderHobbies() {
   return (
-    <Container data-aos="fade-up">
+    <Container data-aos="fade-up" className="mt-5">
       <h1>Hobbies</h1>
       <Row>
         <Col>
