@@ -1,4 +1,5 @@
 import { Button, Card, Col, Container, Row } from "react-bootstrap";
+import ContactButton from "../../components/ContactButton/ContactButton";
 import PortfolioEntry from "../../components/PortfolioEntry/PortfolioEntry";
 import PortfolioRating from "../../components/PortfolioRating/PortfolioRating";
 import { ProjectCard } from "../../components/ProjectCard/ProjectCard";
@@ -15,8 +16,8 @@ export default function Portfolio() {
       {renderEducation()}
       {renderCareer()}
       {renderSoftSkills()}
-      {renderHardSkills()}
       {renderGeneralInfos()}
+      {renderHardSkills()}
       {renderHobbies()}
 
       {renderContact()}
@@ -184,9 +185,7 @@ function renderContact() {
   return (
     <Container data-aos="zoom-in">
       <Row>
-        <Col>
-          <Button>Contact now</Button>
-        </Col>
+        <ContactButton />
       </Row>
     </Container>
   );

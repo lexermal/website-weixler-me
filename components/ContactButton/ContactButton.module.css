@@ -1,0 +1,16 @@
+.button {
+    font-size: 25px;
+    background: rgb(243, 71, 71);
+    text-align: center;
+    padding: 20px;
+    display: inline-block;
+    margin: 0 auto;
+    border: solid 2px rgb(37, 37, 37);
+    margin-top: 80px;
+    border-radius: 9px;
+}
+
+.button:hover {
+    background: rgb(228, 67, 67);
+    font-weight: bold;
+}
