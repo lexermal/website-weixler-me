@@ -40,7 +40,7 @@ function renderEducation() {
       />
       <PortfolioEntry
         year={2022}
-        title={"Completed university of applied sciences in Austria"}
+        title={"Completed University of Applied Sciences in Austria"}
         description={"Innovation management"}
       />
       <PortfolioEntry
@@ -129,7 +129,7 @@ function renderHardSkills() {
         percentage={85}
       />
       <PortfolioRating
-        title="NoSQL Databases (MongoDB, Cassandra, Redis)"
+        title="NoSQL databases (MongoDB, Cassandra, Redis)"
         percentage={85}
       />
       <PortfolioRating title="WebAPIs (REST, GraphQL, ...)" percentage={80} />
@@ -177,7 +177,7 @@ function renderHobbies() {
         <Col>
           <ProjectCard
             name="👥 Group sports"
-            description="Sport is a important part of life and I practive volleyball, badmington and squash on a regular basis."
+            description="Sport is an important part of life and I practice volleyball, badminton and squash on a regular basis."
           />
         </Col>
         <Col>
@@ -196,16 +196,16 @@ function renderHobbies() {
         </Col>
         <Col>
           <ProjectCard
-            name="🖥 Self hosting"
-            description="I love to selfhost my applications and try out new ways to automate my infrastructure."
+            name="🖥 Self-hosting"
+            description="I love to self-host my applications and try out new ways to automate my infrastructure."
           />
         </Col>
       </Row>
       <Row>
         <Col>
           <ProjectCard
-            name="⛰ Climping"
-            description="Asuming the safety measures are set, I often take on the challenge of climping where I need to carefully think about how I place the next step to safe energy and not slip."
+            name="⛰ Climbing"
+            description="Assuming the safety measures are set, I often take on the challenge of climbing, where I need to carefully think about how I place the next step to safe energy and not slip."
           />
         </Col>
         <Col></Col>
