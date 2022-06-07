@@ -14,7 +14,7 @@ export function ProjectCard(props: ProjectItem) {
   );
 }
 
-function PureCard(props: { name: string; description: string }) {
+function PureCard(props: { name: string | JSX.Element; description: string }) {
   return (
     <Card className={"text-center " + css.container}>
       <Card.Body>

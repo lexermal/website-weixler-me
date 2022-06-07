@@ -176,41 +176,36 @@ function renderHobbies() {
       <Row>
         <Col>
           <ProjectCard
-            name="Group sports"
+            name="👥 Group sports"
             description="Sport is a important part of life and I practive volleyball, badmington and squash on a regular basis."
-            url={""}
           />
         </Col>
         <Col>
           <ProjectCard
-            name="Hiking"
+            name="🪨 Hiking"
             description="I'm on a hiking tour across Austria, every year about 150km."
-            url=""
           />
         </Col>
       </Row>
       <Row>
         <Col>
           <ProjectCard
-            name="Writing"
+            name={"✍ Writing"}
             description="I'm writing down stories about things I experience throughout the year."
-            url={""}
           />
         </Col>
         <Col>
           <ProjectCard
-            name="Self hosting"
+            name="🖥 Self hosting"
             description="I love to selfhost my applications and try out new ways to automate my infrastructure."
-            url={""}
           />
         </Col>
       </Row>
       <Row>
         <Col>
           <ProjectCard
-            name="Climping"
+            name="⛰ Climping"
             description="Asuming the safety measures are set, I often take on the challenge of climping where I need to carefully think about how I place the next step to safe energy and not slip."
-            url={""}
           />
         </Col>
         <Col></Col>

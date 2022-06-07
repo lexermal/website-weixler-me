@@ -1,6 +1,6 @@
 export interface ProjectItem {
-    name: string;
-    url: string;
+    name: string | JSX.Element;
+    url?: string;
     description: string;
 }
 
