@@ -11,7 +11,7 @@ export function Projects() {
         {projectItems.map((item, index) => {
           return (
             <Col
-              xs={6}
+              md={6}
               key={index}
               data-aos={index % 2 === 0 ? "fade-left" : "fade-right"}
             >

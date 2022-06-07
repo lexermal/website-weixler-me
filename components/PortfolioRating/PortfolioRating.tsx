@@ -1,3 +1,4 @@
+import { useEffect, useState } from "react";
 import { Col, Row } from "react-bootstrap";
 import Circle from "../Circle/Circle";
 import css from "./PortfolioRating.module.css";
@@ -9,11 +10,17 @@ interface Props {
 }
 
 export default function PortfolioRating(props: Props) {
-  const totalDots = props.totalDots || 15;
+  const [totalDots, setTotalDots] = useState(props.totalDots || 15);
+
+  useEffect(() => {
+    setTotalDots(getWidth() < 500 ? 10 : 15);
+  }, []);
 
   return (
     <Row className={css.container}>
-      <Col className={css.title}>{props.title}</Col>
+      <Col className={css.title} md>
+        {props.title}
+      </Col>
       <Col>
         {[...Array(totalDots).keys()].map((_, index) => (
           <Circle
@@ -23,5 +30,15 @@ export default function PortfolioRating(props: Props) {
         ))}
       </Col>
     </Row>
+  );
+}
+
+function getWidth() {
+  return Math.max(
+    document.body.scrollWidth,
+    document.documentElement.scrollWidth,
+    document.body.offsetWidth,
+    document.documentElement.offsetWidth,
+    document.documentElement.clientWidth
   );
 }

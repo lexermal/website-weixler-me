@@ -1,4 +1,4 @@
-.container{
+.container {
     margin-bottom: 10px;
 }
 
@@ -6,4 +6,10 @@
     font-size: 18px;
     font-weight: bold;
     text-align: right;
+}
+
+@media (max-width: 600px) {
+    .title {
+        text-align: left;
+    }
 }

@@ -10,7 +10,7 @@ interface Props {
 export default function PortfolioEntry(props: Props) {
   return (
     <Row className={css.container}>
-      <Col className={css.year}>{props.year}</Col>
+      <Col md className={css.year}>{props.year}</Col>
       <Col>
         <p className={css.main_information}>{props.title}</p>
         <p>{props.description}</p>

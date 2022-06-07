@@ -152,7 +152,7 @@ function renderGeneralInfos() {
         style={{ fontSize: "22px" }}
       >
         <Row>
-          <Col>
+          <Col sm>
             <Flag size={25} /> Austria
           </Col>
           <Col>
@@ -174,7 +174,7 @@ function renderHobbies() {
     <Container data-aos="fade-up" className="mt-5">
       <h1>Hobbies</h1>
       <Row>
-        <Col>
+        <Col md>
           <ProjectCard
             name="👥 Group sports"
             description="Sport is an important part of life and I practice volleyball, badminton and squash on a regular basis."
@@ -188,7 +188,7 @@ function renderHobbies() {
         </Col>
       </Row>
       <Row>
-        <Col>
+        <Col md>
           <ProjectCard
             name={"✍ Writing"}
             description="I'm writing down stories about things I experience throughout the year."
@@ -202,7 +202,7 @@ function renderHobbies() {
         </Col>
       </Row>
       <Row>
-        <Col>
+        <Col md>
           <ProjectCard
             name="⛰ Climbing"
             description="Assuming the safety measures are set, I often take on the challenge of climbing, where I need to carefully think about how I place the next step to safe energy and not slip."
