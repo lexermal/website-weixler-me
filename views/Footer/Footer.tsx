@@ -4,13 +4,21 @@ import css from "./Footer.module.css";
 export default function Footer() {
   return (
     <footer className={css.footer}>
-      <a href="https://www.instagram.com/manuel.weixler/">
+      <a
+        target="_blank"
+        rel={"noreferrer"}
+        href="https://www.instagram.com/manuel.weixler/"
+      >
         <Instagram />
       </a>
-      <a href="https://github.com/lexermal">
+      <a target="_blank" rel={"noreferrer"} href="https://github.com/lexermal">
         <Github />
       </a>
-      <a href="https://www.linkedin.com/in/manuel-weixler-5187031b0/">
+      <a
+        target="_blank"
+        rel={"noreferrer"}
+        href="https://www.linkedin.com/in/manuel-weixler-5187031b0/"
+      >
         <Linkedin />
       </a>
       | © Weixler.me

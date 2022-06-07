@@ -4,7 +4,7 @@ export default function FixedNavbar() {
   return (
     <Navbar
       expand="md"
-      fixed="top"
+      // fixed="top"
       style={{ background: "#dd3838 !important" }}
     >
       <Container>

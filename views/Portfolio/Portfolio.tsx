@@ -97,13 +97,13 @@ function renderSoftSkills() {
     <Container data-aos="fade-up" className="mt-5">
       <h1>Soft skills</h1>
 
-      <PortfolioRating title="Rhetorics" percentage={90} />
+      <PortfolioRating title="Rhetorics" percentage={85} />
       <PortfolioRating title="Creativity" percentage={90} />
-      <PortfolioRating title="Flexibility" percentage={90} />
+      <PortfolioRating title="Flexibility" percentage={85} />
       <PortfolioRating title="Reliability" percentage={100} />
-      <PortfolioRating title="Teamwork" percentage={90} />
-      <PortfolioRating title="Resilience" percentage={90} />
       <PortfolioRating title="Autonomy" percentage={100} />
+      <PortfolioRating title="Teamwork" percentage={85} />
+      <PortfolioRating title="Resilience" percentage={85} />
     </Container>
   );
 }
