@@ -22,7 +22,7 @@ export const projectItems = [
     },
     {
         name: "Anki in Docker",
-        url: "",
+        url: "https://github.com/lexermal/Anki-server-in-docker",
         description: "This docker container allows to run Anki inside a docker container."
     }
 ] as ProjectItem[];

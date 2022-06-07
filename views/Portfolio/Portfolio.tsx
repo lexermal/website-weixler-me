@@ -35,17 +35,17 @@ function renderEducation() {
 
       <PortfolioEntry
         year={2018}
-        title={"Completed higher technical collage in Kaindorf, Austria"}
-        description={"Field of study: Computer science"}
+        title={"Completed higher technical collage in Austria"}
+        description={"Computer science"}
       />
       <PortfolioEntry
         year={2022}
-        title={"Completed university of applied sciences at Campus 02, Austria"}
-        description={"Field of study: Innovation management"}
+        title={"Completed university of applied sciences in Austria"}
+        description={"Innovation management"}
       />
       <PortfolioEntry
         year={2022}
-        title={"Started master program in Sweden"}
+        title={"Started a master program in Sweden"}
         description={"International Entrepreneurship"}
       />
     </Container>
@@ -59,18 +59,18 @@ function renderCareer() {
 
       <PortfolioEntry
         year={"2018 - 2019"}
-        title={"Leftshift One Software GmbH"}
-        description={"Software developer"}
+        title={"Software developer"}
+        description={""}
       />
       <PortfolioEntry
         year={"2019 - 2020"}
-        title={"Leftshift One Software GmbH"}
-        description={"IT project manager"}
+        title={"Product Owner"}
+        description={""}
       />
       <PortfolioEntry
         year={"2020 - 2022"}
-        title={"Efkon GmbH"}
-        description={"IT project manager"}
+        title={"Product Owner"}
+        description={""}
       />
     </Container>
   );
@@ -177,14 +177,14 @@ function renderHobbies() {
         <Col>
           <ProjectCard
             name="Group sports"
-            description="Sport is a important part of life and I practive Volleyball, Badmington and Sqash on aregular bases."
+            description="Sport is a important part of life and I practive volleyball, badmington and squash on a regular basis."
             url={""}
           />
         </Col>
         <Col>
           <ProjectCard
             name="Hiking"
-            description="I'm on a hiking tour across whole Austria. Every year I go one stage."
+            description="I'm on a hiking tour across Austria, every year about 150km."
             url=""
           />
         </Col>
@@ -193,7 +193,7 @@ function renderHobbies() {
         <Col>
           <ProjectCard
             name="Writing"
-            description="I'm writing down stories about the things I experience throughout the year."
+            description="I'm writing down stories about things I experience throughout the year."
             url={""}
           />
         </Col>
@@ -209,7 +209,7 @@ function renderHobbies() {
         <Col>
           <ProjectCard
             name="Climping"
-            description="Finally reaching the top of the mountain through the climbling route is fascinating."
+            description="Asuming the safety measures are set, I often take on the challenge of climping where I need to carefully think about how I place the next step to safe energy and not slip."
             url={""}
           />
         </Col>

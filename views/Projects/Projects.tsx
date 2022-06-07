@@ -13,7 +13,7 @@ export function Projects() {
             <Col
               xs={6}
               key={index}
-              data-aos={index % 2 === 1 ? "fade-left" : "fade-right"}
+              data-aos={index % 2 === 0 ? "fade-left" : "fade-right"}
             >
               <ProjectCard
                 url={item.url}
