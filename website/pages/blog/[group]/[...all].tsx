@@ -1,11 +1,10 @@
 import Head from "next/head";
 import { useEffect } from "react";
-import FixedNavbar from "../components/Navbar";
 import AOS from "aos";
-import Footer from "../views/Footer/Footer";
-import css from "./index.module.css";
+import css from "../../index.module.css";
 import fs from "fs";
-import BlogOverview from "../views/Blog/Overview/BlogOverview";
+import FixedNavbar from "../../../components/Navbar";
+import Footer from "../../../views/Footer/Footer";
 
 export async function getServerSideProps() {
   const folders = fs.readdirSync("public/blog/");
@@ -30,7 +29,7 @@ const Home = (props: { group: string[] }) => {
       <FixedNavbar />
 
       <main className={css.main}>
-        <BlogOverview groups={props.group} />
+        page that displays totroial or error if tutorial was not found
       </main>
 
       <Footer />
