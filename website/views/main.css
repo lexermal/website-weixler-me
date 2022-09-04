@@ -32,31 +32,30 @@
 
 
 #blogEntry pre {
-    font-family: monoFont !important;
-    background: #f0efed;
     color: #e5e7eb;
-    background-color: #1f2937;
-    overflow-x: auto;
-    /* font-size: 0.8888889em; */
     line-height: 1.75;
-    /* margin-top: 2em; */
-    border-radius: 0.375rem;
+    overflow-x: auto;
+    font-size: 1rem;
     padding-top: 1em;
     padding-bottom: 1em;
     padding-right: 1.5em;
     padding-left: 1.5em;
-    font-size: 1rem;
+    border-radius: 0.375rem;
+    background-color: #1f2937;
+    font-family: monoFont !important;
 }
 
 #blogEntry p code {
+    color: #111827;
+    padding: 0.25rem;
+    font-size: 1.25rem;
     border-radius: 0.25rem;
     font-weight: 400 !important;
-    padding: 0.25rem;
-    font-size: 80%;
-    background: #f0efed;
-    color: #111827;
-    font-weight: 600;
-    font-size: 1.25rem;
+}
+
+code[class*="language-"],
+pre[class*="language-"] {
+    background: #1f2937 !important;
 }
 
 #blogEntry p {
