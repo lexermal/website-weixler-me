@@ -1,18 +1,21 @@
-import { Col, Container, Row } from "react-bootstrap";
+import { Card, Col, Container, Row } from "react-bootstrap";
+import css from "./BlogOverview.module.css";
 
 function BlogOverview(props: { groups: string[] }) {
   return (
     <div>
-      <h1>Weixler.me Blog</h1>
-
       <Container>
-        <p>The following areas are available:</p>
+        <h1 className="mb-5">This topics are available:</h1>
         {props.groups.map((e, k) => {
           return (
             <Row key={k}>
               <Col>
-                <a href={"/blog/" + e}>
-                  <h2>{e}</h2>
+                <a id={css.topic} href={"/blog/" + e}>
+                  <Card className="mb-3">
+                    <Card.Body>
+                      <h2>{e}</h2>
+                    </Card.Body>
+                  </Card>
                 </a>
               </Col>
             </Row>
