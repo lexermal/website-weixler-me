@@ -15,7 +15,9 @@ export async function getServerSideProps(context: any) {
   return {
     props: {
       group: url.split("/")[2],
-      entries: files.filter((e) => e.endsWith(".md")),
+      entries: files.filter(
+        (e) => e.endsWith(".md") && !e.toLowerCase().startsWith("draft")
+      ),
     },
   };
 }
