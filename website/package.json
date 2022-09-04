@@ -1,10 +1,10 @@
 {
-  "name": "weixler.me_website",
-  "version": "0.1.0",
-  "private": true,
+  "name": "website-weixler-me",
+  "version": "0.2.0",
+  "private": false,
   "scripts": {
-    "prepare": "cp -r ../blog public/",
-    "dev": "yarn prepare && next dev",
+    "init-blog": "cp -r ../blog public/",
+    "dev": "yarn init-blog && next dev",
     "build": "next build",
     "start": "next start",
     "lint": "next lint"

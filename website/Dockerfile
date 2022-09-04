@@ -21,7 +21,6 @@ COPY . .
 # Uncomment the following line in case you want to disable telemetry during the build.
 # ENV NEXT_TELEMETRY_DISABLED 1
 
-RUN yarn prepare
 RUN yarn build
 
 # If using npm comment out above and use below instead
@@ -42,6 +41,8 @@ RUN adduser --system --uid 1001 nextjs
 # COPY --from=builder /app/next.config.js ./
 COPY --from=builder /app/public ./public
 COPY --from=builder /app/package.json ./package.json
+
+RUN chown -R nextjs /app/public/fonts
 
 # Automatically leverage output traces to reduce image size
 # https://nextjs.org/docs/advanced-features/output-file-tracing
