@@ -39,7 +39,7 @@
     overflow-x: auto;
     /* font-size: 0.8888889em; */
     line-height: 1.75;
-    margin-top: 2em;
+    /* margin-top: 2em; */
     border-radius: 0.375rem;
     padding-top: 1em;
     padding-bottom: 1em;
@@ -61,9 +61,13 @@
 
 #blogEntry p {
     font-family: regularFont;
-    margin-bottom: 2.5rem;
+    margin-top: 2.5rem;
     font-size: 1.25rem;
     line-height: 1.8;
     color: #111;
     overflow-x: auto;
+}
+
+#blogEntry pre+p {
+    margin-top: 1em;
 }
