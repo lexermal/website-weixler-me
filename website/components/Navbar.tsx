@@ -1,20 +1,16 @@
-import { Container, Nav, Navbar, NavDropdown } from "react-bootstrap";
+import { Container, Nav, Navbar } from "react-bootstrap";
 
 export default function FixedNavbar() {
   return (
-    <Navbar
-      expand="md"
-      // fixed="top"
-      style={{ background: "#dd3838 !important" }}
-    >
+    <Navbar expand="md" style={{ background: "#dd3838 !important" }}>
       <Container>
-        <Navbar.Brand href="#home">Weixler.me</Navbar.Brand>
+        <Navbar.Brand href="/">Weixler.me</Navbar.Brand>
         <Navbar.Toggle aria-controls="basic-navbar-nav" />
         <Navbar.Collapse id="basic-navbar-nav">
           <Nav className="me-auto">
-            <Nav.Link href="#portfolio">Portfolio</Nav.Link>
             <Nav.Link href="#projects">Projects</Nav.Link>
-            <Nav.Link href="https://blog.weixler.me">Blog</Nav.Link>
+            <Nav.Link href="#portfolio">Portfolio</Nav.Link>
+            <Nav.Link href="/blog">Blog</Nav.Link>
             {/* <NavDropdown title="Dropdown" id="basic-nav-dropdown">
                         <NavDropdown.Item href="#action/3.1">Action</NavDropdown.Item>
                         <NavDropdown.Item href="#action/3.2">Another action</NavDropdown.Item>
