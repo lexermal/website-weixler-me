@@ -71,3 +71,13 @@
 #blogEntry pre+p {
     margin-top: 1em;
 }
+
+#blogEntry #source {
+    font-style: italic;
+}
+
+#blogEntry #source a {
+    width: fit-content;
+    margin-left: 3px;
+    padding: 0;
+}
