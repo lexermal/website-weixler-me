@@ -5,15 +5,21 @@ import css from "../../index.module.css";
 import fs from "fs";
 import FixedNavbar from "../../../components/Navbar";
 import Footer from "../../../views/Footer/Footer";
+import BlogEntry from "../../../views/Blog/BlogEntry/BlogEntry";
 
-export async function getServerSideProps() {
-  const folders = fs.readdirSync("public/blog/");
+export async function getServerSideProps(context: any) {
+  const url = context.resolvedUrl as string;
+  const file = fs.readFileSync("public" + url.replaceAll("-", " ") + ".md");
 
   // Pass data to the page via props
-  return { props: { group: folders } };
+  return {
+    props: {
+      content: file.toString(),
+    },
+  };
 }
 
-const Home = (props: { group: string[] }) => {
+const Home = (props: { content: string }) => {
   useEffect(() => {
     AOS.init({ delay: 100 });
   }, []);
@@ -29,7 +35,7 @@ const Home = (props: { group: string[] }) => {
       <FixedNavbar />
 
       <main className={css.main}>
-        page that displays totroial or error if tutorial was not found
+        <BlogEntry content={props.content} />
       </main>
 
       <Footer />
