@@ -1,0 +1,12 @@
+#topic * {
+    font-size: 40px;
+    text-align: center;
+}
+
+#topic:link,
+#topic:visited,
+#topic:hover,
+#topic:active {
+    color: black;
+    text-decoration: none;
+}
