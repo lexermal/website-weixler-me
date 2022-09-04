@@ -5,7 +5,7 @@ import Prism from "prismjs";
 require("prismjs/components/prism-yaml");
 require("prismjs/components/prism-bash");
 
-function BlogEntry(props: { content: string }) {
+function BlogEntry(props: { content: string | null }) {
   const [showChild, setShowChild] = useState(false);
 
   useEffect(() => {
@@ -21,16 +21,21 @@ function BlogEntry(props: { content: string }) {
 
   return (
     <Container className="mt-5" id="blogEntry">
-      <ReactMarkdown>{props.content}</ReactMarkdown>
+      {props.content ? (
+        <ReactMarkdown>{props.content}</ReactMarkdown>
+      ) : (
+        "Entry not found."
+      )}
+
       <hr />
       <Col>
         <Row>
           <span id="source">
-          For comments or improvements go
+            For comments or improvements go
             <a href="https://github.com/lexermal/main_website/tree/master/blog">
               here
             </a>
-          .
+            .
           </span>
         </Row>
       </Col>

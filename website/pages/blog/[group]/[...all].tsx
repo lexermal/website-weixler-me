@@ -9,17 +9,26 @@ import BlogEntry from "../../../views/Blog/BlogEntry/BlogEntry";
 
 export async function getServerSideProps(context: any) {
   const url = context.resolvedUrl as string;
-  const file = fs.readFileSync("public" + url.replaceAll("-", " ") + ".md");
+  const filePath = "public" + url.replaceAll("-", " ") + ".md";
+  let file = null;
+
+  try {
+    if (fs.existsSync(filePath)) {
+      file = fs.readFileSync(filePath);
+    }
+  } catch (err) {
+    console.error(err);
+  }
 
   // Pass data to the page via props
   return {
     props: {
-      content: file.toString(),
+      content: file?.toString() || null,
     },
   };
 }
 
-const Home = (props: { content: string }) => {
+const Home = (props: { content: string | null }) => {
   useEffect(() => {
     AOS.init({ delay: 100 });
   }, []);
