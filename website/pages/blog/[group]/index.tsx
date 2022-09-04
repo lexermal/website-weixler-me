@@ -5,6 +5,7 @@ import css from "../../index.module.css";
 import fs from "fs";
 import FixedNavbar from "../../../components/Navbar";
 import Footer from "../../../views/Footer/Footer";
+import EntrySelection from "../../../views/Blog/EntrySelection/EntrySelection";
 
 export async function getServerSideProps(context: any) {
   const url = context.resolvedUrl as string;
@@ -35,9 +36,7 @@ const Home = (props: { group: string; entries: string[] }) => {
       <FixedNavbar />
 
       <main className={css.main}>
-        <h1>area {props.group}</h1>
-        Inside tutorials.... here are all the tutorials
-        {props.entries.join(", ")}
+        <EntrySelection currentFolder={props.group} entries={props.entries} />
       </main>
 
       <Footer />
