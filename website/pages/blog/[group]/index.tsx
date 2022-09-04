@@ -6,14 +6,20 @@ import fs from "fs";
 import FixedNavbar from "../../../components/Navbar";
 import Footer from "../../../views/Footer/Footer";
 
-export async function getServerSideProps() {
-  const folders = fs.readdirSync("public/blog/");
+export async function getServerSideProps(context: any) {
+  const url = context.resolvedUrl as string;
+  const files = fs.readdirSync("public" + url);
 
   // Pass data to the page via props
-  return { props: { group: folders } };
+  return {
+    props: {
+      group: url.split("/")[2],
+      entries: files.filter((e) => e.endsWith(".md")),
+    },
+  };
 }
 
-const Home = (props: { group: string[] }) => {
+const Home = (props: { group: string; entries: string[] }) => {
   useEffect(() => {
     AOS.init({ delay: 100 });
   }, []);
@@ -29,7 +35,9 @@ const Home = (props: { group: string[] }) => {
       <FixedNavbar />
 
       <main className={css.main}>
+        <h1>area {props.group}</h1>
         Inside tutorials.... here are all the tutorials
+        {props.entries.join(", ")}
       </main>
 
       <Footer />
