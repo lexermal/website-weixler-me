@@ -29,10 +29,11 @@ This setup steps prepare the hosts with WireGuard. **These steps need to be exec
 1. Enter sudo mode ```sudo su```
 2. Make sure the system is up-to-date with ```apt-get update```
 3. Install WireGuard with ```apt-get install wireguard -y```
-4. Generate a public and private key for WireGuard
+4. Go to the directory of WireGuard ```cd /etc/wireguard```
+5. Generate a public and private key for WireGuard
 
    ```wg genkey | tee privatekey | wg pubkey > publickey```
-5. Go to the directory of WireGuard ```cd /etc/wireguard```
+
 6. Print out the private and public keys
 
    ```echo "private key: $(cat privatekey)" && echo "public key: $(cat publickey)"```
@@ -54,18 +55,18 @@ Let's first finish setting up WireGuard on this host by inserting the following 
     # This line saves and updates this config file when a new VPN peer is added.
     SaveConfig = true
 
-After executing ```wg-quick up wg0``` WireGuard is ready and running.
-
 To start it automatically after a reboot add it to systemd by executing the following commands:
 
     systemctl enable wg-quick@wg0.service
     systemctl daemon-reload
     systemctl start wg-quick@wg0
 
-### Setup K3s
-Download the WireGuard install script with ```wget https://get.k3s.io -O k3s-install.sh```
 
-Install WireGuard with ```sh k3s-install.sh --advertise-address 10.1.1.1 --flannel-iface=wg0```
+Now WireGuard is ready.
+### Setup K3s
+Download the K3s install script with ```wget https://get.k3s.io -O k3s-install.sh```
+
+Install K3s with ```sh k3s-install.sh --advertise-address 10.1.1.1 --flannel-iface=wg0```
 This sets it up with advertising its interface to connect to the WireGuard interface with the IP we configured for the master host.
 
 To let the worker nodes later on connect to the cluster you need to have an access token. Copy it somewhere for later usage: ```cat /var/lib/rancher/k3s/server/token```.
@@ -96,7 +97,6 @@ After the basic WireGuard steps are also executed on this host the following lin
     # If the client is behind a NAT device(router, modem) this line is needed. It orders the client to send keep alives to the Master host to keep the connection in the NAT tables.
     PersistentKeepalive = 29
 
-Now bring up the WireGuard interface with ```wg-quick up wg0```.
 
 To start it automatically after a reboot add it to systemd by executing the following commands:
 

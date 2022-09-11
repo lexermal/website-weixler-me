@@ -94,3 +94,15 @@ Status for the jail: sshd
    `- Banned IP list:   <the-list-of-ips>
 
 ```
+
+## Install K3s Server with wireguard
+Follow the instructions of xxxxx
+
+
+## Secure this K3s master node
+
+   46  sudo ufw allow OpenSSH
+   47  sudo ufw allow 80
+   48  sudo ufw allow 443
+   49  sudo ufw allow 51871
+   50  ufw enable
