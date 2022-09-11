@@ -1,0 +1,45 @@
+
+## Namespace structure
+Clustering of services
+
+-----Family
+neuhold_wohnung
+weixler_cloud
+weixler_minecraft
+
+-----Personal
+weixler_vaultwarden
+weixler_wiki
+test_weixler_languagetool
+weixler_discord_bridge
+
+-----University
+fh_anki
+fh_survey
+weixler_notes
+
+-----Prattes
+sysbox_host_prattes
+
+-----Public
+weixler_website
+weixler_mediumgram
+weixler_blog
+
+
+-----Shared Project Resources
+weixler_mockups
+
+-----Devops
+cluster_ssh
+cluster_basics
+sysbox_proxy
+
+
+
+
+# Todos fuer Cluster4
+- Inpiration fuer Server von https://www.youtube.com/watch?v=IE5y2_S8S8U
+
+- Add monitoring https://docs.technotim.live/posts/rancher-monitoring/
+

@@ -10,6 +10,7 @@ https://www.youtube.com/watch?v=APsZJbnluXg
 ## Setup Longhorn
 
  sudo apt install bash curl grep gawk open-iscsi nfs-common -y
+sudo systemctl enable open-iscsi --now
 
  Inspired by
  https://www.youtube.com/watch?v=eKBBHc0t7bc
@@ -17,9 +18,10 @@ https://docs.technotim.live/posts/longhorn-install/
 
 Install Longhorn with the following commands:
 
-kubectl create namespace longhorn-system
-helm install longhorn ./longhorn/chart/ --namespace longhorn-system
-kubectl -n longhorn-system get pod
+kubectl apply -f https://raw.githubusercontent.com/longhorn/longhorn/master/deploy/longhorn.yaml
+
+Watch how it installs
+kubectl get pods --namespace longhorn-system --watch
 
 Open longhorn over the UI interface of Rancher by choosing the cluster and then is on the left side "Longhorn". Open the webinterface.
 
@@ -50,90 +52,102 @@ Click on
 | Rancher | https://git.rancher.io/charts |
 | RKE2	| https://git.rancher.io/rke2-charts |
 
-
-
-## Making Traefik available to the internet
+## Make Traefik avaiable from outside
 By default Traefik is exposed but only to the IP used at setting up the cluster. When the cluster communicates with its nodes over WireGuard, the exposed IP is the one set from WireGuard and that one is a private one(like 10.1.1.1).
 
-To fix this open the Rancher UI, go under "Service Discovery". There find the entry named "traefik" and check what the IP of the target is.
+To fix this create the following config file and change the public ip, the dns provider and the api token to your needs.
+```yaml
+apiVersion: helm.cattle.io/v1
+kind: HelmChartConfig
+metadata:
+  name: traefik
+  namespace: kube-system
+spec:
+  valuesContent: |-
+    service:
+      externalIPs:
+        - 1.1.1.1  # <- change to your public ip
 
-If this one is a private one, click on "Edit YAML" on the right side of that entry.
+    # enable https forwarding
+    ports:
+      websecure:
+        tls:
+          enabled: true
+      web:
+        redirectTo: websecure
 
-Find the field "field.cattle.io/publicEndpoints" and add the public IP to the array.
+    # enable tls challenges for whole subdomains
+    additionalArguments:
+      - "--log.level=DEBUG"
+      - "--certificatesresolvers.le.acme.email=contact@my-domain.com"  # <- your contact email adress
+      - "--certificatesresolvers.le.acme.storage=/data/acme.json"
+      - "--certificatesresolvers.le.acme.tlschallenge=true"
+      - "--certificatesresolvers.le.acme.dnschallenge.provider=hosttech" # <- change to your dns provider
+      - "--certificatesresolvers.le.acme.dnschallenge.delaybeforecheck=0"
+    env:
+      - name: HOSTTECH_API_KEY   # <- change to your dns provider
+        value: my-api-token      # <- change to your access token
+```
 
-## Temporarily access the dashboard of Traefik
-Because of security reasons the dashboard of Traefik should not be exposed to the internet. By default, it's also configured that way.
+Apply the config with ```kubectl apply -f .```.
 
-But to make it easier to spin up services it can temporarily be made public by entering the following command on the master node:
-
-```kubectl port-forward -n kube-system "$(kubectl get pods -n kube-system| grep '^traefik-' | awk '{print $1}')" 9000:9000 --address <your-public-ip>```
-
-Now you can access the web interface with http://your-ip:9000/dashboard/
+The way on how to redirect everything to https is based on this answer https://stackoverflow.com/a/71989847/808723
 
 
-## Tutorial on how to deploy an application with traefik
-https://traefik.io/blog/traefik-proxy-kubernetes-101/
-Don't use the example to redirect traffic. Use the tutorial below
-## Redirect http calls to https
-https://stackoverflow.com/a/71989847/808723
+## Make Traefik accessible publically
 
-## Make Traefik accessible publically behind basic auth
+To make Traefik accessible in a save way we are using basic auth.
 
 First generate a secret called
-```echo "password" | htpasswd -i -n admin```
-Save it as secret named "usersecret" in namespace kube-system.
+```htpasswd -nb my-admin-user my-password | openssl base64```
 
-Apply the other config files in folder traefik-config
+Insert the password hash in the following config and adapt the domain name on which traefik will be available.
 
+```yaml
+apiVersion: v1
+kind: Secret
+metadata:
+  name: traefik-basic-auth-secret
+  namespace: kube-system
+data:
+  users: |2
+    my-password-hash           # <- insert here your password hash
+---
+apiVersion: traefik.containo.us/v1alpha1
+kind: Middleware
+metadata:
+  name: traefik-basic-auth
+  namespace: kube-system
+spec:
+  basicAuth:
+    secret: traefik-basic-auth-secret
+---
+apiVersion: traefik.containo.us/v1alpha1
+kind: IngressRoute
+metadata:
+  name: dashboard
+  namespace: kube-system
+spec:
+  entryPoints:
+    - websecure
+  tls:
+    certResolver: le
+  routes:
+    - match: Host(`traefik.my-domain.com`)   # <- change to your domain
+      kind: Rule
+      middlewares:
+        - name: traefik-basic-auth
+          namespace: kube-system
+      services:
+        - name: api@internal
+          kind: TraefikService
+```
+
+Apply the config with ```kubectl apply -f .```.
 
 ## Kubectl cheat sheet
 https://kubernetes.io/docs/reference/kubectl/cheatsheet/
 
 ## Kubernetes best practices
 https://kubernetes.io/docs/concepts/configuration/overview/
-
-
-## Namespace structure
-Clustering of services
-
------Family
-neuhold_wohnung
-weixler_cloud
-weixler_minecraft
-
------Personal
-weixler_vaultwarden
-weixler_wiki
-test_weixler_languagetool
-weixler_discord_bridge
-
------University
-fh_anki
-fh_survey
-weixler_notes
-
------Prattes
-sysbox_host_prattes
-
------Public
-weixler_website
-weixler_mediumgram
-weixler_blog
-
-
------Shared Project Resources
-weixler_mockups
-
------Devops
-cluster_ssh
-cluster_basics
-sysbox_proxy
-
-
-
-
-# Todos fuer Cluster4
-- Inpiration fuer Server von https://www.youtube.com/watch?v=IE5y2_S8S8U
-
-- Add monitoring https://docs.technotim.live/posts/rancher-monitoring/
 
