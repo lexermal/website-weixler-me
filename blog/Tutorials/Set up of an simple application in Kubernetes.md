@@ -130,6 +130,8 @@ Paste the content in a file in the same folder as your deployment, save it as ``
 
 Well done, our Minecraft server is now reachable from outside the cluster! We can access it by entering the public IP address of the master node in the Minecraft Java client.
 
+If you've setup ufw, open the port with ```sudo ufw allow 25565```.
+
 ## 2. Make Dynmap be reachable
 
 Now it's time for the HTTP service Dynmap to be reachable from outside the cluster. This is done by using an Ingress.
@@ -158,6 +160,8 @@ spec:
 Paste that content in a file in the same folder as the deployment, adjust it to your needs and execute ```kubectl apply -f .```
 
 Now the HTTP service of the Minecraft Plugin is accessible from the website https://minecraft.my.domain.com. Currently, we can't test it out because the plugin is not installed yet. If you open the website a "Bad Gateway" message will be shown.
+
+If you've setup ufw, open the port with ```sudo ufw allow 443```.
 
 ## 3. Migrate the game data and install Dynmap
 
