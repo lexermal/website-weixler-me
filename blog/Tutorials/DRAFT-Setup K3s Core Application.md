@@ -1,16 +1,17 @@
-# abc
-
-
+# Setup K3s core application
 
 
 ## Setup Rancher with the following tutorial
 https://docs.technotim.live/posts/rancher-ha-install/
+
 https://www.youtube.com/watch?v=APsZJbnluXg
 
 ## Setup Longhorn
 
- sudo apt install bash curl grep gawk open-iscsi nfs-common -y
+```
+sudo apt install bash curl grep gawk open-iscsi nfs-common -y
 sudo systemctl enable open-iscsi --now
+```
 
  Inspired by
  https://www.youtube.com/watch?v=eKBBHc0t7bc
@@ -18,10 +19,14 @@ https://docs.technotim.live/posts/longhorn-install/
 
 Install Longhorn with the following commands:
 
+```
 kubectl apply -f https://raw.githubusercontent.com/longhorn/longhorn/master/deploy/longhorn.yaml
+```
 
 Watch how it installs
+```
 kubectl get pods --namespace longhorn-system --watch
+```
 
 Open longhorn over the UI interface of Rancher by choosing the cluster and then is on the left side "Longhorn". Open the webinterface.
 
