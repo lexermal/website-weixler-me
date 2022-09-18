@@ -43,3 +43,23 @@ sysbox_proxy
 
 - Add monitoring https://docs.technotim.live/posts/rancher-monitoring/
 
+
+
+## Adding custom helm charts
+Navigate to https://artifacthub.io/
+Search for a package you like.
+Click on
+
+| Names        | URLs           |
+| ------------- | ------------- |
+| bitnami	| https://charts.bitnami.com          |
+| gissilabs	| https://gissilabs.github.io/charts/ |
+| gitlab	| http://charts.gitlab.io/ |
+| k8s-at-home	| https://k8s-at-home.com/charts/ |
+| minecraft-server-charts	| https://itzg.github.io/minecraft-server-charts/ |
+| nextcloud	| https://nextcloud.github.io/helm/ |
+| nicholaswilde	| https://nicholaswilde.github.io/helm-charts/ |
+| Partners | https://git.rancher.io/partner-charts |
+| prometheus | https://prometheus-community.github.io/helm-charts |
+| Rancher | https://git.rancher.io/charts |
+| RKE2	| https://git.rancher.io/rke2-charts |

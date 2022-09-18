@@ -1,6 +1,6 @@
 # Adding a private registry to K3s
 
-This tutorial is based on https://rancher.com/docs/k3s/latest/en/installation/private-registry/
+
 
 ## Configure the registry on a node
 ```sudo nano /etc/rancher/k3s/registries.yaml```
@@ -18,3 +18,7 @@ configs:
       username: registry_user
       password: my_registry_password
 ```
+
+
+References:
+This tutorial is based on https://rancher.com/docs/k3s/latest/en/installation/private-registry/

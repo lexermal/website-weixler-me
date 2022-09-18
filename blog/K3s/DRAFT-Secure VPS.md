@@ -1,4 +1,4 @@
-# Secure VPS that will become part of a Kubernetes Cluster
+# Secure VPS
 
 Reason: Many Self hosted Kubernetes ervers get hacked because security is not taken into causion. Easy example on how it works:
 https://raesene.github.io/blog/2022/07/03/lets-talk-about-kubernetes-on-the-internet/
@@ -49,35 +49,23 @@ For my setup it would mean to many disadvantages. But it will be secured with Fa
 
 The wheel does not be reinvented, here is a good guide: https://www.digitalocean.com/community/tutorials/how-to-protect-ssh-with-fail2ban-on-ubuntu-22-04
 
+```
 sudo apt install fail2ban -y
-cd /etc/fail2ban
-sudo cp jail.conf jail.local
-sudo nano jail.local
+sudo nano /etc/fail2ban/jail.conf
+```
 
 In the section [sshd] add:
 enabled = true
 
+```
 sudo systemctl enable fail2ban
 sudo systemctl start fail2ban
 
 sudo systemctl status fail2ban
-
-```bash
-● fail2ban.service - Fail2Ban Service
-     Loaded: loaded (/lib/systemd/system/fail2ban.service; enabled; vendor preset: enabled)
-     Active: active (running) since Sun 2022-09-11 11:08:04 CEST; 18s ago
-       Docs: man:fail2ban(1)
-   Main PID: 1672 (fail2ban-server)
-      Tasks: 5 (limit: 38392)
-     Memory: 13.5M
-        CPU: 144ms
-     CGroup: /system.slice/fail2ban.service
-             └─1672 /usr/bin/python3 /usr/bin/fail2ban-server -xf start
-
-Sep 11 11:08:04 my-server systemd[1]: Started Fail2Ban Service.
-Sep 11 11:08:05 my-server fail2ban-server[1672]: Server ready
-
 ```
+
+This should state "Server ready".
+
 
 See the blocked IPs:
 fail2ban-client status sshd
@@ -91,18 +79,18 @@ Status for the jail: sshd
 `- Actions
    |- Currently banned: 2
    |- Total banned:     8
-   `- Banned IP list:   <the-list-of-ips>
+   `- Banned IP list:   1.2.3.4
 
 ```
 
-## Install K3s Server with wireguard
-Follow the instructions of xxxxx
 
+## Setup firewall rules
+If you have K3s installed with Wireguard you need to open the following ports:
 
-## Secure this K3s master node
-
-   46  sudo ufw allow OpenSSH
-   47  sudo ufw allow 80
-   48  sudo ufw allow 443
-   49  sudo ufw allow 51871
-   50  ufw enable
+```
+sudo ufw allow OpenSSH
+sudo ufw allow 80
+sudo ufw allow 443
+sudo ufw allow 51871
+sudo ufw enable
+```

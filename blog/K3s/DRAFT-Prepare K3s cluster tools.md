@@ -30,32 +30,10 @@ kubectl get pods --namespace longhorn-system --watch
 
 Open longhorn over the UI interface of Rancher by choosing the cluster and then is on the left side "Longhorn". Open the webinterface.
 
-The UI should look like this:
-![Longhorn UI](/longhorn.png)
-
-As you can see there are multiple nodes in this cluster. Some have not much space but large computing power. Theses hosts should not save any data columes of longhorn at their disk.
+There are multiple nodes in this cluster. Some have not much space but large computing power. These hosts should not save any data colums of longhorn at their disk.
 
 This can be disabled by navigating to *Node*, clicking on edit at that nodes and disabling the *scheduling*.
 
-
-## Adding custom helm charts
-Navigate to https://artifacthub.io/
-Search for a package you like.
-Click on
-
-| Names        | URLs           |
-| ------------- | ------------- |
-| bitnami	| https://charts.bitnami.com          |
-| gissilabs	| https://gissilabs.github.io/charts/ |
-| gitlab	| http://charts.gitlab.io/ |
-| k8s-at-home	| https://k8s-at-home.com/charts/ |
-| minecraft-server-charts	| https://itzg.github.io/minecraft-server-charts/ |
-| nextcloud	| https://nextcloud.github.io/helm/ |
-| nicholaswilde	| https://nicholaswilde.github.io/helm-charts/ |
-| Partners | https://git.rancher.io/partner-charts |
-| prometheus | https://prometheus-community.github.io/helm-charts |
-| Rancher | https://git.rancher.io/charts |
-| RKE2	| https://git.rancher.io/rke2-charts |
 
 ## Make Traefik avaiable from outside
 By default Traefik is exposed but only to the IP used at setting up the cluster. When the cluster communicates with its nodes over WireGuard, the exposed IP is the one set from WireGuard and that one is a private one(like 10.1.1.1).
@@ -149,10 +127,4 @@ spec:
 ```
 
 Apply the config with ```kubectl apply -f .```.
-
-## Kubectl cheat sheet
-https://kubernetes.io/docs/reference/kubectl/cheatsheet/
-
-## Kubernetes best practices
-https://kubernetes.io/docs/concepts/configuration/overview/
 
