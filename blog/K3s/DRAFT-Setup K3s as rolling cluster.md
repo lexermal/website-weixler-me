@@ -11,8 +11,10 @@ Let's assume you have multiple servers that are all available over the internet.
 First of you have to rent at least 2 v-servers. Cheap ones can be found on these pages. Generally I found out that servers in europe are way cheaper then in USA. You can also get very cheap servers at sales like summer sale, chrismas deals, black friday,...
 
 https://www.hostingadvice.com/coupon/
+
 https://www.vserververgleich.com/
-(hosttest)[https://www-hosttest-de.translate.goog/vergleich/vserver.html?_x_tr_sl=auto&_x_tr_tl=en&_x_tr_hl=sv&_x_tr_pto=wapp] This page is sadly only available in german but with google translater it should work fine.
+
+[hosttest](https://www-hosttest-de.translate.goog/vergleich/vserver.html?_x_tr_sl=auto&_x_tr_tl=en&_x_tr_hl=sv&_x_tr_pto=wapp) This page is sadly only available in german but with google translater it should work fine.
 
 
 
@@ -31,16 +33,25 @@ https://www.youtube.com/watch?v=NWMYPU2FCjI
 
 When Netmaker is up and running, log into the dashboard.
 
-Then create a network with the ip range 10.33.33.0/24 and the name "cluster-nw". You can use another range but this works in most cases.
+Then create a network with the IP range 10.33.33.0/24 and the name "cluster-nw". You can use another range, but this works in most cases.
 
-Then create access tokens for every node and copy the docker command and run it on every node you want to connect to the cluster.
+Then create access tokens for every node and copy the docker command.
+
+Install docker on every node with
+
+```bash
+curl -fsSL https://get.docker.com -o get-docker.sh
+sudo sh ./get-docker.sh
+```
+
+**Run it on every node but add "--restart always" at the end.**
 
 You can see in the node view when nodes are connected successfully.
 
 
 ## Setup K3s
-First of we setup the first master node.
-For that we need the Wireguard interface ip. You find it with ```ip add```. It should be 10.33.33.1
+First of we set up the first master node.
+For that we need the WireGuard interface IP. You find it with ```ip add```. It should be 10.33.33.1
 
 Next we install K3s with the following commands:
 ```
@@ -51,7 +62,7 @@ sudo sh k3s-install.sh server --advertise-address 10.33.33.1 --flannel-iface=nm-
 
 K3s needs now some time to install. In meantime we can get the access token for the other nodes by entering the following command:
 
-```cat /var/lib/rancher/k3s/server/token```.
+```cat /var/lib/rancher/k3s/server/token```
 
 Copy it somewhere for later usage.
 
@@ -102,7 +113,7 @@ When the cheap period of the v-server is over or you want to have a other server
 
 To add a node simply follow the introductions from above.
 
-If you have Longhorn installed disable scheduling on that node over the webinterface.
+If you have Longhorn installed disable scheduling on that node over the web interface.
 
 Wait a bit for Longhorn to move the volumes.
 
@@ -114,7 +125,7 @@ Next drain the host and remove it from the cluster:
 
 The cluster needs now some time to restructure itself.
 
-You are now done concratulations!!
+You are now done congratulations!!
 
 
 You can now install your first Kubernetes services but I would recommend you to first [secure your nodes against attacks](DRAFT-Secure%20VPS.md) and make the cluster more [convinient to use](DRAFT-Prepare%20K3s%20cluster%20tools.md).

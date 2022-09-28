@@ -18,9 +18,10 @@ Make host only accessible via SSH Keys:
 ### Add SSH key to client host
 Change permissions so it can be added to the ssh agent
 
+```
 sudo chmod 777 id_rsa
 sudo chmod 777 id_rsa.pub
-
+```
 Add it to the agent:
 ssh-add /my/path/id_rsa
 
@@ -29,18 +30,19 @@ ssh-add /my/path/id_rsa
 Log now into the host with ssh root@my-ip
 
 Update the host
+```
 sudo apt update
 sudo apt upgrade -y
-
+```
 set the following values in sshd_config with
 
 sudo nano /etc/ssh/sshd_config
-
+```
 PubkeyAuthentication yes
 PasswordAuthentication no
 PermitRootLogin yes
+```
 sudo systemctl restart sshd
-
 
 Should you change the ssh port to avoid attacks? That questions is good answered (here)[https://security.stackexchange.com/questions/32308/should-i-change-the-default-ssh-port-on-linux-servers].
 
