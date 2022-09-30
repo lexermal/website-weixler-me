@@ -1,6 +1,6 @@
 
-## Secure Rancher with Crowdsec
-We assume that Longhorn is installed on that system.
+## Secure K3s Cluster with Crowdsec
+We assume that Longhorn is installed on that cluster.
 
 ```
 helm repo add crowdsec https://crowdsecurity.github.io/helm-charts && helm repo update
@@ -49,8 +49,9 @@ agent:
 
 Rise the inotify limit and install crowdsec.
 ```bash
-sudo sysctl fs.inotify.max_user_instances=1280
-sudo sysctl fs.inotify.max_user_watches=655360
+echo "fs.inotify.max_user_instances=1280" | sudo tee -a /etc/sysctl.conf
+echo "fs.inotify.max_user_watches=655360" | sudo tee -a /etc/sysctl.conf
+sudo sysctl -p
 
 helm upgrade crowdsec crowdsec/crowdsec --install -n crowdsec -f custom-values.yaml --create-namespace
 ```
@@ -141,7 +142,8 @@ spec:
 
 Apply the configs with
 ```
-kubectl apply -f crowdsec-dashboard-ingress.yaml -f crowdsec-dashboard-ingress.yaml
+kubectl apply -f crowdsec-dashboard-cert.yaml
+kubectl apply -f crowdsec-dashboard-ingress.yaml
 ```
 
 
@@ -162,6 +164,42 @@ username: crowdsec@crowdsec.net
 
 password: !!Cr0wdS3c_M3t4b4s3??
 
+## Verify blocking
+
+Now to verify that blocking works, check logs of your crowdsec-lapi pod with the following (for your pod adapted) command:
+
+```
+ kubectl logs crowdsec-lapi-pod-name --namespace crowdsec
+```
+When logs could look like this:
+
+
+```bash
+time="30-09-2022 12:04:50" level=info msg="10.42.0.137 - [Fri, 30 Sep 2022 12:04:50 UTC] \"GET /v1/decisions?type=ban&ip=10.42.0.1 HTTP/1.1 200 122.06386ms \"Go-http-client/1.1\" \""
+time="30-09-2022 12:05:26" level=info msg="10.42.0.137 - [Fri, 30 Sep 2022 12:05:26 UTC] \"GET /v1/decisions?type=ban&ip=10.42.0.1 HTTP/1.1 200 98.097303ms \"Go-http-client/1.1\" \""
+time="30-09-2022 12:05:26" level=info msg="10.42.0.137 - [Fri, 30 Sep 2022 12:05:26 UTC] \"GET /v1/decisions?type=ban&ip=10.42.0.1 HTTP/1.1 200 68.349596ms \"Go-http-client/1.1\" \""
+```
+If you see here private ip adresses (10.x.x.x) then you need to update the config of traefik with "externalTrafficPolicy: Local".
+
+To do so create the following file:
+
+```yaml
+apiVersion: helm.cattle.io/v1
+kind: HelmChartConfig
+metadata:
+  name: traefik
+  namespace: kube-system
+spec:
+  valuesContent: |-
+    service:
+      spec:
+        externalTrafficPolicy: Local
+
+```
+
+Apply the config with ```kubectl apply -f .```
+
+Now you will see other ip adresses and your instance is secure.
 
 ## Remarks
 

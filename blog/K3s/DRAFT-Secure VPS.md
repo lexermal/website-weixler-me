@@ -87,12 +87,12 @@ Status for the jail: sshd
 
 
 ## Setup firewall rules
-If you have K3s installed with Wireguard you need to open the following ports:
+If you have K3s installed with Wireguard you can secure your server with adding the following rules to crontab with ```sudo crontab -e```:
 
 ```
-sudo ufw allow OpenSSH
-sudo ufw allow 80
-sudo ufw allow 443
-sudo ufw allow 51871
-sudo ufw enable
+@reboot /usr/sbin/iptables -A INPUT -i eth0 -p tcp --destination-port 111 -j DROP
+@reboot /usr/sbin/iptables -A INPUT -i eth0 -p tcp --destination-port 6443 -j DROP
+@reboot /usr/sbin/iptables -A INPUT -i eth0 -p tcp --destination-port 10250 -j DROP
+@reboot /usr/sbin/iptables -A INPUT -i eth0 -p tcp --destination-port 30259 -j DROP
+@reboot /usr/sbin/iptables -A INPUT -i eth0 -p tcp --destination-port 31138 -j DROP
 ```

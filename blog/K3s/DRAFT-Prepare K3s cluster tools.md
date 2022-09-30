@@ -88,6 +88,9 @@ metadata:
 spec:
   valuesContent: |-
     service:
+      spec:
+        # this forwards the real source ip to internal services
+        externalTrafficPolicy: Local
       externalIPs:
         - 1.1.1.1  # <- change to your public ip
 
