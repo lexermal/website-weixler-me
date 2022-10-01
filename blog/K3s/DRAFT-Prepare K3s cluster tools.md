@@ -74,6 +74,8 @@ There are multiple nodes in this cluster. Some have not much space but large com
 
 This can be disabled by navigating to *Node*, clicking on edit at that nodes and disabling the *scheduling*.
 
+**Now make Longhorn the default storage class by clicking on "reset default" in the Rancher UI at the entry "local-path".**
+
 
 ## Make Traefik avaiable from outside
 By default Traefik is exposed but only to the IP used at setting up the cluster. When the cluster communicates with its nodes over WireGuard, the exposed IP is the one set from WireGuard and that one is a private one(like 10.1.1.1).

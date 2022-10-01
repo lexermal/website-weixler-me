@@ -70,7 +70,7 @@ This should state "Server ready".
 
 
 See the blocked IPs:
-fail2ban-client status sshd
+```fail2ban-client status sshd```
 
 ```bash
 Status for the jail: sshd
@@ -93,6 +93,4 @@ If you have K3s installed with Wireguard you can secure your server with adding 
 @reboot /usr/sbin/iptables -A INPUT -i eth0 -p tcp --destination-port 111 -j DROP
 @reboot /usr/sbin/iptables -A INPUT -i eth0 -p tcp --destination-port 6443 -j DROP
 @reboot /usr/sbin/iptables -A INPUT -i eth0 -p tcp --destination-port 10250 -j DROP
-@reboot /usr/sbin/iptables -A INPUT -i eth0 -p tcp --destination-port 30259 -j DROP
-@reboot /usr/sbin/iptables -A INPUT -i eth0 -p tcp --destination-port 31138 -j DROP
 ```

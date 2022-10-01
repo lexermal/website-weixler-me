@@ -179,7 +179,7 @@ time="30-09-2022 12:04:50" level=info msg="10.42.0.137 - [Fri, 30 Sep 2022 12:04
 time="30-09-2022 12:05:26" level=info msg="10.42.0.137 - [Fri, 30 Sep 2022 12:05:26 UTC] \"GET /v1/decisions?type=ban&ip=10.42.0.1 HTTP/1.1 200 98.097303ms \"Go-http-client/1.1\" \""
 time="30-09-2022 12:05:26" level=info msg="10.42.0.137 - [Fri, 30 Sep 2022 12:05:26 UTC] \"GET /v1/decisions?type=ban&ip=10.42.0.1 HTTP/1.1 200 68.349596ms \"Go-http-client/1.1\" \""
 ```
-If you see here private ip adresses (10.x.x.x) then you need to update the config of traefik with "externalTrafficPolicy: Local".
+If you see here private IP addresses (10.x.x.x) then you need to update the config of Traefik with "externalTrafficPolicy: Local".
 
 To do so create the following file:
 
@@ -199,7 +199,19 @@ spec:
 
 Apply the config with ```kubectl apply -f .```
 
-Now you will see other ip adresses and your instance is secure.
+Now you will see other IP addresses and your instance is secure.
+
+## Test out blocking
+To test if blocking works connect a host with another public IP, like using your Hotspot on your phone.
+
+Open the browser and open your domain like https://my-comain.com. You will see your expected side.
+
+Then execute the following command to check for security vulnerabilities which triggers Crowdsec to block the IP temporally:
+```
+wapiti -u https://my-comain.com
+```
+
+When you reload now the page, you will see a "Forbidden" message. Only this IP is temporarily blocked.
 
 ## Remarks
 
