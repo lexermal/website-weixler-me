@@ -67,6 +67,9 @@ Hint: The Metadata stays always invalid.
 
 When an error occures that the **user is not provisioned**, close the browser window and access https://cloud.my-domain.com again after 5 minutes.
 
+## Login without SAML
+As admin it might be that you want to login into Nextcloud without SAML to configure stuff.
+This can be achieved with this url: https://cloud.my-domain.com/login?direct=1
 
 ## Reclaimer
 Tutorial is based on https://artifacthub.io/packages/helm/nextcloud/nextcloud#configuration
