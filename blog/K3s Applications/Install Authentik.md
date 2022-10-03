@@ -18,27 +18,11 @@ Create a file named **values.yaml** and adapt the values:
 ```
 authentik:
     secret_key: "my-secret-key"
-    postgresql:
-        password: "my-postgres-password"
-
-ingress:
-  enabled: true
-  annotations:
-    kubernetes.io/ingress.class: "traefik"
-  hosts:
-    - host: auth.my-domain.com
-      paths:
-        - path: "/"
-          pathType: Prefix
-  tls:
-    - secretName: internal-acme-crt-secret
-      hosts:
-        - 'auth.my-domain.com'
-
+     postgresql:
+        password: "my-db-password"
 postgresql:
     enabled: true
-    postgresqlPassword: "my-postgres-password"
-
+    postgresqlPassword: "my-db-password"
 redis:
     enabled: true
 ```
@@ -53,6 +37,30 @@ helm upgrade --install authentik authentik/authentik -f values.yaml -n authentik
 kubectl rollout status -w --timeout=300s deployment/authentik-server -n authentik
 kubectl rollout status -w --timeout=300s deployment/authentik-worker -n authentik
 ```
+
+kubectl get service --namespace authentik
+
+```
+apiVersion: traefik.containo.us/v1alpha1
+kind: IngressRoute
+metadata:
+  name: authentik-route
+  namespace: authentik
+spec:
+  entryPoints:
+    - websecure
+  tls:
+    certResolver: le
+  routes:
+    - match: Host(`auth.my-domain.com`)   # <--change domain
+      kind: Rule
+      services:
+        - name: authentik
+          port: 80
+```
+
+kubectl apply -f ingress.yml
+
 
 You can now setup Authentik over https://auth.my-domain.com/if/flow/initial-setup/
 
