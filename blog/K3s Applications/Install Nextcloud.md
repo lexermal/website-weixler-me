@@ -9,12 +9,12 @@ image:
     tag: "24.0.5"
 
 nextcloud:
-    host: "cloud.weixler.me"
-    password: "H9wjXg5aajWQGz"
+    host: "cloud.my-domain.com"
+    password: "my-password"
 
 mariadb:
     enabled: true
-    password: "mPx6NQ3VD3R97R"
+    password: "my-password"
 
 cronjob:
     enabled: true
