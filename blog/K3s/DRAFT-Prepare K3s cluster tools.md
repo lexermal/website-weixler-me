@@ -72,11 +72,14 @@ This can be disabled by navigating to *Node*, clicking on edit at that nodes and
 
 Now we need to change the default class to longhorn. We do that by executing this command:
 ```
-kubectl delete storageclass local-path
-touch /var/lib/rancher/k3s/server/manifests/local-storage.yaml.skip
+kubectl patch storageclass local-path -p '{"metadata": {"annotations":{"storageclass.kubernetes.io/is-default-class":"false"}}}'
+```
+We also need to add the following command to crontab so the storageclass gets set when the server reboots. We do that with ```crontab -e``` and pasting the following at the end of the file:
+```
+@reboot /usr/bin/sleep 200 && kubectl patch storageclass local-path -p '{"metadata": {"annotations":{"storageclass.kubernetes.io/is-default-class":"false"}}}'
 ```
 
-## Make Traefik avaiable from outside
+## Make Traefik available from outside
 By default Traefik is exposed but only to the IP used at setting up the cluster. When the cluster communicates with its nodes over WireGuard, the exposed IP is the one set from WireGuard and that one is a private one(like 10.1.1.1).
 
 To fix this create the following config file and change the public ip, the dns provider and the api token to your needs.
@@ -174,4 +177,4 @@ Apply the config with ```kubectl apply -f .```.
 
 
 ## Reclaims
-* How to remove default storageclass was found here https://blog.voltane.eu/disable-local-path-storage-on-k3s/
+* How to set the default storageclass was found here https://pongzt.com/post/kube-cluster-k3s-longhorn/
