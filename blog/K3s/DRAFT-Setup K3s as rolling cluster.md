@@ -60,7 +60,7 @@ wget https://get.k3s.io -O k3s-install.sh
 sudo sh k3s-install.sh server --advertise-address 10.33.33.1 --flannel-iface=nm-cluster-nw1 --cluster-init
 ```
 
-K3s needs now some time to install. In meantime we can get the access token for the other nodes by entering the following command:
+K3s needs now some time to install. In meantime, we can get the access token for the other nodes by entering the following command:
 
 ```cat /var/lib/rancher/k3s/server/token```
 
@@ -79,6 +79,11 @@ node1   Ready    control-plane,etcd,master   4m53s   v1.24.4+k3s1
 ```
 The node needs to have the status ready.
 
+Because the interface initialization of Netmaker/Wireguard takes some time we need to edit **/etc/systemd/system/k3s.service** and add the following line under "[Service]":
+```
+ExecStartPre=/bin/sleep 120
+```
+It delays the startup by 120 seconds.
 
 
 ## Setup K3s on other nodes
