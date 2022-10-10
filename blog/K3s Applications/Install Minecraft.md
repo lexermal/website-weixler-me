@@ -1,5 +1,9 @@
 # Install Minecraft Server
 
+```
+helm repo add minecraft-server-charts https://itzg.github.io/minecraft-server-charts/
+```
+
 Create a file named values.yml with the following content:
 
 ```
@@ -51,7 +55,29 @@ Congrats the server is now reachable on port 25565.
 
 You can now install all plugins you like. It's easiest to open a shell window to that container, go into the plugins folder and download the plugins with wget.
 
-## Make dynmap available
+## Install Dynmap
+
+Open a shell to the Minecraft pod and execute the following for Minecraft 1.19:
+```
+wget https://github.com/webbukkit/dynmap/releases/download/v3.2.1/Dynmap-3.2.1-spigot.jar
+```
+
+### Optional additional plugins
+The following plugins might be useful
+```
+https://github.com/IntellectualSites/FastAsyncWorldEdit/releases
+https://dev.bukkit.org/projects/multiverse-core/files/latest
+https://github.com/AuthMe/AuthMeReloaded/releases
+https://github.com/ViaVersion/ViaBackwards/releases
+https://ci.viaversion.com/view/ViaRewind/job/ViaRewind/lastBuild/artifact/all/target/
+https://github.com/EssentialsX/Essentials/releases
+
+
+
+```
+
+
+## Make Dynmap available
 When you have installed some plugins like Dynmap that are HTTP services and should be reachable we will make them reachable now.
 
 Create a file named **config.yml** and add the following contend:
@@ -87,7 +113,11 @@ Apply the config with ```kubectl apply -f config.yml```.
 
 Congrats Dynmap is now reachable via https://minecraft.my-domain.com.
 
-
+## Optional using RCON
+If you want to execute commands on the servers shell you need to use RCON. The simplest way to do so is the following command:
+```
+docker run -it --rm outdead/rcon ./rcon -p my-rcon-password -a minecraft.my-domain.com:25575 "my minecraft command"
+```
 
 ## Remarks
 * Helm charts and config can be found here https://artifacthub.io/packages/helm/minecraft-server-charts/minecraft?modal=values
