@@ -5,7 +5,7 @@
 helm repo add postgresql https://charts.bitnami.com/bitnami
 helm repo add redis https://charts.bitnami.com/bitnami
 helm repo add common https://library-charts.k8s-at-home.com/
-helm repo add goauthentik https://charts.goauthentik.io/
+helm repo add authentik https://charts.goauthentik.io/
 helm repo update
 ```
 
@@ -29,7 +29,7 @@ redis:
 
 Install Authentik with this command
 ```
-helm upgrade --install authentik authentik/authentik -f values.yaml -n authentik --create-namespace
+helm upgrade --install authentik authentik/authentik -f values.yml -n authentik --create-namespace
 ```
 
 
