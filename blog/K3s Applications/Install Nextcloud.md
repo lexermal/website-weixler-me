@@ -31,9 +31,10 @@ phpClientHttpsFix:
     enabled: true
 ```
 
-
-helm upgrade --install nextcloud nextcloud/nextcloud -f values.yaml -n nextcloud --create-namespace
-
+Install Nextcloud with:
+```
+helm upgrade --install nextcloud nextcloud/nextcloud -f values.yml -n nextcloud --create-namespace
+```
 
 kubectl get service --namespace nextcloud
 
@@ -65,11 +66,12 @@ https://blog.cubieserver.de/2022/complete-guide-to-nextcloud-saml-authentication
 
 Hint: The Metadata stays always invalid.
 
-When an error occures that the **user is not provisioned**, close the browser window and access https://cloud.my-domain.com again after 5 minutes.
+At the end you need to disable the app "circles" in Nextcloud. Otherwise, a Status 500 error will be thrown when the user tries to log in for the first time. It's a bug. Details can be found in References.
 
 ## Login without SAML
 As admin it might be that you want to login into Nextcloud without SAML to configure stuff.
 This can be achieved with this url: https://cloud.my-domain.com/login?direct=1
 
-## Reclaimer
-Tutorial is based on https://artifacthub.io/packages/helm/nextcloud/nextcloud#configuration
+## References
+* Tutorial is based on https://artifacthub.io/packages/helm/nextcloud/nextcloud#configuration
+* Nextcloud Saml bug https://github.com/nextcloud/server/issues/32432#issuecomment-1222143890
