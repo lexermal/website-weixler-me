@@ -26,11 +26,34 @@ There are multiple nodes in this cluster. Some have not much space but large com
 
 This can be disabled by navigating to *Node*, clicking on edit at that nodes and disabling the *scheduling*.
 
-Now we need to change the default class to longhorn. We do that by executing this command:
+### Fix Longhorn default storage class error
+
+When you install Longhorn it is by default set to be the default storage class, but local-path is so too.
+
+Therefore, it is required to deactivate local-path from being a default storage class.
+
+Run the following commands
 ```
-kubectl patch storageclass local-path -p '{"metadata": {"annotations":{"storageclass.kubernetes.io/is-default-class":"false"}}}'
+cd /var/lib/rancher/k3s/server/manifests
+cp local-storage.yaml custom-local-storage.yaml
+nano custom-local-storage.yaml
 ```
-We also need to add the following command to crontab so the storageclass gets set when the server reboots. We do that with ```crontab -e``` and pasting the following at the end of the file:
+At around line 90 change ```storageclass.kubernetes.io/is-default-class: "true"``` to ```storageclass.kubernetes.io/is-default-class: "false"```.
+
+Adapt the file /etc/systemd/system/k3s.service, so it looks at the end like this:
 ```
-@reboot /usr/bin/sleep 200 && kubectl patch storageclass local-path -p '{"metadata": {"annotations":{"storageclass.kubernetes.io/is-default-class":"false"}}}'
+ExecStart=/usr/local/bin/k3s \
+    server \
+        '--advertise-address' \
+        '10.33.33.2' \
+        '--flannel-iface=nm-cluster-nw1' \
+        '--cluster-init' \
+        '--disable=local-storage'
 ```
+
+Restart the node and the storage is fixed.
+
+
+## References
+* Explanation on how to disable local-path storage class https://bytemeta.vip/repo/k3s-io/k3s/issues/4083
+*
