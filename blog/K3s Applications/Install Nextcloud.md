@@ -69,9 +69,16 @@ Hint: The Metadata stays always invalid.
 At the end you need to disable the app "circles" in Nextcloud. Otherwise, a Status 500 error will be thrown when the user tries to log in for the first time. It's a bug. Details can be found in References.
 
 ## Login without SAML
+
 As admin it might be that you want to login into Nextcloud without SAML to configure stuff.
 This can be achieved with this url: https://cloud.my-domain.com/login?direct=1
 
+## (optional) Making calendar sync work
+
+The calendar API works only with local users, not SAML / SSO users.
+
+To still sync your calendar you need to create a local user to which calendars you subscribe and your real user in Nextcloud shares this calendar with the sync user and lets them edit the calendars.
+
 ## References
 * Tutorial is based on https://artifacthub.io/packages/helm/nextcloud/nextcloud#configuration
-* Nextcloud Saml bug https://github.com/nextcloud/server/issues/32432#issuecomment-1222143890
+* Nextcloud SAML bug https://github.com/nextcloud/server/issues/32432#issuecomment-1222143890
