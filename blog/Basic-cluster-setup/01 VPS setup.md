@@ -1,62 +1,40 @@
 # Secure VPS
 
-Reason: Many Self hosted Kubernetes ervers get hacked because security is not taken into causion. Easy example on how it works:
-https://raesene.github.io/blog/2022/07/03/lets-talk-about-kubernetes-on-the-internet/
-
-
+Reason: Many self-hosted Kubernetes servers get hacked because security is not taken into caution. This blog article explains the issue well [link](https://raesene.github.io/blog/2022/07/03/lets-talk-about-kubernetes-on-the-internet/).
 
 
 ## Securing SSH Access
 
 Make host only accessible via SSH Keys:
 
-```ssh-keygen -t ed25519 -C "my-email@example.com" -f ~/my/folder/id_rsa```
+```ssh-keygen -t ed25519 -C "my-email@example.com"```
 
 **Always set a password! Otherwise someone can suimply copy the files and access the server like having the stolen password.**
 
+Copy the ssh key to the server with ```ssh-copy-id username@my-server-ip```.
 
-### Add SSH key to client host
-Change permissions so it can be added to the ssh agent
+Log now into the host with ```ssh username@my--server-ip```
 
-```
-sudo chmod 777 id_rsa
-sudo chmod 777 id_rsa.pub
-```
-Add it to the agent:
-ssh-add /my/path/id_rsa
-
-
-### Secure ssh on server
-Log now into the host with ssh root@my-ip
-
-Update the host
-```
-sudo apt update
-sudo apt upgrade -y
-```
-set the following values in sshd_config with
-
+### Disable password login
 sudo nano /etc/ssh/sshd_config
 ```
-PubkeyAuthentication yes
 PasswordAuthentication no
 PermitRootLogin yes
 ```
 sudo systemctl restart sshd
 
-Should you change the ssh port to avoid attacks? That questions is good answered (here)[https://security.stackexchange.com/questions/32308/should-i-change-the-default-ssh-port-on-linux-servers].
-
-For my setup it would mean to many disadvantages. But it will be secured with Fail2Ban. This is also advisable when the port is changed.
 
 
-The wheel does not be reinvented, here is a good guide: https://www.digitalocean.com/community/tutorials/how-to-protect-ssh-with-fail2ban-on-ubuntu-22-04
+## Enable Fail2ban
+In order to prevent attacks we enable Fail2Ban.
+
 
 ```
 sudo apt install fail2ban -y
 sudo nano /etc/fail2ban/jail.conf
 ```
 
-In the section [sshd] add:
+At around line 280 in the section [sshd] add:
 enabled = true
 
 ```
@@ -86,11 +64,11 @@ Status for the jail: sshd
 ```
 
 
-## Setup firewall rules
-If you have K3s installed with Wireguard you can secure your server with adding the following rules to crontab with ```sudo crontab -e```:
 
-```
-@reboot /usr/sbin/iptables -A INPUT -i eth0 -p tcp --destination-port 111 -j DROP
-@reboot /usr/sbin/iptables -A INPUT -i eth0 -p tcp --destination-port 6443 -j DROP
-@reboot /usr/sbin/iptables -A INPUT -i eth0 -p tcp --destination-port 10250 -j DROP
-```
+
+
+
+## References
+* Setup and configuration of Fail2Ban https://www.digitalocean.com/community/tutorials/how-to-protect-ssh-with-fail2ban-on-ubuntu-22-04
+* Adding SSH keys to server https://www.digitalocean.com/community/tutorials/how-to-configure-ssh-key-based-authentication-on-a-linux-server
+*

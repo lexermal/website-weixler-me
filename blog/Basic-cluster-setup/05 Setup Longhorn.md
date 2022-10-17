@@ -5,10 +5,6 @@ sudo apt install bash curl grep gawk open-iscsi nfs-common -y
 sudo systemctl enable open-iscsi --now
 ```
 
- Inspired by
- https://www.youtube.com/watch?v=eKBBHc0t7bc
-https://docs.technotim.live/posts/longhorn-install/
-
 Install Longhorn with the following commands:
 
 ```
@@ -40,13 +36,10 @@ nano custom-local-storage.yaml
 ```
 At around line 90 change ```storageclass.kubernetes.io/is-default-class: "true"``` to ```storageclass.kubernetes.io/is-default-class: "false"```.
 
-Adapt the file /etc/systemd/system/k3s.service, so it looks at the end like this:
+Adapt the file **/etc/systemd/system/k3s.service**, so it looks at the end like this:
 ```
 ExecStart=/usr/local/bin/k3s \
     server \
-        '--advertise-address' \
-        '10.33.33.2' \
-        '--flannel-iface=nm-cluster-nw1' \
         '--cluster-init' \
         '--disable=local-storage'
 ```
@@ -56,4 +49,4 @@ Restart the node and the storage is fixed.
 
 ## References
 * Explanation on how to disable local-path storage class https://bytemeta.vip/repo/k3s-io/k3s/issues/4083
-*
+* Tutorial on how to install Longhorn https://docs.technotim.live/posts/longhorn-install/

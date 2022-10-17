@@ -6,9 +6,9 @@
 
 
 ## Make Traefik available from outside
-By default Traefik is exposed but only to the IP used at setting up the cluster. When the cluster communicates with its nodes over WireGuard, the exposed IP is the one set from WireGuard and that one is a private one(like 10.1.1.1).
+By default the Traefik dashboard is active but not exposed.
 
-To fix this create the following config file and change the public ip, the dns provider and the api token to your needs.
+To fix this, create the following config file and change the selected parts.
 ```yaml
 apiVersion: helm.cattle.io/v1
 kind: HelmChartConfig
@@ -21,8 +21,6 @@ spec:
       spec:
         # this forwards the real source ip to internal services
         externalTrafficPolicy: Local
-      externalIPs:
-        - 1.1.1.1  # <- change to your public ip
 
     # enable https forwarding
     ports:
@@ -47,7 +45,6 @@ spec:
 
 Apply the config with ```kubectl apply -f .```.
 
-The way on how to redirect everything to https is based on this answer https://stackoverflow.com/a/71989847/808723
 
 
 ## Make Traefik accessible publically
@@ -57,7 +54,7 @@ To make Traefik accessible in a save way we are using basic auth.
 First generate a secret called
 ```htpasswd -nb my-admin-user my-password | openssl base64```
 
-Insert the password hash in the following config and adapt the domain name on which traefik will be available.
+Insert the password hash in the following config and adapt the domain name on which Traefik will be available.
 
 ```yaml
 apiVersion: v1
@@ -102,3 +99,5 @@ spec:
 Apply the config with ```kubectl apply -f .```.
 
 
+## References
+* The way on how to redirect all http traffic to https is based on this answer https://stackoverflow.com/a/71989847/808723

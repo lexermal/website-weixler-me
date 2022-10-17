@@ -2,102 +2,69 @@
 
 Hello everyone!
 
-Today I'm going to explain how to create a high available Kubernetes cluster that is up in a few minutes and is very cheap.
-When having a small budget but still want to always get performant servers, this tutorial is exactly for you!
+Today I'm going to explain how to create a high available cheap Kubernetes cluster that is ready within minutes.
 
-Let's assume you have multiple servers that are all available over the internet. This could be because you are testing out multiple hosting services or simply have multiple servers you want to connect to one cluster to keep the administration effort small.
+I've tried out countless methods, and now I believe this is the best one.
+
 
 ## Rent cheap servers
-First of you have to rent at least 2 v-servers. Cheap ones can be found on these pages. Generally I found out that servers in europe are way cheaper then in USA. You can also get very cheap servers at sales like summer sale, chrismas deals, black friday,...
+In order to make it easy to host a Kubernetes cluster that is production ready that is still cheap we will have two HA master VPS and multiple cheap worker VPS.
 
-https://www.hostingadvice.com/coupon/
+The master VPS should have the following specs at least:
+* 20GB SSD storage (NVM storage would be best)
+* 2 GB memory
+* 1 core CPU
 
-https://www.vserververgleich.com/
+The most crutial part of the tutorial is the choice on the master VPS. They will have ETCD installed and need therefore very fast storage. This servers are there to be kept for multiple years.
 
-[hosttest](https://www-hosttest-de.translate.goog/vergleich/vserver.html?_x_tr_sl=auto&_x_tr_tl=en&_x_tr_hl=sv&_x_tr_pto=wapp) This page is sadly only available in german but with google translater it should work fine.
+The worker nodes should just be as powerful as you need them. They can be swapped out anytime. I recommend to wait for sales like summer sale, chrismas deals, black friday to buy the worker nodes.
 
+Here are some pages offering cheap servers on a regular basis:
+* https://www.hostingadvice.com/coupon/
+* https://www.vserververgleich.com/
+* [hosttest](https://www-hosttest-de.translate.goog/vergleich/vserver.html?_x_tr_sl=auto&_x_tr_tl=en&_x_tr_hl=sv&_x_tr_pto=wapp) This page is sadly only available in german but with Google Translater it should work fine.
 
-
-## Prepare everything for Setting up K3s
-To have a secure cluster we want to use Wireguard for the communication.
-
-Because to create a network with wireguard where every server can talk to each other it is very difficult to manage on our own. Thats why we use Netmaker. It takes care of the wireguard configuration and we simply need to join the nodes.
-
-For that we setup Netmaker on a server that will be available permanently and it is separate from the Kubernetes cluster. This can be a server in your home network thats publically available or a cheap vserver. At least 2GB of memory are recommended.
-
-Follow these instructions to set it up:
-https://netmaker.readthedocs.io/en/master/getting-started.html
-
-To understand how networker works, here is a great tutorial.
-https://www.youtube.com/watch?v=NWMYPU2FCjI
-
-When Netmaker is up and running, log into the dashboard.
-
-Then create a network with the IP range 10.33.33.0/24 and the name "cluster-nw". You can use another range, but this works in most cases.
-
-Then create access tokens for every node and copy the docker command.
-
-Install docker on every node with
-
-```bash
-curl -fsSL https://get.docker.com -o get-docker.sh
-sudo sh ./get-docker.sh
+## Prepare server
+Change the hostname to something easily rememberable:
 ```
-
-**Run it on every node but add "--restart always" at the end.**
-
-You can see in the node view when nodes are connected successfully.
-
+sudo hostnamectl set-hostname my-host-123
+```
 
 ## Setup K3s
 First of we set up the first master node.
-For that we need the WireGuard interface IP. You find it with ```ip add```. It should be 10.33.33.1
 
-Next we install K3s with the following commands:
+Install K3s with the following commands:
 ```
-wget https://get.k3s.io -O k3s-install.sh
-
-sudo sh k3s-install.sh server --advertise-address 10.33.33.1 --flannel-iface=nm-cluster-nw1 --cluster-init
+curl -sfL https://get.k3s.io | sh -s - server --cluster-init
 ```
 
-K3s needs now some time to install. In meantime, we can get the access token for the other nodes by entering the following command:
-
-```cat /var/lib/rancher/k3s/server/token```
-
-Copy it somewhere for later usage.
-
-
-Now K3s should be set up. We can check if everything worked by displaying the nodes:
+K3s needs now some time to install. You can check the status with:
 
 ```kubectl get nodes```
 
-When the output looks similar to this everything worked:
+When the output looks similar the master node is ready:
 
 ```bash
 NAME    STATUS   ROLES                       AGE     VERSION
 node1   Ready    control-plane,etcd,master   4m53s   v1.24.4+k3s1
 ```
-The node needs to have the status ready.
 
-Because the interface initialization of Netmaker/Wireguard takes some time we need to edit **/etc/systemd/system/k3s.service** and add the following line under "[Service]":
-```
-ExecStartPre=/bin/sleep 120
-```
-It delays the startup by 120 seconds.
+In order for the order master node to join later we need to know the master access token. You can get it with the following command:
+
+```cat /var/lib/rancher/k3s/server/token```
 
 
 ## Setup K3s on other nodes
-Now we add the second master node. We use the same script but adjust the ip to the one of the previews node and set the access token we got from the other host.
+Now we add the second master node.
+
+Run the following command and adapt the hostname and use the access token from above.
 
 ```
-wget https://get.k3s.io -O k3s-install.sh
-
-sudo sh k3s-install.sh server --flannel-iface=nm-cluster-nw1 --server https://10.33.33.1:6443 -t my-access-token
+curl -sfL https://get.k3s.io | sh -s - server --server https://ip-or-hostname-of-first-master-node:6443 -t my-master-access-token
 ```
 
-Wait a minute for K3s to initialize on that node.
 
-When you now execute ```kubectl get nodes``` you will see that the other node slowly joins:
+After the installation you should see the following by executing ```kubectl get nodes```:
 
 ```bash
 NAME    STATUS   ROLES                       AGE   VERSION
@@ -105,37 +72,42 @@ node2   Ready    control-plane,etcd,master   17s   v1.24.4+k3s1
 node1   Ready    control-plane,etcd,master   21m   v1.24.4+k3s1
 ```
 
-When booth have the status ready, your cluster is initialized.
+When booth have the status ready, your master nodes are ready.
 
-If the node does wount join check for errors on that node via ```journalctl -u k3s-agent```. When it shows a **401 Unauthorized** error at the end of the output, it might be that you have invisible characters around the install comand. You can check for these with [this tool](https://www.soscisurvey.de/tools/view-chars.php).
+If the node does wouldn't join check for errors on that node via ```journalctl -u k3s-agent```. When it shows a **401 Unauthorized** error at the end of the output, it might be that you have invisible characters around the installation command. You can check for these with [this tool](https://www.soscisurvey.de/tools/view-chars.php).
 
-When adding multiple nodes try to connect the new one to the one that will stay the longest in the cluster.
+## Adding worker nodes
+Try to split up the worker nodes to booth master nodes.
+
+Add a worker to a master node by executing
+```
+curl -sfL https://get.k3s.io | K3S_URL=https://my-master-server:6443 K3S_TOKEN=my-master-token sh -
+```
 
 ## Removing a node
-When the cheap period of the v-server is over or you want to have a other server that has a better price to performance ratio you can remove a host the following way:
+When the cheap period of the v-server is over, or you want to have another server that has a better price to performance ratio you can remove a host the following way:
 
 > :warning: Keep in mind depending on the load running in the cluster it might sometimes be recommendable to first add another node before removing one.
 
-To add a node simply follow the introductions from above.
-
-If you have Longhorn installed disable scheduling on that node over the web interface.
-
-Wait a bit for Longhorn to move the volumes.
-
-Next drain the host and remove it from the cluster:
+1. If you have Longhorn installed disable scheduling on that node over the web interface.
+2. Wait a bit for Longhorn to move the volumes.
+3. Next drain the host and remove it from the cluster:
 ```
  kubectl drain my-node --delete-emptydir-data --ignore-daemonsets
  kubectl delete node my-node
 ```
 
-The cluster needs now some time to restructure itself.
+The cluster needs some time to restructure itself.
 
-You are now done congratulations!!
+## Setup firewall rules
+In order to shrink the surface of attacks we add the following firewall rules to secure the master nodes ```sudo crontab -e```:
 
-
-You can now install your first Kubernetes services but I would recommend you to first [secure your nodes against attacks](DRAFT-Secure%20VPS.md) and make the cluster more [convinient to use](DRAFT-Prepare%20K3s%20cluster%20tools.md).
-
-
+```
+@reboot /usr/sbin/iptables -A INPUT -i eth0 -p tcp --destination-port 111 -j DROP
+@reboot /usr/sbin/iptables -A INPUT -i eth0 -p tcp --destination-port 6443 -j DROP
+@reboot /usr/sbin/iptables -A INPUT -i eth0 -p tcp --destination-port 10250 -j DROP
+```
 
 ## References
-* Rancher instructions on how to setup a HA K3s cluster: https://rancher.com/docs/k3s/latest/en/installation/ha-embedded/
+* Rancher instructions on how to set up a HA K3s cluster: https://docs.k3s.io/installation/ha-embedded
+* Rancher instructions on how to add worker nodes: https://docs.k3s.io/quick-start
