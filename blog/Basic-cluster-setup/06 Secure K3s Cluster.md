@@ -3,9 +3,9 @@
 We assume that Longhorn is installed on that cluster.
 
 ```
-helm repo add crowdsec https://crowdsecurity.github.io/helm-charts && helm repo update
+helm repo add crowdsec https://crowdsecurity.github.io/helm-charts
 
-nano custom-values.yaml
+nano values.yml
 ```
 Insert the following content:
 
@@ -53,7 +53,7 @@ echo "fs.inotify.max_user_instances=1280" | sudo tee -a /etc/sysctl.conf
 echo "fs.inotify.max_user_watches=655360" | sudo tee -a /etc/sysctl.conf
 sudo sysctl -p
 
-helm upgrade crowdsec crowdsec/crowdsec --install -n crowdsec -f custom-values.yaml --create-namespace
+helm upgrade crowdsec crowdsec/crowdsec --install -n crowdsec -f values.yml --create-namespace
 ```
 
 The rollout takes up to 30min and the api pod shows multiple errors in that time.
@@ -160,9 +160,11 @@ additionalArguments:
 Congratulations your Crowdsec instance is working now!
 You can now log in via https://crowdsec.my-domain.com
 
-username: crowdsec@crowdsec.net
+Username: crowdsec@crowdsec.net
 
-password: !!Cr0wdS3c_M3t4b4s3??
+Password: !!Cr0wdS3c_M3t4b4s3??
+
+Don't forget to change the credentials.
 
 ## Verify blocking
 
