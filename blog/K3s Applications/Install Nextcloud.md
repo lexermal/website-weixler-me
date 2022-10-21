@@ -36,7 +36,6 @@ Install Nextcloud with:
 helm upgrade --install nextcloud nextcloud/nextcloud -f values.yml -n nextcloud --create-namespace
 ```
 
-kubectl get service --namespace nextcloud
 
 ```
 apiVersion: traefik.containo.us/v1alpha1
