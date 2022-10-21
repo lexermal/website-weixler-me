@@ -64,17 +64,21 @@ wget https://github.com/webbukkit/dynmap/releases/download/v3.2.1/Dynmap-3.2.1-s
 
 ### Optional additional plugins
 The following plugins might be useful
-```
+
 https://github.com/IntellectualSites/FastAsyncWorldEdit/releases
+
 https://dev.bukkit.org/projects/multiverse-core/files/latest
+
 https://github.com/AuthMe/AuthMeReloaded/releases
+
 https://github.com/ViaVersion/ViaBackwards/releases
+
 https://ci.viaversion.com/view/ViaRewind/job/ViaRewind/lastBuild/artifact/all/target/
+
 https://github.com/EssentialsX/Essentials/releases
 
 
 
-```
 
 
 ## Make Dynmap available
