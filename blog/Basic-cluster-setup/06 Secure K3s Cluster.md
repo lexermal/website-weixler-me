@@ -14,7 +14,9 @@ container_runtime: containerd
 lapi:
   dashboard:
     enabled: true
-  resources: {}
+  resources:
+    limits:
+      memory: 200Mi
   persistentVolume:
     data:
       storageClassName: longhorn
