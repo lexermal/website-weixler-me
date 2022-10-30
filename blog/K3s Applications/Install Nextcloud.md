@@ -72,6 +72,26 @@ At the end you need to disable the app "circles" in Nextcloud. Otherwise, a Stat
 As admin it might be that you want to login into Nextcloud without SAML to configure stuff.
 This can be achieved with this url: https://cloud.my-domain.com/login?direct=1
 
+### Enable admin group management over Authentik
+In order to let users be admins there need to change some configuration in Authentik.
+
+Create a group called "Cloud Admins" that contains the users you want to be admins for Nextcloud.
+
+In "Property Mapping" create a SAML property mapping with the following settings:
+* Name: Cloud group mapping
+* SAML Attribute name: http://schemas.xmlsoap.org/claims/Group
+* Expression:
+```
+for group in user.ak_groups.all():
+    yield group.name
+if ak_is_group_member(request.user, name="Cloud Admins"):
+    yield "admin"
+```
+
+Open the SAML Provider for your Nextcloud, open the advanced protocol settings, unselect "authentik default SAML mapping: Groups" and select "Cloud group mapping".
+
+Done. Now the users of group Cloud Admins will be admins starting from the next time they log in.
+
 ## (optional) Making calendar sync work
 
 The calendar API works only with local users, not SAML / SSO users.
@@ -81,3 +101,4 @@ To still sync your calendar you need to create a local user to which calendars y
 ## References
 * Tutorial is based on https://artifacthub.io/packages/helm/nextcloud/nextcloud#configuration
 * Nextcloud SAML bug https://github.com/nextcloud/server/issues/32432#issuecomment-1222143890
+* Details for SAML property mapping http://schemas.xmlsoap.org/claims/Group
