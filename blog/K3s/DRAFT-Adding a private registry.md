@@ -2,7 +2,7 @@
 
 
 
-## Configure the registry on a node
+## Configure the registry on every node
 ```sudo nano /etc/rancher/k3s/registries.yaml```
 
 Write the following in that file:
@@ -19,6 +19,7 @@ configs:
       password: my_registry_password
 ```
 
+Reboot the server.
 
 References:
 This tutorial is based on https://rancher.com/docs/k3s/latest/en/installation/private-registry/
