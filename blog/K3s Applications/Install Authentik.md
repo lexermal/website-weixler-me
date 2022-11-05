@@ -64,7 +64,20 @@ kubectl apply -f ingress.yml
 
 You can now setup Authentik over https://auth.my-domain.com/if/flow/initial-setup/
 
+## Authentik URLs
+
+| Endpoint             | URL                                                                  |
+| -------------------- | -------------------------------------------------------------------- |
+| Authorization        | `/application/o/authorize/`                                          |
+| Token                | `/application/o/token/`                                              |
+| User Info            | `/application/o/userinfo/`                                           |
+| Token Revoke         | `/application/o/revoke/`                                             |
+| End Session          | `/application/o/<application slug>/end-session/`                     |
+| JWKS                 | `/application/o/<application slug>/jwks/`                            |
+| OpenID Configuration | `/application/o/<application slug>/.well-known/openid-configuration` |
+
 ## References
 * Tutorial is based on https://goauthentik.io/docs/installation/kubernetes
 * Necessary repositories were found at https://artifacthub.io/packages/helm/goauthentik/authentik
 * Ingress config is based on https://github.com/goauthentik/authentik/issues/741#issuecomment-822038893
+* Source for Authentik urls https://goauthentik.io/docs/providers/oauth2/
