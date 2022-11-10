@@ -17,6 +17,7 @@ Create a file named **values.yaml** and adapt the values:
 
 ```
 authentik:
+    log_level: debug
     secret_key: "my-secret-key"
      postgresql:
         password: "my-db-password"
@@ -76,8 +77,37 @@ You can now setup Authentik over https://auth.my-domain.com/if/flow/initial-setu
 | JWKS                 | `/application/o/<application slug>/jwks/`                            |
 | OpenID Configuration | `/application/o/<application slug>/.well-known/openid-configuration` |
 
+## Using LDAP
+Create an LDAP outpost with the name "LDAP outpost".
+Other applications can connect to it via **ak-outpost-ldap-outpost.authentik.svc.cluster.local**. 
+
+### Debug LDAP
+If you want to debug the LDAP connection you can expose the LDAP outpost. But keep in mind it should be disabled as soon as you are finished debugging because leaving it exposed is a security risk.
+
+```yaml
+apiVersion: v1
+kind: Service
+metadata:
+  name: sumdays-authentik-service
+  namespace: sumdays-authentik
+spec:
+  type: LoadBalancer
+  ports:
+  - port: 389
+    protocol: TCP
+    targetPort: 3389
+    name: ldap
+  - port: 636
+    protocol: TCP
+    targetPort: 6636
+    name: ldaps
+  selector:
+     app.kubernetes.io/name: authentik-outpost-ldap
+```
+
 ## References
 * Tutorial is based on https://goauthentik.io/docs/installation/kubernetes
 * Necessary repositories were found at https://artifacthub.io/packages/helm/goauthentik/authentik
 * Ingress config is based on https://github.com/goauthentik/authentik/issues/741#issuecomment-822038893
 * Source for Authentik urls https://goauthentik.io/docs/providers/oauth2/
+* Service access within cluster https://stackoverflow.com/questions/37221483/service-located-in-another-namespace
