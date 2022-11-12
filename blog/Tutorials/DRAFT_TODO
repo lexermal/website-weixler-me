@@ -2,39 +2,12 @@
 ## Namespace structure
 Clustering of services
 
------Family
 neuhold_wohnung
-weixler_cloud
-weixler_minecraft
-
------Personal
-weixler_vaultwarden
 weixler_wiki
-test_weixler_languagetool
-weixler_discord_bridge
-
------University
-fh_anki
-fh_survey
-weixler_notes
-
------Prattes
 sysbox_host_prattes
-
------Public
 weixler_website
 weixler_mediumgram
-weixler_blog
-
-
------Shared Project Resources
 weixler_mockups
-
------Devops
-cluster_ssh
-cluster_basics
-sysbox_proxy
-
 
 
 
@@ -45,25 +18,6 @@ sysbox_proxy
 
 
 
-## Adding custom helm charts
-Navigate to https://artifacthub.io/
-Search for a package you like.
-Click on
-
-| Names        | URLs           |
-| ------------- | ------------- |
-| bitnami	| https://charts.bitnami.com          |
-| gissilabs	| https://gissilabs.github.io/charts/ |
-| gitlab	| http://charts.gitlab.io/ |
-| k8s-at-home	| https://k8s-at-home.com/charts/ |
-| minecraft-server-charts	| https://itzg.github.io/minecraft-server-charts/ |
-| nextcloud	| https://nextcloud.github.io/helm/ |
-| nicholaswilde	| https://nicholaswilde.github.io/helm-charts/ |
-| Partners | https://git.rancher.io/partner-charts |
-| prometheus | https://prometheus-community.github.io/helm-charts |
-| Rancher | https://git.rancher.io/charts |
-| RKE2	| https://git.rancher.io/rke2-charts |
-
 
 
 
@@ -73,3 +27,21 @@ https://github.com/longhorn/longhorn/issues/2228#issuecomment-792750229
 https://longhorn.io/docs/1.3.1/references/longhorn-client-python/
 
 ## Harden K3s Server more with https://rancher.com/docs/k3s/latest/en/security/hardening_guide/
+
+
+
+
+## Kubernetes Sumday todo
+* Configure NFS backup
+* Configure script backup for longhorn volumes to OG
+* Setup private wiki
+
+
+
+## Todo this week
+- Onboard David + Account creation
+- Setup Taiga
+- Setup Limesurvey
+- Start with Frontend development
+- Organize Chrismas Party
+- Find and Join language course
