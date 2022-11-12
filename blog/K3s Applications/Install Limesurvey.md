@@ -88,6 +88,8 @@ So setup is postponed
 
 Interesting thing about mapped properties, maybe that's the final mistake https://goauthentik.io/docs/property-mappings/#saml-property-mapping
 
+Further hint on how to make ldap work https://www.reddit.com/r/selfhosted/comments/ys6n76/authentik_ldap_in_calibreweb/
+
 ## References
 * https://artifacthub.io/packages/helm/martialblog/limesurvey
 * https://goauthentik.io/docs/providers/ldap
