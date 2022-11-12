@@ -5,7 +5,6 @@ When a user signs up it does not work but if the user exists before login is pos
 So the following works:
 1. In Taiga registering user
 2. Login via Authentik
-   
 
 ## Create admin
 
