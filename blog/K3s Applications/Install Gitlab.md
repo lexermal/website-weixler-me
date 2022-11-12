@@ -2,6 +2,27 @@
 
 This tutorial uses the helm charts of Pascaliske for installing Gitlab omnibus. They were chosen because the original Gitlab charts have a problem with CustomResourceDefinitions.
 
+## Configure Authentik
+
+Generate a Certificate-Key Pair with the following settings:
+* Common Name Gitlab
+* Validity days: 3650
+
+Open the Gitlab certificate and copy the SHA1 certificate fingerprint for the idp_cert_fingerprint in the Gitlab values.yml file config parameter.
+
+Create a SAML Provider with the following settings:
+* Name: Gitlab
+* Authorization flow: implicit
+* ACS URL: https://git.my-domain.com/users/auth/saml/callback
+* Issuer: https://git.my-domain.com
+* Audience: https://git.my-domain.com
+* Signing Certificate: Gitlab
+
+Create an application with the following settings:
+* Name: Gitlab
+* Slug: gitlab
+* Provider: Gitlab
+* Launch URL: https://git.my-domain.com
 ## Install Gitlab
 helm repo add pascaliske https://charts.pascaliske.dev
 
@@ -52,27 +73,7 @@ Install Gitlab with this command
 helm upgrade --install gitlab pascaliske/gitlab -f values.yml -n gitlab --create-namespace
 ```
 If you change settings in the values.yml file and run the upgrade command from above, you need to run this command in the pod to apply the changes ```gitlab-ctl reconfigure```.
-## Configure Authentik
 
-Generate a Certificate-Key Pair with the following settings:
-* Common Name Gitlab
-* Validity days: 3650
-
-Open the Gitlab certificate and copy the SHA1 certificate fingerprint for the idp_cert_fingerprint in the Gitlab values.yml file config parameter.
-
-Create a SAML Provider with the following settings:
-* Name: Gitlab
-* Authorization flow: implicit
-* ACS URL: https://git.my-domain.com/users/auth/saml/callback
-* Issuer: https://git.my-domain.com
-* Audience: https://git.my-domain.com
-* Signing Certificate: Gitlab
-
-Create an application with the following settings:
-* Name: Gitlab
-* Slug: gitlab
-* Provider: Gitlab
-* Launch URL: https://git.my-domain.com
 
 ## Make Gitlab reachable
 
