@@ -34,6 +34,7 @@ configMap:
       external_url 'https://git.my-domain.com'
       gitlab_rails['initial_root_password'] = 'my-root-password'
       nginx['listen_https'] = false
+      nginx['listen_port'] = 80
       letsencrypt['enable'] = false
       grafana['enable'] = false
       gitlab_rails['gitlab_default_projects_features_issues'] = true
