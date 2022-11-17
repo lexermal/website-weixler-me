@@ -46,7 +46,36 @@ ExecStart=/usr/local/bin/k3s \
 
 Restart the node and the storage is fixed.
 
+## Troubleshoot multipath issue
+
+If you find in your logs issues like these
+```time="2020-04-16T08:49:27Z" level=info msg="GRPC request: {\"target_path\":\"/var/lib/kubelet/pods/cf0a0b5b-106e-4793-a74a-28bfae21be1a/volumes/kubernetes.io~csi/pvc-d061512e-870a-4ece-bd45-2f04672d5256/mount\",\"volume_capability\":{\"AccessType\":{\"Mount\":{\"fs_type\":\"ext4\"}},\"access_mode\":{\"mode\":1}},\"volume_context\":{\"baseImage\":\"\",\"fromBackup\":\"\",\"numberOfReplicas\":\"3\",\"staleReplicaTimeout\":\"30\",\"storage.kubernetes.io/csiProvisionerIdentity\":\"1586958032802-8081-driver.longhorn.io\"},\"volume_id\":\"pvc-d061512e-870a-4ece-bd45-2f04672d5256\"}"
+time="2020-04-16T08:49:27Z" level=info msg="NodeServer NodePublishVolume req: volume_id:\"pvc-d061512e-870a-4ece-bd45-2f04672d5256\" target_path:\"/var/lib/kubelet/pods/cf0a0b5b-106e-4793-a74a-28bfae21be1a/volumes/kubernetes.io~csi/pvc-d061512e-870a-4ece-bd45-2f04672d5256/mount\" volume_capability:<mount:<fs_type:\"ext4\" > access_mode:<mode:SINGLE_NODE_WRITER > > volume_context:<key:\"baseImage\" value:\"\" > volume_context:<key:\"fromBackup\" value:\"\" > volume_context:<key:\"numberOfReplicas\" value:\"3\" > volume_context:<key:\"staleReplicaTimeout\" value:\"30\" > volume_context:<key:\"storage.kubernetes.io/csiProvisionerIdentity\" value:\"1586958032802-8081-driver.longhorn.io\" > "
+E0416 08:49:27.567704 1 mount_linux.go:143] Mount failed: exit status 32
+Mounting command: mount
+Mounting arguments: -t ext4 -o defaults /dev/longhorn/pvc-d061512e-870a-4ece-bd45-2f04672d5256 /var/lib/kubelet/pods/cf0a0b5b-106e-4793-a74a-28bfae21be1a/volumes/kubernetes.io~csi/pvc-d061512e-870a-4ece-bd45-2f04672d5256/mount
+Output: mount: /var/lib/kubelet/pods/cf0a0b5b-106e-4793-a74a-28bfae21be1a/volumes/kubernetes.io~csi/pvc-d061512e-870a-4ece-bd45-2f04672d5256/mount: /dev/longhorn/pvc-d061512e-870a-4ece-bd45-2f04672d5256 already mounted or mount point busy.
+E0416 08:49:27.576477 1 mount_linux.go:487] format of disk "/dev/longhorn/pvc-d061512e-870a-4ece-bd45-2f04672d5256" failed: type:("ext4") target:("/var/lib/kubelet/pods/cf0a0b5b-106e-4793-a74a-28bfae21be1a/volumes/kubernetes.io~csi/pvc-d061512e-870a-4ece-bd45-2f04672d5256/mount") options:(["defaults"])error:(exit status 1)
+time="2020-04-16T08:49:27Z" level=error msg="GRPC error: rpc error: code = Internal desc = exit status 1"
+```
+
+It's likely that you have a multipath issue. Detailed infos about the issue can be found in the references below.
+
+To solve the issue edit the file ```/etc/multipath.conf``` on the node where the issues happen and insert the following lines at the end
+
+```
+blacklist {
+    devnode "^sd[a-z0-9]+"
+}
+```
+
+Apply changes with ```systemctl restart multipathd.service```.
+You can validate the changes with ```multipath -t````.
+
+Now mounting should work. Find the PVCs that do not work, detach them via Longhorn UI and attach them again on the node where the pod is running. Then delete the pod and it will start properly.
+
 
 ## References
 * Explanation on how to disable local-path storage class https://bytemeta.vip/repo/k3s-io/k3s/issues/4083
 * Tutorial on how to install Longhorn https://docs.technotim.live/posts/longhorn-install/
+* Infos about Multiplatform issue: https://longhorn.io/kb/troubleshooting-volume-with-multipath/
