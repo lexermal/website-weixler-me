@@ -75,7 +75,46 @@ You can validate the changes with ```multipath -t````.
 Now mounting should work. Find the PVCs that do not work, detach them via Longhorn UI and attach them again on the node where the pod is running. Then delete the pod and it will start properly.
 
 
+## Troubleshoot Attach and Detach loop
+If it happends that the Longhorn UI shows that a PVC gets attached and seconds later detached in a loop the following helps.
+
+The issue why the PVC does not get mounted is because the volume size does not match. You can find the error message in the **longhron-manager* pod
+```
+time="2022-11-17T16:24:02Z" level=warning msg="pvc-0646006d-ea7b-4dee-abed-6d6cde9a5137-e-3d30d9e2: time=\"2022-11-17T15:05:54Z\" level=warning msg=\"backend tcp://10.42.1.101:10015 size does not match 5368709120 != 32212254720 in the engine initiation phase\""
+```
+
+You can fix this by first extracting the data from the volume, delete it and copy it into the new one.
+
+First go into the directory of the volume:
+
+```
+cd /var/lib/longhorn/replicas/
+cd <pvc-name>
+```
+
+Then you need to find out the size of the volume by reading it out of the file **volume.meta**.
+
+Then run the following command to be able to mount the volume. Adjust the pvc and size before executing:
+```
+docker run -v /dev:/host/dev -v /proc:/host/proc -v /var/lib/longhorn/replicas/my-pvc-directory:/volume --privileged -d longhornio/longhorn-engine:v1.3.0 launch-simple-longhorn my-pvc-name my-found-size
+```
+
+Now you can mount the vollume with
+```
+mkdir /tmp/my-pvc-data
+mount /dev/longhorn/my-pvc-name /tmp/my-pvc-data
+```
+
+Copy all data.
+Stop the docker container.
+Delete the PVC via Longhorn UI.
+Scale the deployment of your pod down to 0, mount the new PCV and copy all data into it.
+Scale the deployment up again.
+
+
+
 ## References
 * Explanation on how to disable local-path storage class https://bytemeta.vip/repo/k3s-io/k3s/issues/4083
 * Tutorial on how to install Longhorn https://docs.technotim.live/posts/longhorn-install/
-* Infos about Multiplatform issue: https://longhorn.io/kb/troubleshooting-volume-with-multipath/
+* Infos about Multiplatform issue https://longhorn.io/kb/troubleshooting-volume-with-multipath/
+* Infos about attaching loop https://longhorn.io/docs/1.1.0/advanced-resources/data-recovery/export-from-replica/
