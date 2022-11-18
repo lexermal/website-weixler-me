@@ -1,7 +1,7 @@
-
+```
 helm repo add djjudas21 https://djjudas21.github.io/charts/
+```
 
-helm upgrade --install heimdall djjudas21/heimdall -f values.yml -n my-heimdall --create-namespace
 
 ```
 persistence:
@@ -9,6 +9,9 @@ persistence:
     enabled: true
 ```
 
+```
+helm upgrade --install heimdall djjudas21/heimdall -f values.yml -n my-heimdall --create-namespace
+```
 
 Heimdall will be available via https://home.my-domain.com
 
