@@ -16,6 +16,7 @@ jicofo:
   xmpp:
     password: my-password
 jvb:
+  UDPPort: 32001
   xmpp:
     password: my-password
 ```
