@@ -16,9 +16,6 @@ mariadb:
     enabled: true
     password: "my-password"
 
-cronjob:
-    enabled: true
-
 persistence:
     enabled: true
     storageClass: longhorn
