@@ -87,71 +87,48 @@ kubectl exec -it deployment/crowdsec-lapi -n crowdsec -c crowdsec-lapi -- cscli 
 
 
 Create a file named **traefik_bouncer-values.yaml** and insert the following:
-```
+```yaml
 bouncer:
   crowdsec_bouncer_api_key: my-bouncer-key
   crowdsec_agent_host: "crowdsec-service.crowdsec.svc.cluster.local:8080"
+  crowdsec_bouncer_ban_response_code: 400
 ```
 
 Add the bouncer with
 
-```
+```bash
 helm upgrade traefik-bouncer crowdsec/crowdsec-traefik-bouncer --install -n kube-system -f traefik_bouncer-values.yaml
 ```
 
-Now we need to make the dashboard of crowsdec visible via a webinterface with doing the following:
+Now we need to make the dashboard of Crowdsec accessible by doing the following:
 
-Create a file named **crowdsec-dashboard-cert.yaml** with the following content:
-```
-apiVersion: cert-manager.io/v1
-kind: Certificate
-metadata:
-  name: crowdsec-dashboard-cert
-  namespace: crowdsec
-spec:
-  commonName: crowdsec.my-domain.com
-  secretName: crowdsec-dashboard-cert
-  dnsNames:
-    - crowdsec.my-domain.com
-  issuerRef:
-    name: "Contact Weixler"
-    kind: ClusterIssuer
-```
+Create a file named **ingress.yml** with the following content:
 
-Now we add the ingress route
-
-Create a file named **crowdsec-dashboard-ingress.yaml** and add the following content. Adapt the domain name
-
-```
+```yaml
 apiVersion: traefik.containo.us/v1alpha1
 kind: IngressRoute
 metadata:
-  name: crowdsec-dashboard-ingress
+  name: crowdsec-route
   namespace: crowdsec
 spec:
   entryPoints:
     - websecure
-  routes:
-  - match: Host(`crowdsec.my-domain.com`)
-    kind: Rule
-    services:
-    - name: crowdsec-service
-      port: 3000
   tls:
-      secretName: crowdsec-dashboard-cert
+    certResolver: le
+  routes:
+    - match: Host(`crowdsec.my-domain.com`)   # <--change domain
+      kind: Rule
+      services:
+        - name: crowdsec-service
+          port: 3000
 ```
 
-
-Apply the configs with
-```
-kubectl apply -f crowdsec-dashboard-cert.yaml
-kubectl apply -f crowdsec-dashboard-ingress.yaml
-```
+Apply the config with ```kubectl apply -f ingress.yml```
 
 
 The bouncer is now running. To add Traefik bouncer as middleware globally, you need to add this configuration below to your Traefik helm values and upgrade.
 
-```
+```yaml
 additionalArguments:
   - "--entrypoints.web.http.middlewares=kube-system-traefik-bouncer@kubernetescrd"
   - "--entrypoints.websecure.http.middlewares=kube-system-traefik-bouncer@kubernetescrd"
@@ -217,7 +194,6 @@ wapiti -u https://my-comain.com
 
 When you reload now the page, you will see a "Forbidden" message. Only this IP is temporarily blocked.
 
-## Remarks
-
-This tutorial is based on this install script
-https://pastebin.com/2mq6dfmT
+## References
+* This tutorial is based on this install script https://pastebin.com/2mq6dfmT
+* Artefacthub helm infos https://artifacthub.io/packages/helm/crowdsec/crowdsec?modal=values
