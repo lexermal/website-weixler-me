@@ -100,12 +100,13 @@ When the cheap period of the v-server is over, or you want to have another serve
 The cluster needs some time to restructure itself.
 
 ## Setup firewall rules
-In order to shrink the surface of attacks we add the following firewall rules to secure the master nodes ```sudo crontab -e```:
+In order to shrink the surface of attacks we add the following firewall rules to secure the master nodes ```sudo crontab -e```. Adapt the ip to the nodes ips:
 
 ```
-@reboot /usr/sbin/iptables -A INPUT -i eth0 -p tcp --destination-port 111 -j DROP
-@reboot /usr/sbin/iptables -A INPUT -i eth0 -p tcp --destination-port 6443 -j DROP
-@reboot /usr/sbin/iptables -A INPUT -i eth0 -p tcp --destination-port 10250 -j DROP
+@reboot /usr/sbin/iptables -A INPUT -p tcp --dport 6443 -s 1.2.3.4 -j ACCEPT
+@reboot /usr/sbin/iptables -A INPUT -p tcp --dport 6443 -j DROPDROP
+@reboot /usr/sbin/iptables -A INPUT -p tcp --dport 10250 -s 1.2.3.4 -j ACCEPT
+@reboot /usr/sbin/iptables -A INPUT -p tcp --dport 10250 -j DROPDROP
 ```
 
 ## References
