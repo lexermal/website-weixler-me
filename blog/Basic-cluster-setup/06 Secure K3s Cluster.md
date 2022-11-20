@@ -139,9 +139,9 @@ additionalArguments:
 Congratulations your Crowdsec instance is working now!
 You can now log in via https://crowdsec.my-domain.com
 
-Username: crowdsec@crowdsec.net
+Username: **crowdsec@crowdsec.net**
 
-Password: !!Cr0wdS3c_M3t4b4s3??
+Password: **!!Cr0wdS3c_M3t4b4s3??**
 
 Don't forget to change the credentials.
 
@@ -197,3 +197,5 @@ When you reload now the page, you will see a "Forbidden" message. Only this IP i
 ## References
 * This tutorial is based on this install script https://pastebin.com/2mq6dfmT
 * Artefacthub helm infos https://artifacthub.io/packages/helm/crowdsec/crowdsec?modal=values
+* Traefik Bouncer environment variables https://github.com/fbonalair/traefik-crowdsec-bouncer
+* Traefik bouncer helm infos https://artifacthub.io/packages/helm/crowdsec/crowdsec-traefik-bouncer?modal=values
