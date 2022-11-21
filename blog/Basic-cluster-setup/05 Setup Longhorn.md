@@ -111,7 +111,20 @@ Delete the PVC via Longhorn UI.
 Scale the deployment of your pod down to 0, mount the new PCV and copy all data into it.
 Scale the deployment up again.
 
+## Troubleshoot "no relationship found between node 'X' and this object" error
 
+```
+MountVolume.WaitForAttach failed for volume \"pvc-84933541-a66d-4ca2-a710-6db17e6643ba\" : volume pvc-84933541-a66d-4ca2-a710-6db17e6643ba has GET error for volume attachment csi-0c400de43ff27c65fa12afab1248675317dbb2b8fc07ae6582df5ce218fa6ff7: volumeattachments.storage.k8s.io \"csi-0c400de43ff27c65fa12afab1248675317dbb2b8fc07ae6582df5ce218fa6ff7\" is forbidden: User \"system:node:server1\" cannot get resource \"volumeattachments\" in API group \"storage.k8s.io\" at the cluster scope: no relationship found between node 'server1' and this object
+```
+
+This is currently an open bug: https://github.com/longhorn/longhorn/issues/4188
+
+It can be fixed by scaling the deployment down to 0 and back up:
+
+```
+kubectl scale --replicas=0 deployment my-deployment-name -n my-namespace
+kubectl scale --replicas=1 deployment my-deployment-name -n my-namespace
+```
 
 ## References
 * Explanation on how to disable local-path storage class https://bytemeta.vip/repo/k3s-io/k3s/issues/4083
