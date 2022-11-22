@@ -126,6 +126,16 @@ kubectl scale --replicas=0 deployment my-deployment-name -n my-namespace
 kubectl scale --replicas=1 deployment my-deployment-name -n my-namespace
 ```
 
+## Troubleshoot read only file system
+If you encounter an error in the pod logs that says the file system is read only, this is the solution.
+
+Like in the troubleshooting point from above you simply need to scale the deployment to 0 and scale back up:
+```
+kubectl scale --replicas=0 deployment my-deployment-name -n my-namespace
+kubectl scale --replicas=1 deployment my-deployment-name -n my-namespace
+```
+
+
 ## References
 * Explanation on how to disable local-path storage class https://bytemeta.vip/repo/k3s-io/k3s/issues/4083
 * Tutorial on how to install Longhorn https://docs.technotim.live/posts/longhorn-install/
