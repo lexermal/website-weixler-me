@@ -28,3 +28,36 @@ database:
 
 
 helm upgrade --install harbor harbor/harbor -f values.yml -n harbor --create-namespace
+
+## Configure SSO
+
+Create a OAuth2/OpenID Provider in Authentik with the following config:
+* Name: Harbor
+* Authorization flow: Implicit
+* Copy Client ID
+* Copy Secret
+* Redirect URIs: https://registry.my-domain.com/c/oidc/callback
+* Signing Key: authentik RSA key
+
+Create an application with the following config:
+* Name: Harbor
+* Slug: harbor
+* Provider: Harbor
+* Launch URL: https://registry.my-domain.com
+
+In the administration of Harbor set in the Configuration the following setting:
+* Auth mode: OIDC
+* Provider Name: authentik
+* OIDC Endpoint: https://auth.my-domain.com/application/o/harbor/
+* OICD Client ID: Enter the copied id
+* OIDC Client Secret: Enter the copied secret
+* Group Claim Name: groups
+* OIDC Admin Group: authentik Admins
+* OIDC Scope: openid,profile,email
+* Verify Certificate: checked
+* Automatic onboarding: checked
+* Username Claim: preferred_username
+
+## References
+* Habor SSO https://goharbor.io/docs/1.10/administration/configure-authentication/oidc-auth/
+* Authentik docu for Harbor https://goauthentik.io/integrations/services/harbor/
