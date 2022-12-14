@@ -49,19 +49,11 @@ x-environment:
 
   # OpenID settings
   ENABLE_OPENID: "True"
-  OPENID_USER_URL: "https://auth.sumdays.org/application/o/userinfo/"
-  OPENID_TOKEN_URL: "https://auth.sumdays.org/application/o/token/"
-  OPENID_CLIENT_ID: "b7e9240840e47e97810ebc5c810a681714c612c4"
-  OPENID_CLIENT_SECRET: "53a51c3b4570d47d5038f893daa14894e6235f89be9c790eb540a3107ef4430eb6142d7ab35583308899f7e69e7ed3bdcf37703944f0d259c925c8fafa170c60"
- # OPENID_SCOPE: ""
+  OPENID_USER_URL: "https://auth.my-domain.com/application/o/userinfo/"
+  OPENID_TOKEN_URL: "https://auth.my-domain.com/application/o/token/"
+  OPENID_CLIENT_ID: "my-client-id"
+  OPENID_CLIENT_SECRET: "my-client-secret"
   OPENID_SCOPE: "openid profile email"
-#  OPENID_ID_FIELD: "sub"
- # OPENID_USERNAME_FIELD: "preferred_username"
-  #OPENID_FULLNAME_FIELD: "email"
-  #OPENID_EMAIL_FIELD: "email"
-  # OPENID_SCOPE: "openid email"
-
-
 
 x-volumes:
   &default-back-volumes
@@ -123,8 +115,8 @@ services:
       TAIGA_URL: "http://localhost:9000"
       TAIGA_WEBSOCKETS_URL: "ws://localhost:9000"
       ENABLE_OPENID: "true"
-      OPENID_URL: "https://auth.sumdays.org/application/o/authorize/"
-      OPENID_CLIENT_ID: "b7e9240840e47e97810ebc5c810a681714c612c4"
+      OPENID_URL: "https://auth.my-domain.com/application/o/authorize/"
+      OPENID_CLIENT_ID: "my-client-id"
       OPENID_NAME: "Authentik"
       OPENID_SCOPE: "openid profile email"
     networks:
