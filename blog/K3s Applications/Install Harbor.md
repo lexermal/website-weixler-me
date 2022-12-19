@@ -7,6 +7,9 @@ helm repo add harbor https://helm.goharbor.io
 ```
 expose:
   ingress:
+    annotations:
+      traefik.ingress.kubernetes.io/router.entrypoints: websecure
+      traefik.ingress.kubernetes.io/router.tls.certResolver: le  
     hosts:
       core: registry.my-domain.com
       notary: notary.my-domain.com
