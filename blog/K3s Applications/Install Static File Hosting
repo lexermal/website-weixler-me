@@ -1,0 +1,106 @@
+# Install simple webhosting for static files
+
+
+To deploy the hosting create a file called **deployment.yml** and change the values to your needs:
+```yaml
+apiVersion: v1
+kind: PersistentVolumeClaim
+metadata:
+  name: hosting-pvc
+  namespace: web-hosting
+spec:
+  accessModes:
+    - ReadWriteOnce
+  storageClassName: longhorn
+  resources:
+    requests:
+      storage: 10Gi   # <-- Change
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: hosting-deployment
+  namespace: web-hosting
+  labels:
+    app: hosting-deployment
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: hosting-pod
+  template:
+    metadata:
+      labels:
+        app: hosting-pod
+    spec:
+      containers:
+      - name: hosting-backend
+        image: hurlenko/filebrowser
+        volumeMounts:
+        - name: hosting-vol
+          mountPath: /usr/share/nginx/html
+          subPath: data
+        - name: hosting-vol
+          mountPath: /config
+          subPath: config
+      - name: nginx
+        image: nginx:alpine
+        volumeMounts:
+        - name: hosting-vol
+          mountPath: /usr/share/nginx/html
+          subPath: data
+      volumes:
+      - name: hosting-vol
+        persistentVolumeClaim:
+          claimName: hosting-pvc
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: hosting-service
+  namespace: web-hosting
+spec:
+  ports:
+  - port: 80
+    name: nginx
+  - port: 8080
+    name: filebrowser  
+  selector:
+    app: hosting-pod
+---
+apiVersion: traefik.containo.us/v1alpha1
+kind: IngressRoute
+metadata:
+  name: hosting-route
+  namespace: web-hosting
+spec:
+  entryPoints:
+    - websecure
+  tls:
+    certResolver: le
+  routes:
+    - match: Host(`my-domain.com`)     # <-- Change
+      kind: Rule
+      services:
+        - name: hosting-service
+          port: 80
+---
+apiVersion: traefik.containo.us/v1alpha1
+kind: IngressRoute
+metadata:
+  name: hosting-route
+  namespace: web-hosting
+spec:
+  entryPoints:
+    - websecure
+  tls:
+    certResolver: le
+  routes:
+    - match: Host(`upload.my-domain.com`)     # <-- Change
+      kind: Rule
+      services:
+        - name: hosting-service
+          port: 8080
+```
+
+Deploy the file with ```kubectl apply -f deployment.yml```
