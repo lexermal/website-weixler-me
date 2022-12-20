@@ -15,11 +15,6 @@ Log now into the host with ```ssh username@my--server-ip```.
 
 Open the file **./ssh/authorized_keys** and add at the bottom a new line with your public ssh key.
 
-## Change hostname
-Change the hostname to something easily rememberable:
-
-```sudo hostnamectl set-hostname my-host-123```
-
 ### Disable password login
 Open the ssh settings with ```sudo nano /etc/ssh/sshd_config```
 
@@ -32,6 +27,10 @@ PubkeyAuthentication yes
 Restart the SSH service with 
 ```sudo systemctl restart sshd``` or ```sudo systemctl restart ssh```
 
+## Change hostname
+Change the hostname to something easily rememberable:
+
+```sudo hostnamectl set-hostname my-host-123```
 
 
 ## Enable Fail2ban
@@ -80,4 +79,3 @@ Status for the jail: sshd
 ## References
 * Setup and configuration of Fail2Ban https://www.digitalocean.com/community/tutorials/how-to-protect-ssh-with-fail2ban-on-ubuntu-22-04
 * Adding SSH keys to server https://www.digitalocean.com/community/tutorials/how-to-configure-ssh-key-based-authentication-on-a-linux-server
-*
