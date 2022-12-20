@@ -11,17 +11,26 @@ Make host only accessible via SSH Keys:
 
 **Always set a password! Otherwise someone can suimply copy the files and access the server like having the stolen password.**
 
-Copy the ssh key to the server with ```ssh-copy-id username@my-server-ip```.
+Log now into the host with ```ssh username@my--server-ip```.
 
-Log now into the host with ```ssh username@my--server-ip```
+Open the file **./ssh/authorized_keys** and add at the bottom a new line with your public ssh key.
+
+## Change hostname
+Change the hostname to something easily rememberable:
+
+```sudo hostnamectl set-hostname my-host-123```
 
 ### Disable password login
-sudo nano /etc/ssh/sshd_config
+Open the ssh settings with ```sudo nano /etc/ssh/sshd_config```
+
+Change the settings to these once:
 ```
 PasswordAuthentication no
 PermitRootLogin yes
+PubkeyAuthentication yes
 ```
-sudo systemctl restart sshd
+Restart the SSH service with 
+```sudo systemctl restart sshd``` or ```sudo systemctl restart ssh```
 
 
 
