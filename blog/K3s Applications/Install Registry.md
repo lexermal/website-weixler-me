@@ -33,3 +33,26 @@ spec:
 ```
   
 ```helm upgrade --install registry twuni/docker-registry -f values.yml -n my-registry --create-namespace```
+
+## Configure the usage of that repository deployment in the same cluster
+If you want to use a private docker repository execute the following commands on every node that runs pods:
+```
+mkdir /etc/rancher/k3s
+nano /etc/rancher/k3s/repositories.yaml
+```
+
+Insert the following config for your private repository:
+```
+mirrors:
+  registry.my-domain.com:    # <-- change to your domain
+    endpoint:
+      - "http://registry-docker-registry.my-registry-namespace.svc.cluster.local"    # <-- change to your namespace
+configs:
+  "registry.my-domain.com":    # <-- change to your domain
+    auth:
+      username: my-user       # <-- change
+      password: my-password   # <-- change
+```
+
+## References
+* Source for K3s private repository configuration https://docs.k3s.io/installation/private-registry
