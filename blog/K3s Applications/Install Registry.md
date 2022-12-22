@@ -2,16 +2,19 @@
 
 ```helm repo add twuni https://helm.twun.io```
 
+Generate the htpasswd with ```docker run --entrypoint htpasswd httpd:2 -Bbn my-user my-password```.
+
+
 ```
 persistence:
   enabled: true
 secrets:
-  haSharedSecret: "your-password"
-  htpasswd: "your-password"
+  haSharedSecret: "my-password"
+  htpasswd: "my-htpasswd string"
 ```
   
 ```
-  apiVersion: traefik.containo.us/v1alpha1
+apiVersion: traefik.containo.us/v1alpha1
 kind: IngressRoute
 metadata:
   name: registry-ingress
