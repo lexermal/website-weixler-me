@@ -99,7 +99,28 @@ When the cheap period of the v-server is over, or you want to have another serve
 
 The cluster needs some time to restructure itself.
 
-## Setup firewall rules
+
+## Configure the usage of a private repository
+If you want to use a private docker repository in your cluster execute the following commands on every node that runs pods:
+```
+mkdir /etc/rancher/k3s
+nano /etc/rancher/k3s/repositories.yaml
+```
+
+Insert the following config for your private repository:
+```
+mirrors:
+  registry.my-domain.com:    # <-- change
+    endpoint:
+      - "https://url-of-docker-restiry"    # <-- change 
+configs:
+  "registry.my-domain.com":    # <-- change
+    auth:
+      username: my-user       # <-- change
+      password: my-password   # <-- change
+```
+
+## Setup firewall rules (needs to be adjusted)
 
 THIS DOES CURRENTLY NOT WORK, LOCAL IPS NEED TO BE ALLOWED TOO
 
@@ -115,3 +136,4 @@ In order to shrink the surface of attacks we add the following firewall rules to
 ## References
 * Rancher instructions on how to set up a HA K3s cluster: https://docs.k3s.io/installation/ha-embedded
 * Rancher instructions on how to add worker nodes: https://docs.k3s.io/quick-start
+* Source for K3s private repository configuration https://docs.k3s.io/installation/private-registry
