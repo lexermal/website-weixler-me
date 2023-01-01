@@ -38,10 +38,10 @@ spec:
 If you want to use a private docker repository execute the following commands on every node that runs pods:
 ```
 mkdir /etc/rancher/k3s
-nano /etc/rancher/k3s/repositories.yaml
+nano /etc/rancher/k3s/registries.yaml
 ```
 
-Insert the following config for your private repository:
+Insert the following config for your private registry:
 ```
 mirrors:
   registry.my-domain.com:    # <-- change to your domain
