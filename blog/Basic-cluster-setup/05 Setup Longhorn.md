@@ -22,11 +22,11 @@ There are multiple nodes in this cluster. Some have not much space but large com
 
 This can be disabled by navigating to *Node*, clicking on edit at that nodes and disabling the *scheduling*.
 
-### Fix Longhorn default storage class error
+### Adjust the default storage class
 
-When you install Longhorn it is by default set to be the default storage class, but local-path is so too.
+When you install Longhorn it is by default set to be the default storage class, but local-path is so too. This results often in volume mounting errors.
 
-Therefore, it is required to deactivate local-path from being a default storage class.
+Therefore, it is required to deactivate local-path from being a default storage class. 
 
 Run the following commands
 ```
@@ -45,6 +45,7 @@ ExecStart=/usr/local/bin/k3s \
 ```
 
 Restart the node and the storage is fixed.
+**These steps need to be done on every master node!**
 
 ## Troubleshoot multipath issue
 
