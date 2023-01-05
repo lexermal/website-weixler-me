@@ -100,11 +100,11 @@ When the cheap period of the v-server is over, or you want to have another serve
 The cluster needs some time to restructure itself.
 
 
-## Configure the usage of a private repository
-If you want to use a private docker repository in your cluster execute the following commands on every node that runs pods:
+## Configure the usage of a private registry
+If you want to use a private docker registry in your cluster execute the following commands on every node that runs pods:
 ```
 mkdir /etc/rancher/k3s
-nano /etc/rancher/k3s/repositories.yaml
+nano /etc/rancher/k3s/registries.yaml
 ```
 
 Insert the following config for your private repository:
