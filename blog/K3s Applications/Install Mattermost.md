@@ -20,6 +20,10 @@ mysql:
   mysqlUser: msadmin
   mysqlRootPassword: my-password
   mysqlPassword: my-password
+securityContext:
+  fsGroup: 2000
+  runAsGroup: 2000
+  runAsUser: 2000
 ```    
 
 ```
