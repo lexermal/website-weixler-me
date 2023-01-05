@@ -32,6 +32,7 @@ Change the hostname to something easily rememberable:
 
 ```sudo hostnamectl set-hostname my-host-123```
 
+Check in **/etc/hosts** if the name is set there too to resolve to localhost!
 
 ## Enable Fail2ban
 In order to prevent attacks we enable Fail2Ban.
