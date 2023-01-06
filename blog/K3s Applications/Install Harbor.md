@@ -1,15 +1,18 @@
 # Install Harbor
 
 
-helm repo add harbor https://helm.goharbor.io
+```helm repo add harbor https://helm.goharbor.io```
 
 
 ```
 expose:
+  tls:
+    certSource: none
   ingress:
     annotations:
+      kubernetes.io/ingress.class: traefik
       traefik.ingress.kubernetes.io/router.entrypoints: websecure
-      traefik.ingress.kubernetes.io/router.tls.certResolver: le  
+      traefik.ingress.kubernetes.io/router.tls.certResolver: le
     hosts:
       core: registry.my-domain.com
       notary: notary.my-domain.com
@@ -30,7 +33,7 @@ database:
 ```    
 
 
-helm upgrade --install harbor harbor/harbor -f values.yml -n harbor --create-namespace
+```helm upgrade --install harbor harbor/harbor -f values.yml -n harbor --create-namespace```
 
 ## Configure SSO
 
@@ -64,3 +67,5 @@ In the administration of Harbor set in the Configuration the following setting:
 ## References
 * Habor SSO https://goharbor.io/docs/1.10/administration/configure-authentication/oidc-auth/
 * Authentik docu for Harbor https://goauthentik.io/integrations/services/harbor/
+* Inspiration for fixing SSL issue: https://github.com/goharbor/harbor-helm/issues/582
+
