@@ -37,8 +37,8 @@ services:
     hello-world:
         container_name: hello-world
         image: nginx
-#        expose:
-#            - "8080"
+        expose:
+            - "8080"
         environment:
             VIRTUAL_HOST: test.my-domain.com
             LETSENCRYPT_HOST: test.my-domain.com
