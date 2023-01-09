@@ -57,8 +57,11 @@ Enter the following settings:
 * Application Secret Key: Key you copied from Gitlab
 * Gitlab Site URL: https://chat.my-domain.com
 
-Safe the settings. Congratulations you can now login to your Mattermost instance via Gitlab!
+Safe the settings. 
 
+Congratulations you can now login to your Mattermost instance via Gitlab!
+
+Make sure you make one OAuth user admin!
 
 ## References
 * Docu for installation of Mattermost: https://artifacthub.io/packages/helm/mattermost/mattermost-team-edition
