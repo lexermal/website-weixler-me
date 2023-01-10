@@ -1,28 +1,33 @@
 # Install Nextcloud
 
-```
+Add Helm charts with:
+
+```bash
 helm repo add nextcloud https://nextcloud.github.io/helm/
 ```
+Create a file called values.yml for the deployment settings with the following contend:
 
-```
-image:
-    tag: "24.0.5"
-
+```yaml
+ingress:
+    enabled: true
+    className: traefik
+    annotations:
+      traefik.ingress.kubernetes.io/router.entrypoints: websecure
+      traefik.ingress.kubernetes.io/router.tls.certResolver: le
+    tls:
+      - hosts:
+          - cloud.my-domain.com   # <-- change
 nextcloud:
-    host: "cloud.my-domain.com"
-    password: "my-password"
-
+    host: "cloud.my-domain.com"   # <-- change
+    password: "my-password"   # <-- change
 mariadb:
     enabled: true
-    password: "my-password"
-
+    password: "my-password"   # <-- change
 persistence:
     enabled: true
-    storageClass: longhorn
     nextcloudData:
         enabled: true
-        storageClass: longhorn
-        size: 500Gi
+        size: 100Gi   # <-- change
 
 phpClientHttpsFix:
     enabled: true
@@ -33,27 +38,6 @@ Install Nextcloud with:
 helm upgrade --install nextcloud nextcloud/nextcloud -f values.yml -n nextcloud --create-namespace
 ```
 
-
-```
-apiVersion: traefik.containo.us/v1alpha1
-kind: IngressRoute
-metadata:
-  name: nextcloud-route
-  namespace: nextcloud
-spec:
-  entryPoints:
-    - websecure
-  tls:
-    certResolver: le
-  routes:
-    - match: Host(`cloud.my-domain.com`)   # <--change domain
-      kind: Rule
-      services:
-        - name: nextcloud
-          port: 8080
-```
-
-kubectl apply -f ingress.yml
 
 
 ## (optional) Connect Nextcloud with Authentik
@@ -93,7 +77,11 @@ Done. Now the users of group Cloud Admins will be admins starting from the next 
 
 The calendar API works only with local users, not SAML / SSO users.
 
-To still sync your calendar you need to create a local user to which calendars you subscribe and your real user in Nextcloud shares this calendar with the sync user and lets them edit the calendars.
+Create a access password in Nextcloud via the user profile settings at the bottom.
+
+OR create a local user to which calendars you subscribe and your real user in Nextcloud shares this calendar with the sync user and lets them edit the calendars.
+
+
 
 ## References
 * Tutorial is based on https://artifacthub.io/packages/helm/nextcloud/nextcloud#configuration
