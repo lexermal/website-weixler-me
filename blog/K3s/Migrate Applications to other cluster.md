@@ -15,8 +15,10 @@
 3. Attach PVCs to the server via Longhorn UI
 4. Create a folder in tmp for mounting, it should be explainable like mount-gitlab-data
 5. Mount all PVCs with ```mount /dev/longhorn/pvc-name /tmp/just-created-dir/```
-6. Go in the folder with ````cd just-created-folder```
+6. Go in the folder with ```cd just-created-folder```
 7. Delete all files with ```rm -Rf * .*```
-8. Uncompress files with ```tar xpf  ../`my-tar-dir.tar.gz --same-owner```
-
+8. Uncompress files with ```tar xpf  ../my-tar-dir.tar.gz --same-owner```
+9. Unmount the folders with ```ùmount /tmp/just-created-folder```
+10. Detach volumes via Longhorn UI
+11. Scale application up again
 
