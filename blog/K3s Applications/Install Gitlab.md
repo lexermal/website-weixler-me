@@ -24,7 +24,7 @@ Create an application with the following settings:
 * Provider: Gitlab
 * Launch URL: https://git.my-domain.com
 ## Install Gitlab
-helm repo add pascaliske https://charts.pascaliske.dev
+```helm repo add pascaliske https://charts.pascaliske.dev```
 
 ```
 healthCheck:
@@ -79,8 +79,6 @@ If you change settings in the values.yml file and run the upgrade command from a
 ## Make Gitlab reachable
 
 ```
-ingress.yml  values.yml
-root@stable-master:/k8-deployments/sumdays/gitlab/v2# cat ingress.yml
 apiVersion: traefik.containo.us/v1alpha1
 kind: IngressRoute
 metadata:
@@ -105,4 +103,3 @@ This installation of Gitlab is not perfect due to not using the original Gitlab 
 ## References
 * Helm chart infos https://artifacthub.io/packages/helm/pascaliske/gitlab
 * SSO integration with Authentik https://goauthentik.io/integrations/services/gitlab/
-*
