@@ -18,7 +18,8 @@
 6. Go in the folder with ```cd just-created-folder```
 7. Delete all files with ```rm -Rf * .*```
 8. Uncompress files with ```tar xpf  ../my-tar-dir.tar.gz --same-owner```
-9. Unmount the folders with ```ùmount /tmp/just-created-folder```
+9. Unmount the folders with ```ùmount just-created-folder```
 10. Detach volumes via Longhorn UI
-11. Scale application up again
+11. Change DNS entry to point to new server
+12. Scale application up again
 
