@@ -18,7 +18,7 @@
 6. Go in the folder with ```cd mount-gitlab-30gb```
 7. Delete all files with ```rm -Rf * .*```
 8. Uncompress files with ```tar xpf  ../mount-gitlab-30gb.tar.gz --same-owner```
-9. Unmount the folders with ```ùmount mount-gitlab-30gb```
+9. Unmount the folders with ```ùmount /tmp/mount-gitlab-30gb```
 10. Detach volumes via Longhorn UI
 11. Change DNS entry to point to new server
 12. Scale application up again
