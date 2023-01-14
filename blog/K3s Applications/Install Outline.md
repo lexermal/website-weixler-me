@@ -14,7 +14,7 @@ Create an application with the following values:
 
 ## Install Outline
 
-helm repo add outline https://gitlab.com/api/v4/projects/30221184/packages/helm/stable/
+```helm repo add outline https://gitlab.com/api/v4/projects/30221184/packages/helm/stable/```
 
 
 Generate a secret key and utils key with ```openssl rand -hex 3```
@@ -24,6 +24,10 @@ secretKey: "my-secret-key"
 utilsSecret: "my-utils-key"
 ingress:
   host: outline.my-domain.com
+  annotations:
+    kubernetes.io/ingress.class: traefik
+    traefik.ingress.kubernetes.io/router.entrypoints: websecure
+    traefik.ingress.kubernetes.io/router.tls.certResolver: le
   tls:
     enabled: true
 env:
@@ -49,6 +53,10 @@ minio:
     hostname: "data.outline.my-domain.com"
     tls: true
     certManager: true
+    annotations:
+      kubernetes.io/ingress.class: traefik
+      traefik.ingress.kubernetes.io/router.entrypoints: websecure
+      traefik.ingress.kubernetes.io/router.tls.certResolver: le
   secretKey:
     password: "my-secret-key"
   accessKey:
@@ -61,50 +69,6 @@ minio:
 ```
 helm upgrade --install outline outline/outline -f values.yml -n outline --create-namespace
 ```
-
-## Make Outline available online
-```
-apiVersion: traefik.containo.us/v1alpha1
-kind: IngressRoute
-metadata:
-  name: outline-route
-  namespace: outline
-spec:
-  entryPoints:
-    - websecure
-  tls:
-    certResolver: le
-  routes:
-    - match: Host(`outline.my-domain.com`)   # <--change domain
-      kind: Rule
-      services:
-        - name: outline
-          port: 80
-```
-
-kubectl apply -f ingress.yml
-
-
-```
-apiVersion: traefik.containo.us/v1alpha1
-kind: IngressRoute
-metadata:
-  name: outline-minio-route
-  namespace: outline
-spec:
-  entryPoints:
-    - websecure
-  tls:
-    certResolver: le
-  routes:
-    - match: Host(`data.outline.my-domain.com`)   # <--change domain
-      kind: Rule
-      services:
-        - name: outline-minio
-          port: 9000
-```
-
-kubectl apply -f ingress.yml
 
 
 ## References
