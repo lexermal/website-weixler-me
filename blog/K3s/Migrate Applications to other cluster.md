@@ -6,8 +6,9 @@
 3. Attach PVCs to the server via Longhorn UI
 4. Create a folder in tmp for mounting, it should be explainable like the application name and PVC size e.g. mount-gitlab-30gb
 5. Mount all PVCs with ```mount /dev/longhorn/pvc-name /tmp/mount-gitlab-30gb/```
-6. Compress ```tar czvf ../${PWD##*/}.tar.gz .```
-7. Copy tared files to new server
+6. Go in the directory with ```cd mount-gitlab-30gb```
+7. Compress ```tar czvf ../${PWD##*/}.tar.gz .```
+8. Copy tared files to new server
 
 ## On new server
 1. Install the application with the same settings as on the old server
