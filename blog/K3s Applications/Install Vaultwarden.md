@@ -1,8 +1,10 @@
-# Install Vaultwarden.
+# Install Vaultwarden
 
 Add the repository with:
+
 ```helm repo add gissilabs https://gissilabs.github.io/charts/```
 
+Create a values.yml file for Vaultwardens setup config with this contend:
 
 ```
 ingress:
@@ -25,6 +27,7 @@ vaultwarden:
 ```
 
 Install Vaultwarden now with:
+
 ```helm upgrade --install vaultwarden gissilabs/vaultwarden -f values.yml -n vaultwarden --create-namespace```
 
 
