@@ -25,8 +25,10 @@ mariadb:
     password: "my-password"   # <-- change
 persistence:
     enabled: true
+    storageClass: longhorn
     nextcloudData:
         enabled: true
+        storageClass: longhorn
         size: 100Gi   # <-- change
 
 phpClientHttpsFix:
