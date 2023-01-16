@@ -1,9 +1,19 @@
-helm repo add gissilabs https://gissilabs.github.io/charts/
+# Install Vaultwarden.
+
+Add the repository with:
+```helm repo add gissilabs https://gissilabs.github.io/charts/```
+
 
 ```
+ingress:
+  enabled: true
+  className: traefik
+  host: vaultwarden.my-domain.com
+  annotations: 
+    traefik.ingress.kubernetes.io/router.entrypoints: websecure
+    traefik.ingress.kubernetes.io/router.tls.certResolver: le
 persistence:
   enabled: true
-  storageClass: "longhorn"
 vaultwarden:
   domain: "https://vaultwarden.my-domain.com"
   allowSignups: false
@@ -12,33 +22,12 @@ vaultwarden:
   admin:
     enabled: true
     token: my-random-access-token
-
 ```
 
-helm upgrade --install vaultwarden gissilabs/vaultwarden -f values.yml -n vaultwarden --create-namespace
+Install Vaultwarden now with:
+```helm upgrade --install vaultwarden gissilabs/vaultwarden -f values.yml -n vaultwarden --create-namespace```
 
 
-
-```
-apiVersion: traefik.containo.us/v1alpha1
-kind: IngressRoute
-metadata:
-  name: vaultwarden-route
-  namespace: vaultwarden
-spec:
-  entryPoints:
-    - websecure
-  tls:
-    certResolver: le
-  routes:
-    - match: Host(`vaultwarden.my-domain.com`)   # <--change domain
-      kind: Rule
-      services:
-        - name: vaultwarden
-          port: 80
-```
-
-kubectl apply -f ingress.yml
 
 ## Create user
 
