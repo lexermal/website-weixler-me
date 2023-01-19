@@ -77,7 +77,9 @@ If you change settings in the values.yml file and run the upgrade command from a
 
 
 ## Make Gitlab reachable
+Make sure the port 22 is not taken by other applications like the SSH server. You can remove the lower service map and service if you don't want to use ssh cloning.
 
+Createa a file called **ingress.yml** witht the following contend:
 ```
 apiVersion: traefik.containo.us/v1alpha1
 kind: IngressRoute
@@ -95,7 +97,31 @@ spec:
       services:
         - name: gitlab
           port: 80
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: gitlab-service
+  namespace: gitlab
+spec:
+  type: LoadBalancer
+  ports:
+  - port: 22
+    protocol: TCP
+  selector:
+    app.kubernetes.io/instance: gitlab
+    app.kubernetes.io/name: gitlab
+---
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: gitlab-ssh
+  namespace: gitlab
+data:
+  22: "gitlab/gitlab-service:22"
 ```
+
+Expose Gitlab with ```kubectl apply -f ingress.yml```
 
 ### Remarks
 This installation of Gitlab is not perfect due to not using the original Gitlab helm charts. I would be happy if someone would show a way how to setup Gitlab on K3s with these charts.
