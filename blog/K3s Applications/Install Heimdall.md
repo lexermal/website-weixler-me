@@ -1,19 +1,7 @@
-```
-helm repo add djjudas21 https://djjudas21.github.io/charts/
-```
+# Install Heimdall
 
+We are going to setup Heimdall behind an Authentik Middleware to make it securelly available.
 
-```
-persistence:
-  config:
-    enabled: true
-```
-
-```
-helm upgrade --install heimdall djjudas21/heimdall -f values.yml -n my-heimdall --create-namespace
-```
-
-Heimdall will be available via https://home.my-domain.com
 
 
 ## Configure Authentik
@@ -36,16 +24,16 @@ Create an Outpost:
 * Application: Heimdall
 
 
+## Create middleware
 
+To make Heimdall securelly available we need to create a middleware:
 
-## Make Heimdall available
-
-```
+```yaml
 apiVersion: traefik.containo.us/v1alpha1
 kind: Middleware
 metadata:
   name: middlewares-authentik
-  namespace: my-heimdall
+  namespace: my-heimdall   # <-- change
 spec:
   forwardAuth:
     address: https://home.my-domain.com/outpost.goauthentik.io/auth/traefik  #<--change domain
@@ -64,34 +52,44 @@ spec:
       - X-authentik-meta-version
 ```
 
+Deploy the middleware with ```kubectl apply -f .```
 
+## Setup Heimdalll
 
-
+Add the repository with
 ```
-apiVersion: traefik.containo.us/v1alpha1
-kind: IngressRoute
-metadata:
-  name: my-heimdall-route
-  namespace: my-heimdall
-spec:
-  entryPoints:
-    - websecure
-  tls:
-    certResolver: le
-  routes:
-    - match: Host(`home.my-domain.com`)   # <--change domain
-      kind: Rule
-      middlewares:
-        - name: middlewares-authentik
-      services:
-        - name: heimdall
-          port: 80
+helm repo add djjudas21 https://djjudas21.github.io/charts/
 ```
 
-```kubectl apply -f .```
+Create a file called **values.yml** with the settings of heimdall like this one:
+```yaml
+persistence:
+  config:
+    enabled: true
+ingress:
+  main:
+    enabled: true
+    annotations:
+      traefik.ingress.kubernetes.io/router.entrypoints: websecure
+      traefik.ingress.kubernetes.io/router.tls.certResolver: le
+      traefik.ingress.kubernetes.io/router.middlewares: my-heimdall-middlewares-authentik@kubernetescrd  # change namespace
+    hosts:
+      - host: home.my-domain.com     # <-- change
+        paths:
+          - path: "/"
+            pathType: Prefix
+```
+
+Install Heimdall with:
+```
+helm upgrade --install heimdall djjudas21/heimdall -f values.yml -n my-heimdall --create-namespace
+```
+
+Heimdall is now available via https://home.my-domain.com
 
 
 
 
 ## Ressources
-* https://goauthentik.io/docs/providers/proxy/forward_auth
+* Docu for Middleware https://goauthentik.io/docs/providers/proxy/forward_auth
+* Heimdall Helm charts https://artifacthub.io/packages/helm/djjudas21/heimdall
