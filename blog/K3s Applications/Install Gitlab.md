@@ -73,7 +73,7 @@ Install Gitlab with this command
 ```
 helm upgrade --install gitlab pascaliske/gitlab -f values.yml -n gitlab --create-namespace
 ```
-If you change settings in the values.yml file and run the upgrade command from above, you need to run this command in the pod to apply the changes ```gitlab-ctl reconfigure```.
+If you change settings in the values.yml file and run the upgrade command from above, you need to run this command in the pod to apply the changes ```gitlab-ctl reconfigure && update-permissions```.
 
 
 ## Make Gitlab reachable
@@ -126,7 +126,7 @@ Expose Gitlab with ```kubectl apply -f ingress.yml```
 ### Remarks
 This installation of Gitlab is not perfect due to not using the original Gitlab helm charts. I would be happy if someone would show a way how to setup Gitlab on K3s with these charts.
 
-If you want to reduce the resource usage apply these [settings](https://docs.gitlab.com/omnibus/settings/memory_constrained_envs.html#configuration-with-all-the-changes).
+If you want to reduce the resource usage apply these [settings](https://docs.gitlab.com/omnibus/settings/memory_constrained_envs.html#configuration-with-all-the-changes). I recommend leaving out the once connected to cgroups.
 
 ## References
 * Helm chart infos https://artifacthub.io/packages/helm/pascaliske/gitlab
