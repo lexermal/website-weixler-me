@@ -126,6 +126,8 @@ Expose Gitlab with ```kubectl apply -f ingress.yml```
 ### Remarks
 This installation of Gitlab is not perfect due to not using the original Gitlab helm charts. I would be happy if someone would show a way how to setup Gitlab on K3s with these charts.
 
+If you want to reduce the resource usage apply these (settings)[https://docs.gitlab.com/omnibus/settings/memory_constrained_envs.html#configuration-with-all-the-changes].
+
 ## References
 * Helm chart infos https://artifacthub.io/packages/helm/pascaliske/gitlab
 * SSO integration with Authentik https://goauthentik.io/integrations/services/gitlab/
