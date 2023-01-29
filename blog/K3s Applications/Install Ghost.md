@@ -10,6 +10,7 @@ clusterDomain: home.my-domain.com
 ghostUsername: admin
 ghostPassword: my-password
 ghostBlogTitle: My-Blog
+ghostEnableHttps: true
 ghostHost: home.my-domain.com
 ingress:
   enabled: true
