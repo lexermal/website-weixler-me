@@ -1,35 +1,40 @@
 # Install Ghost
 
 ```bash
-helm repo add bitnami https://charts.bitnami.com/bitnami
+helm repo add groundhog2k https://groundhog2k.github.io/helm-charts/
 ```
 
 
 ```yaml
-clusterDomain: home.my-domain.com
-ghostUsername: admin
-ghostPassword: my-password
-ghostBlogTitle: My-Blog
-ghostEnableHttps: true
-ghostHost: home.my-domain.com
+image:
+  tag: 5
 ingress:
   enabled: true
-  hostname: home.my-domain.com
   annotations:
+    kubernetes.io/ingress.class: traefik
     traefik.ingress.kubernetes.io/router.entrypoints: websecure
-    traefik.ingress.kubernetes.io/router.tls.certResolver: le
-  ingressClassName: traefik
-mysql:
-  auth: 
+    traefik.ingress.kubernetes.io/router.tls.certResolver: le  
+  hosts:
+    - host: home.my-domain.com
+      paths:
+        - /
+settings:
+  url: https://home.my-domain.com
+mariadb:
+  enabled: true
+  settings:
     rootPassword: my-password
+  userDatabase:
+    name: ghost
+    user: ghadmin
     password: my-password
 ```
 
 
 
-````bash
-helm upgrade --install ghost bitnami/ghost -f values.yml -n ghost --create-namespace
+```bash
+helm upgrade --install ghost groundhog2k/ghost -f values.yml -n ghost --create-namespace
 ```
 
 ## References
-* Deployment infos https://artifacthub.io/packages/helm/bitnami/ghost
+* Deployment infos [https://artifacthub.io/packages/helm/bitnami/ghost](https://artifacthub.io/packages/helm/groundhog2k/ghost)
