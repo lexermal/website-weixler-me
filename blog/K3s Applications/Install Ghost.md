@@ -36,5 +36,7 @@ mariadb:
 helm upgrade --install ghost groundhog2k/ghost -f values.yml -n ghost --create-namespace
 ```
 
+Now you can setup the page via https://home.my-domain.com/ghost
+
 ## References
 * Deployment infos [https://artifacthub.io/packages/helm/bitnami/ghost](https://artifacthub.io/packages/helm/groundhog2k/ghost)
