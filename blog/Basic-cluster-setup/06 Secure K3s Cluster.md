@@ -86,7 +86,7 @@ kubectl exec -it deployment/crowdsec-lapi -n crowdsec -c crowdsec-lapi -- cscli 
 ```
 
 
-Create a file named **traefik_bouncer-values.yaml** and insert the following:
+Create a file named **bouncer-values.yml** and insert the following:
 ```yaml
 bouncer:
   crowdsec_bouncer_api_key: my-bouncer-key
@@ -97,7 +97,7 @@ bouncer:
 Add the bouncer with
 
 ```bash
-helm upgrade traefik-bouncer crowdsec/crowdsec-traefik-bouncer --install -n kube-system -f traefik_bouncer-values.yaml
+helm upgrade traefik-bouncer crowdsec/crowdsec-traefik-bouncer --install -n kube-system -f bouncer-values.yml
 ```
 
 Now we need to make the dashboard of Crowdsec accessible by doing the following:
