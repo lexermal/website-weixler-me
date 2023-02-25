@@ -182,14 +182,14 @@ Apply the config with ```kubectl apply -f .```
 
 Now you will see other IP addresses and your instance is secure.
 
-## Test out blocking
+## Test blocking
 To test if blocking works connect a host with another public IP, like using your Hotspot on your phone.
 
-Open the browser and open your domain like https://my-comain.com. You will see your expected side.
+Open the browser and open your domain like https://my-domain.com. You will see your expected side.
 
 Then execute the following command to check for security vulnerabilities which triggers Crowdsec to block the IP temporally:
 ```
-wapiti -u https://my-comain.com
+wapiti -u https://my-domain.com
 ```
 
 When you reload now the page, you will see a "Forbidden" message. Only this IP is temporarily blocked.
