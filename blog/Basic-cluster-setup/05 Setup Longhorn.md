@@ -47,6 +47,37 @@ ExecStart=/usr/local/bin/k3s \
 Restart the node and the storage is fixed.
 **These steps need to be done on every master node!**
 
+## Configure Backup
+The following steps show how a typical S3 storage can be used as backup solution.
+
+First configure a bucket in the S3 platform you want to use. I recommend https://idrivee2.com/ they are currently the cheapest on the market.
+
+When you have the endpoint, access key and secret encode them by using this command ```echo -n my-endpoint-or-access-key-or-access-secret | base64```
+
+Then create the file **s3-backup-secret.yml** with the following contend:
+
+```
+apiVersion: v1
+kind: Secret
+metadata:
+  name: minio-secret
+  namespace: longhorn-system
+type: Opaque
+data:
+  AWS_ACCESS_KEY_ID: my-encoded-key      # <-- change
+  AWS_SECRET_ACCESS_KEY: my-encoded-secret      # <-- change
+  AWS_ENDPOINTS: my-encoded-endoint      # <-- change
+```
+
+Apply the file with ```kubectl apply -f k3-backup-secret.yml```
+
+Open the settings of Longhorn and set the following:
+* Backup Target: s3://my-bucket@my-endpoint.com/data/
+* Backup Target Credential Secret: s3-backup-secret
+
+Safe the settings and trigger your first backup by checking all volumes and clicking "Create backup". 
+You can see the progress in the backup tab.
+
 ## Troubleshoot Attach and Detach loop
 If it happends that the Longhorn UI shows that a PVC gets attached and seconds later detached in a loop the following helps.
 
