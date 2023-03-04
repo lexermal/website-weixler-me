@@ -165,6 +165,25 @@ kubectl apply -f velero-v1.9.6-linux-amd64/examples/nginx-app/with-pv.yaml
 
 Check deployment success with ```kubectl get deployments --namespace=nginx-example```
 
+Now we create a file in a mounted folder to verify later restoring worked. To do that execute:
+```
+kubectl exec -n nginx-example deploy/nginx-deployment -- bash -c "echo Hello World > /var/log/helloworld.txt"
+kubectl exec -n nginx-example deploy/nginx-deployment -- bash -c "cat /var/log/helloworld.txt"
+```
+
+Now lets create a backup:
+```
+velero backup create nginx-backup --include-namespaces nginx-example --wait 
+```
+
+Let's simulate a desaster by deleting the namespace: ```kubectl delete namespace nginx-example```
+With ```kubectl get namespace/nginx-example``` you can see the namespace with all iits resources does not exist anymore.
+
+It can be restored with
+```
+velero restore create --from-backup nginx-backup --wait
+```
+
 
 
 ## Refernces
