@@ -1,8 +1,12 @@
 # Setup Backups
+In this tutorial we will configure automatic Backups in a K3s Cluster with Longhorn using Velero to backup resources to an S3 storage.
 
+Longhorn will handle the persistence volume backup and Velero the backup for all other resources.
+
+Velero is also the tool to recover from desasters, so it triggers Longhorn to create backups.
 
 ## Setup Longhorn
-
+First we are setting up Longhorn to be able to work together with Velero and to be able to export the backups to an S3 storage.
 Make sure the Longhorn is at least version 1.4.0.
 
 ### First we install the snalshot controller:
@@ -167,8 +171,8 @@ Check deployment success with ```kubectl get deployments --namespace=nginx-examp
 
 Now we create a file in a mounted folder to verify later restoring worked. To do that execute:
 ```
-kubectl exec -n nginx-example deploy/nginx-deployment -- bash -c "echo Hello World > /var/log/helloworld.txt"
-kubectl exec -n nginx-example deploy/nginx-deployment -- bash -c "cat /var/log/helloworld.txt"
+kubectl exec -n nginx-example deploy/nginx-deployment -- bash -c "echo Hello World > /var/log/nginx/test.txt"
+kubectl exec -n nginx-example deploy/nginx-deployment -- bash -c "cat /var/log/nginx/test.txt"
 ```
 
 Now lets create a backup:
@@ -184,6 +188,19 @@ It can be restored with
 velero restore create --from-backup nginx-backup --wait
 ```
 
+After nginx started up you can validate the success by checking if the file test.txt exists with:
+```
+kubectl exec -n nginx-example deploy/nginx-deployment -- bash -c "cat /var/log/nginx/test.txt"
+```
+You will see it reads out "Hello World".
+
+Ok, lets clean up with the following commands:
+```
+velero backup delete nginx-backup --confirm
+kubectl delete namespace nginx-example
+```
+
+## Configure scheduled backups
 
 
 ## Refernces
