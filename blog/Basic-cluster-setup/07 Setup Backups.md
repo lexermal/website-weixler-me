@@ -1,15 +1,15 @@
 # Setup Backups
-In this tutorial we will configure automatic Backups in a K3s Cluster with Longhorn using Velero to backup resources to an S3 storage.
+In this tutorial we will configure automatic backups for a K3s cluster with Longhorn using Velero to backup resources to an S3 storage.
 
 Longhorn will handle the persistence volume backup and Velero the backup for all other resources.
 
 Velero is also the tool to recover from desasters, so it triggers Longhorn to create backups.
 
 ## Setup Longhorn
-First we are setting up Longhorn to be able to work together with Velero and to be able to export the backups to an S3 storage.
+First we are setting up Longhorn so it works together with Velero and is able to export the backups to an S3 storage.
 Make sure the Longhorn is at least version 1.4.0.
 
-### First we install the snalshot controller:
+### Installing the snapshot controller:
 
 Create a file called **kustomization.yaml** with this contend:
 
@@ -30,9 +30,9 @@ kubectl apply -k .
 
 ### Configure Longhorn
 
-First configure a bucket in the S3 platform you want to use. I recommend https://idrivee2.com/ they are currently the cheapest on the market.
+First configure a bucket in the S3 platform you want to use. I recommend https://idrivee2.com/ currently they are the cheapest on the market.
 
-When you have the endpoint, access key and secret encode them by using this command ```echo -n my-endpoint-or-access-key-or-access-secret | base64```
+When the endpoint, access key and secret is configured encode them by using this command ```echo -n my-endpoint-or-access-key-or-access-secret | base64```
 
 Then create the file **s3-backup-secret.yml** with the following contend:
 
@@ -40,7 +40,7 @@ Then create the file **s3-backup-secret.yml** with the following contend:
 apiVersion: v1
 kind: Secret
 metadata:
-  name: minio-secret
+  name: s3-backup-secret
   namespace: longhorn-system
 type: Opaque
 data:
@@ -49,7 +49,7 @@ data:
   AWS_ENDPOINTS: my-encoded-endoint      # <-- change
 ```
 
-Apply the file with ```kubectl apply -f k3-backup-secret.yml```
+Apply the file with ```kubectl apply -f s3-backup-secret.yml```
 
 Open the settings of Longhorn and set the following:
 * Backup Target: s3://my-bucket@my-endpoint.com/  **DON'T forget the /**
@@ -83,15 +83,17 @@ deletionPolicy: Delete
 parameters:
   type: bak
 ```
-
+Deploy the files with
+```
 kubectl apply -f longhorn-backup-vsc.yml -f longhorn-snapshot-vsc.yml
-
+```
 
 ## Install Velero
 
 Setup the velero client by executing the following commands. Adapt the version number might have changed see [here}(https://github.com/vmware-tanzu/velero/releases).
 
 ```
+mkdir -p ~/kube/config
 cp /etc/rancher/k3s/k3s.yaml ~/kube/config
 
 wget https://github.com/vmware-tanzu/velero/releases/download/v1.9.6/velero-v1.9.6-linux-amd64.tar.gz -O velero.tar.gz
@@ -124,7 +126,7 @@ configuration:
     config:
       region: eu-west-1
       s3ForcePathStyle: true
-      s3Url: my-bucket-url     # <-- change
+      s3Url: https://my-bucket-endpoint     # <-- change
   features: EnableCSI
 credentials:
   secretContents:
@@ -136,6 +138,7 @@ credentials:
 
 Run this command to set it up. Leave the namespace to velero.
 ```
+helm repo add vmware-tanzu https://vmware-tanzu.github.io/helm-charts/
 helm upgrade --install velero vmware-tanzu/velero -f values.yml -n velero --create-namespace
 ```
 
@@ -162,7 +165,7 @@ Congratulations, you have successfully setup Velero!
 
 ## Testing Velero
 
-Let's check out if Velero works by setting up an example nginx server. An example deployment is included in the Velero client and can be setup with
+Let's check out if Velero works by setting up an example nginx server. An example deployment is included in the downloaded Velero client folder and can be setup with
 ```
 kubectl apply -f velero-v1.9.6-linux-amd64/examples/nginx-app/with-pv.yaml
 ```
