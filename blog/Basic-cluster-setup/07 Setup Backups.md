@@ -201,7 +201,20 @@ kubectl delete namespace nginx-example
 ```
 
 ## Configure scheduled backups
+For scheduling backups are many options on what to include, when to schedule it and how long it should be stored. 
+I recommend the following as basis:
+```
+velero schedule create daily-full-backup --schedule="0 1 * * *" --ttl 168h0m0s
+velero create schedule weekly-full-backup --schedule="@every 168h" --ttl 720h0m0s
+```
+It's a daily backup at 1am being saved for one week and a weekly backup saved for a month.
 
+With these backups you can restore the whole cluster or single namespaces using
+```
+velero restore create --from-backup daily-full-backup --include-namespaces my-namepsace
+```
+
+If you want to monitor your backups, you can use [BotKube](https://docs.botkube.io) or [Grafana](https://www.qloudx.com/monitoring-velero-kubernetes-backups-automated-alerting-for-backup-failures/).
 
 ## Refernces
 * Wonderful setup for Raspberry PI cluster setup, tutorial is inspired by it https://picluster.ricsanfre.com/docs/backup/#enable-csi-snapshots-support-in-k3s
