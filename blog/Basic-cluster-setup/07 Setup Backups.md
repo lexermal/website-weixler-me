@@ -165,7 +165,9 @@ Congratulations, you have successfully setup Velero!
 
 ## Testing Velero
 
-Let's check out if Velero works by setting up an example nginx server. An example deployment is included in the downloaded Velero client folder and can be setup with
+Let's check out if Velero works by setting up an example nginx server. An example deployment is included in the downloaded Velero client folder. 
+
+It can be found at *velero-v1.9.6-linux-amd64/examples/nginx-app/with-pv.yaml*. Change the port in the service to 8000 and set it up with 
 ```
 kubectl apply -f velero-v1.9.6-linux-amd64/examples/nginx-app/with-pv.yaml
 ```
@@ -180,10 +182,13 @@ kubectl exec -n nginx-example deploy/nginx-deployment -- bash -c "cat /var/log/n
 
 Now lets create a backup:
 ```
-velero backup create nginx-backup --include-namespaces nginx-example --wait 
+velero backup create nginx-backup --include-namespaces nginx-example --wait
 ```
 
-Let's simulate a desaster by deleting the namespace: ```kubectl delete namespace nginx-example```
+Let's simulate a desaster by deleting the namespace: 
+```
+kubectl delete namespace nginx-example
+```
 With ```kubectl get namespace/nginx-example``` you can see the namespace with all iits resources does not exist anymore.
 
 It can be restored with
