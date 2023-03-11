@@ -66,12 +66,11 @@ kubectl rollout status -w --timeout=300s deployment/crowdsec-lapi -n crowdsec
 kubectl rollout status -w --timeout=300s daemonset/crowdsec-agent -n crowdsec
 ```
 
-Get the pod name of crowdsec-lapi with ```kubectl get pods --namespace crowdsec```
 
-Then enroll the api key from https://app.crowdsec.net/overview
+Enroll the api key from https://app.crowdsec.net/overview
 
 ```
-kubectl --namespace crowdsec exec crowdsec-lapi-pod-name -- cscli console enroll my-enroll-key --name my-display-name
+kubectl -n crowdsec exec deployment/crowdsec-lapi -- cscli console enroll my-enroll-key --name my-display-name
 ```
 
 Go to https://app.crowdsec.net/overview and approve the cluster.
