@@ -93,7 +93,6 @@ Create a file named **bouncer-values.yml** and insert the following:
 bouncer:
   crowdsec_bouncer_api_key: my-bouncer-key
   crowdsec_agent_host: "crowdsec-service.crowdsec.svc.cluster.local:8080"
-  crowdsec_bouncer_ban_response_code: 400
 ```
 
 Add the bouncer with
