@@ -7,39 +7,49 @@ helm repo add crowdsec https://crowdsecurity.github.io/helm-charts
 
 nano values.yml
 ```
-Insert the following content:
+
+Copy the enrollment key from https://app.crowdsec.net/overview
+
+Insert the following content in values.yml:
 
 ```yaml
 container_runtime: containerd
 lapi:
+  env:
+    - name: LEVEL_TRACE
+      value: "true"
+    - name: ENROLL_KEY
+      value: "my-enroll-key"   # <--change
+    - name: ENROLL_INSTANCE_NAME
+      value: "my-cluster-name"   # <--change
   dashboard:
     enabled: true
   resources:
     limits:
       memory: 200Mi
-  persistentVolume:
-    data:
-      storageClassName: longhorn
-      accessModes:
-        - ReadWriteMany
-      size: 4Gi
-    config:
-      storageClassName: longhorn
-      accessModes:
-        - ReadWriteMany
-      size: 4Gi
+#  persistentVolume:
+#    data:
+#      storageClassName: longhorn
+#      accessModes:
+#        - ReadWriteMany
+#      size: 4Gi
+#    config:
+#      storageClassName: longhorn
+#      accessModes:
+#        - ReadWriteMany
+#      size: 4Gi
 agent:
   acquisition:
     - namespace: kube-system
       podName: traefik-*
       program: traefik
-  resources: {}
-  persistentVolume:
-    config:
-      storageClassName: longhorn
-      accessModes:
-        - ReadWriteMany
-      size: 1Gi
+#  resources: {}
+#  persistentVolume:
+#    config:
+#      storageClassName: longhorn
+#      accessModes:
+#        - ReadWriteMany
+#      size: 1Gi
   env:
     - name: PARSERS
       value: "crowdsecurity/cri-logs"
@@ -66,18 +76,11 @@ kubectl rollout status -w --timeout=300s deployment/crowdsec-lapi -n crowdsec
 kubectl rollout status -w --timeout=300s daemonset/crowdsec-agent -n crowdsec
 ```
 
-
-Enroll the api key from https://app.crowdsec.net/overview
-
-```
-kubectl -n crowdsec exec deployment/crowdsec-lapi -- cscli console enroll my-enroll-key --name my-display-name
-```
-
 Go to https://app.crowdsec.net/overview and approve the cluster.
 
-Restart the pod with ```kubectl rollout restart -n crowdsec deployment/crowdsec-lapi```
+Restart LAPI with ```kubectl rollout restart -n crowdsec deployment/crowdsec-lapi```
 
-Now crowdsec is connected with the host. The next thing is to add the traefik bouncer to detect and block traffic.
+Now crowdsec is connected with the host. The next step is to add the traefik bouncer to detect and block traffic.
 
 Get the bouncer connection key with:
 ```
