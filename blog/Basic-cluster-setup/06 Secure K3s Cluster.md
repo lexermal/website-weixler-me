@@ -16,40 +16,17 @@ Insert the following content in values.yml:
 container_runtime: containerd
 lapi:
   env:
-    - name: LEVEL_TRACE
-      value: "true"
     - name: ENROLL_KEY
       value: "my-enroll-key"   # <--change
     - name: ENROLL_INSTANCE_NAME
       value: "my-cluster-name"   # <--change
   dashboard:
-    enabled: true
-  resources:
-    limits:
-      memory: 200Mi
-#  persistentVolume:
-#    data:
-#      storageClassName: longhorn
-#      accessModes:
-#        - ReadWriteMany
-#      size: 4Gi
-#    config:
-#      storageClassName: longhorn
-#      accessModes:
-#        - ReadWriteMany
-#      size: 4Gi
+    enabled: false
 agent:
   acquisition:
     - namespace: kube-system
       podName: traefik-*
       program: traefik
-#  resources: {}
-#  persistentVolume:
-#    config:
-#      storageClassName: longhorn
-#      accessModes:
-#        - ReadWriteMany
-#      size: 1Gi
   env:
     - name: PARSERS
       value: "crowdsecurity/cri-logs"
@@ -101,7 +78,26 @@ Add the bouncer with
 helm upgrade traefik-bouncer crowdsec/crowdsec-traefik-bouncer --install -n kube-system -f bouncer-values.yml
 ```
 
-Now we need to make the dashboard of Crowdsec accessible by doing the following:
+The bouncer is now running. To add Traefik bouncer as middleware globally, you need to add this configuration below to your Traefik helm values and upgrade.
+
+```yaml
+additionalArguments:
+  - "--entrypoints.web.http.middlewares=kube-system-traefik-bouncer@kubernetescrd"
+  - "--entrypoints.websecure.http.middlewares=kube-system-traefik-bouncer@kubernetescrd"
+```
+
+
+Congratulations your Crowdsec instance is working now!
+
+## (optional) Expose Crowdsec dashboard
+Crowdsec has a dashboard where you can see information about what the firewall is doing. 
+
+Adapt the **values.yml** file of the Crowdsec deployment and and set *dashboard: true*.
+
+Apply the changes with 
+```
+helm upgrade crowdsec crowdsec/crowdsec --install -n crowdsec -f values.yml
+```
 
 Create a file named **ingress.yml** with the following content:
 
@@ -127,18 +123,8 @@ spec:
 Apply the config with ```kubectl apply -f ingress.yml```
 
 
-The bouncer is now running. To add Traefik bouncer as middleware globally, you need to add this configuration below to your Traefik helm values and upgrade.
 
-```yaml
-additionalArguments:
-  - "--entrypoints.web.http.middlewares=kube-system-traefik-bouncer@kubernetescrd"
-  - "--entrypoints.websecure.http.middlewares=kube-system-traefik-bouncer@kubernetescrd"
-```
-
-
-
-Congratulations your Crowdsec instance is working now!
-You can now log in via https://crowdsec.my-domain.com
+You can now log in to the dashboard via https://crowdsec.my-domain.com
 
 Username: **crowdsec@crowdsec.net**
 
