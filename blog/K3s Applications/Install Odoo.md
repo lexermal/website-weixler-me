@@ -9,7 +9,9 @@ ingress:
   enabled: true
   ingressClassName: traefik
   hostname: odoo.my-domain.com   # <-- change
-  tls: true
+  annotations:
+    traefik.ingress.kubernetes.io/router.entrypoints: websecure
+    traefik.ingress.kubernetes.io/router.tls.certResolver: le
 postgresql:
   auth:
     password: my-db-password    # <-- change
