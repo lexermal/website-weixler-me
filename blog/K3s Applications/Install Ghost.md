@@ -20,7 +20,7 @@ ingress:
         - /
 settings:
   url: https://home.my-domain.com
-mariadb:
+mysql:
   enabled: true
   settings:
     rootPassword: my-password
@@ -28,6 +28,12 @@ mariadb:
     name: ghost
     user: ghadmin
     password: my-password
+  storage:
+    requestedSize: 3Gi
+    className: longhorn
+storage:
+  requestedSize: 2Gi
+  className: longhorn
 ```
 
 
