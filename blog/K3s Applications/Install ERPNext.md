@@ -25,13 +25,20 @@ mariadb:
     rootPassword: my-password  # <-- change
     password: my-password  # <-- change
     replicationPassword: my-password  # <-- change
-createSite:
-  enabled: true
-  siteName: erp.my-domain.com
-  adminPassword: my-password  # <-- change
+jobs:
+  createSite:
+    enabled: true
+    siteName: erp.my-domain-com    # <-- change
+    adminPassword: my-password  # <-- change
 ```
 
 
 ```
 helm upgrade --install erpnext erpnext/erpnext -f values.yml -n my-erpnext --create-namespace
 ```
+Wait till all pods are running, then give the application 2 min to initialize.
+
+You can now enter the page via https://erp.my-domain.com
+
+Username: Administrator
+Password: the one you set in values.yml
