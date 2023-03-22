@@ -36,7 +36,7 @@ jobs:
 ```
 helm upgrade --install erpnext erpnext/erpnext -f values.yml -n my-erpnext --create-namespace
 ```
-Wait till all pods are running, then give the application 2 min to initialize.
+Wait till all pods are running, then give the application 5 min to initialize.
 
 You can now enter the page via https://erp.my-domain.com
 
