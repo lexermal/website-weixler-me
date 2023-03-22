@@ -42,3 +42,8 @@ You can now enter the page via https://erp.my-domain.com
 
 Username: Administrator
 Password: the one you set in values.yml
+
+## References
+* Helm chart config https://artifacthub.io/packages/helm/erpnext/erpnext?modal=values&path=persistence
+* User credentials https://verystrongfingers.github.io/erpnext/2021/02/11/erpnext-k3s.html
+* Job creation details https://github.com/frappe/helm/blob/main/erpnext/README.md
