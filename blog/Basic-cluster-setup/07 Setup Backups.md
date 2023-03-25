@@ -24,9 +24,25 @@ resources:
 
 Deploy the controller:
 ```
-kubectl config set-context --current --namespace=kube-system
 kubectl apply -k .
 ```
+
+Now a file called **volume-vsc.yml** which Velero uses to create VolumeSnapshot objects when orchestrating backups needs to be created with the following contend:
+
+```
+kind: VolumeSnapshotClass
+apiVersion: snapshot.storage.k8s.io/v1
+metadata:
+  name: velero-longhorn-backup-vsc
+  labels:
+    velero.io/csi-volumesnapshot-class: "true"
+driver: driver.longhorn.io
+deletionPolicy: Delete
+parameters:
+  type: bak
+```
+
+Apply the file with ```kubectl apply -f volume-vsc.yml```
 
 ### Configure Longhorn
 
@@ -58,36 +74,6 @@ Open the settings of Longhorn and set the following:
 Safe the settings and trigger your first backup by checking all volumes and clicking "Create backup". 
 You can see the progress in the backup tab.
 
-### Create jobs for Snapshots and backups
-
-Create a file called **longhorn-snapshot-vsc.yml** with the following contend:
-```
-kind: VolumeSnapshotClass
-apiVersion: snapshot.storage.k8s.io/v1
-metadata:
-  name: longhorn-snapshot-vsc
-driver: driver.longhorn.io
-deletionPolicy: Delete
-parameters:
-  type: snap
-```
-
-Create a file called **longhorn-backup-vsc.yml** with the following contend:
-```
-kind: VolumeSnapshotClass
-apiVersion: snapshot.storage.k8s.io/v1
-metadata:
-  name: longhorn-backup-vsc
-driver: driver.longhorn.io
-deletionPolicy: Delete
-parameters:
-  type: bak
-```
-Deploy the files with
-```
-kubectl apply -f longhorn-backup-vsc.yml -f longhorn-snapshot-vsc.yml
-```
-
 ## Install Velero
 
 Setup the velero client by executing the following commands. Adapt the version number might have changed see [here}(https://github.com/vmware-tanzu/velero/releases).
@@ -104,21 +90,19 @@ cp velero-v1.9.6-linux-amd64/velero /usr/local/bin
 Install velero server by creating a values.yml file with the following contend:
 
 ```yaml
-# AWS backend and CSI plugins configuration
 initContainers:
   - name: velero-plugin-for-aws
-    image: velero/velero-plugin-for-aws:v1.3.0
-    imagePullPolicy: IfNotPresent
+    image: velero/velero-plugin-for-aws:v1.6.1
     volumeMounts:
       - mountPath: /target
         name: plugins
   - name: velero-plugin-for-csi
-    image: velero/velero-plugin-for-csi:v0.3.1
-    imagePullPolicy: IfNotPresent
+    image: velero/velero-plugin-for-csi:v0.4.2
     volumeMounts:
       - mountPath: /target
         name: plugins
 configuration:
+  features: EnableCSI
   provider: aws
   backupStorageLocation:
     provider: aws
@@ -127,7 +111,6 @@ configuration:
       region: eu-west-1
       s3ForcePathStyle: true
       s3Url: https://my-bucket-endpoint     # <-- change
-  features: EnableCSI
 credentials:
   secretContents:
     cloud: |
@@ -144,23 +127,6 @@ helm upgrade --install velero vmware-tanzu/velero -f values.yml -n velero --crea
 
 Wait till the pods are running.
 
-Now a file called **volume-vsc.yml** which Velero uses to create VolumeSnapshot objects when orchestrating backups needs to be created with the following contend:
-
-```
-kind: VolumeSnapshotClass
-apiVersion: snapshot.storage.k8s.io/v1
-metadata:
-  name: velero-longhorn-backup-vsc
-  labels:
-    velero.io/csi-volumesnapshot-class: "true"
-driver: driver.longhorn.io
-deletionPolicy: Retain
-parameters:
-  type: bak
-```
-
-Apply the file with ```kubectl apply -f volume-vsc.yml```
-
 Congratulations, you have successfully setup Velero!
 
 ## Testing Velero
@@ -170,6 +136,7 @@ Let's check out if Velero works by setting up an example nginx server. An exampl
 It can be found at *velero-v1.9.6-linux-amd64/examples/nginx-app/with-pv.yaml*. Change the port in the service to 8000 and set it up with 
 ```
 kubectl apply -f velero-v1.9.6-linux-amd64/examples/nginx-app/with-pv.yaml
+kubectl delete service my-nginx -n nginx-example
 ```
 
 Check deployment success with ```kubectl get deployments --namespace=nginx-example```
@@ -189,9 +156,8 @@ Let's simulate a desaster by deleting the namespace:
 ```
 kubectl delete namespace nginx-example
 ```
-With ```kubectl get namespace/nginx-example``` you can see the namespace with all iits resources does not exist anymore.
 
-It can be restored with
+The namespace with it's resources can be restored with
 ```
 velero restore create --from-backup nginx-backup --wait
 ```
@@ -227,4 +193,6 @@ If you want to monitor your backups, you can use [BotKube](https://docs.botkube.
 ## Refernces
 * Wonderful setup for Raspberry PI cluster setup, tutorial is inspired by it https://picluster.ricsanfre.com/docs/backup/#enable-csi-snapshots-support-in-k3s
 * Helm chart install details: https://artifacthub.io/packages/helm/vmware-tanzu/velero?modal=values&path=kubectl
+* Tutorial for setting it up using vagrant https://platform.cloudogu.com/en/blog/velero-longhorn-backup-restore/
+* Velero CSI Plugin issue with Longhorn https://longhorn.io/kb/troubleshooting-restore-pvc-stuck-using-velero-csi-plugin-version-lower-than-0.4/
 
