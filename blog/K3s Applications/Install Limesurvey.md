@@ -18,35 +18,23 @@ limesurvey:
     password: my-admin-password   # <--change
   persistence:
     storageClassName: longhorn
+ingress:
+  enabled: true
+  className: traefik
+  annotations:
+      traefik.ingress.kubernetes.io/router.entrypoints: websecure
+      traefik.ingress.kubernetes.io/router.tls.certResolver: le
+  hosts:
+    - host: survey.my-domain.com
+      paths:
+        - path: /
+          pathType: ImplementationSpecific
 ```
 
 
 ```
 helm upgrade --install limesurvey martialblog/limesurvey -f values.yml -n limesurvey --create-namespace
 ```
-
-
-
-```yaml
-apiVersion: traefik.containo.us/v1alpha1
-kind: IngressRoute
-metadata:
-  name: limesurvey-route
-  namespace: limesurvey
-spec:
-  entryPoints:
-    - websecure
-  tls:
-    certResolver: le
-  routes:
-    - match: Host(`survey.my-domain.com`)   # <--change
-      kind: Rule
-      services:
-        - name: limesurvey
-          port: 80
-```
-
-kubectl apply -f ingress.yml
 
 ## Setup LDAP
 
