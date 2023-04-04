@@ -52,12 +52,12 @@ services:
       - DATABASE_NAME=o360
       - APPLICATION_SECRET
       - EXTERNAL_AUTH_SERVER_URL=http://auth-server:9090/
-      - MAIL_HOST=sumdays.org
+      - MAIL_HOST=my-domain.com
       - MAIL_PORT=465
       - MAIL_SSL=yes
-      - MAIL_USER=retro@sumdays.org
-      - MAIL_PASSWORD=!M3hp9k92
-      - MAIL_SEND_FROM=retro@sumdays.org
+      - MAIL_USER=retro@my-domain.com
+      - MAIL_PASSWORD=my-password
+      - MAIL_SEND_FROM=retro@my-domain.com
     volumes:
 #      - o360-user-uploads:/opt/docker/uploads
       - ${PWD}/backend/drive_service_key.json:/opt/docker/conf/drive_service_key.json
