@@ -1,46 +1,36 @@
-# How to install Wordpress on a K3s Cluster
+# Install Wordpress
 
-
-
-helm repo add wordpress https://charts.bitnami.com/bitnami
-
-
-
+Add the chart repo with the following command:
 ```
-global:
-    storageClass: longhorn
+helm repo add wordpress https://charts.bitnami.com/bitnami
+```
+
+Create a **values.yml** file with the following content:
+```
 wordpressUsername: admin
-wordpressPassword: my-admin-password
+wordpressPassword: my-admin-password   # <-- change
 mariadb:
     auth:
-        rootPassword: my-db-password
+        rootPassword: my-db-password   # <-- change
+ingress:
+    enabled: true
+    ingressClassName: traefik
+    hostname: wp.my-domain.com   # <-- change
+    annotations:
+        traefik.ingress.kubernetes.io/router.entrypoints: websecure
+        traefik.ingress.kubernetes.io/router.tls.certResolver: le
 ```
 
+Install Wordpress with the following command:
 ```
 helm upgrade --install wordpress wordpress/wordpress -f values.yml -n wordpress --create-namespace
 ```
 
-```
-apiVersion: traefik.containo.us/v1alpha1
-kind: IngressRoute
-metadata:
-  name: wordpress-route
-  namespace: wordpress
-spec:
-  entryPoints:
-    - websecure
-  tls:
-    certResolver: le
-  routes:
-    - match: Host(`wp.my-domain.com`)   # <--change domain
-      kind: Rule
-      services:
-        - name: wordpress
-          port: 80
-```
 
 ## (optional) Connect WordPress with Authentik
 
 Use this tutorial: https://goauthentik.io/integrations/services/wordpress/
 
 
+## References
+* Deployment parameters https://artifacthub.io/packages/helm/bitnami/wordpress
