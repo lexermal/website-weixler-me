@@ -1,11 +1,12 @@
 # Install ERPNext
 
+Add the repository with the following command:
 ```
 helm repo add frappe https://helm.erpnext.com
 ```
 
-
-```
+Create a values.yml file with the following content:
+```yaml
 ingress:
   enabled: true
   className: traefik
@@ -13,7 +14,7 @@ ingress:
     traefik.ingress.kubernetes.io/router.entrypoints: websecure
     traefik.ingress.kubernetes.io/router.tls.certResolver: le
   hosts:
-  - host: erp.my-domain.com
+  - host: erp.my-domain.com  # <-- change
     paths:
     - path: /
       pathType: ImplementationSpecific
@@ -30,17 +31,25 @@ jobs:
     enabled: true
     siteName: erp.my-domain-com    # <-- change
     adminPassword: my-password  # <-- change
+#    installApps:
+#    - hrms
+#image:
+#  repository: lexermal/erpnext
+#  tag: 14.35.0
 ```
 
-
+Install ERPNext with
 ```
 helm upgrade --install frappe-bench frappe/erpnext -f values.yml -n my-erpnext --create-namespace
 ```
-Wait till all pods are running, then give the application 5 min to initialize.
+Wait till all pods are running and all jobs are finished.
+You can monitor the jobs with ```kubectl get jobs -w -n my-erpnext```
 
 You can now enter the page via https://erp.my-domain.com
 
+
 Username: Administrator
+
 Password: the one you set in values.yml
 
 ## (optional) Configure SSO
@@ -79,31 +88,49 @@ Navigate to Website -> Website Settings -> Login Page and uncheck "Disable Signu
 
 You can now login with SSO by nativating to https://erp.my-domain.com/login and clicking on "Login with Authentik".
 
+
 ### Install HR module
+ERPNext has a add called HRMS which has lots of features for HRM.
 
-Copy values.yml to custom-values.yaml
+In order to install ERPNext with the HRM module, the ERPNext docker container needs to be customized.
 
-Adapt the following content:
-jobs:
-  createSite:
-    enabled: true
-    siteName: hrm.my-domain.com
-    adminPassword: my-admin-password
-    installApps:
-    - hrms
+#### Prepare ERPNext docker image
 
-helm template frappe-bench -n my-erpnext frappe/erpnext -f custom-values.yaml -s templates/job-create-site.yaml > create-site-job.yml
-
-Adapt **create-site-job.yml** at around line 57 where it says *bench get-app hrms* replace it with:
 ```
-bench get-app hrms && bench new-site $(SITE_NAME)
+git clone https://github.com/frappe/frappe_docker
+cd frappe_docker
 ```
-kubectl apply -f create-site-job.yml
 
-helm template frappe-bench -n my-erpnext frappe/erpnext -f custom-values.yaml -s templates/ingress.yaml > hrm-ingress.yml
+Create in that folder a file called apps.json with the following content:
+```
+[
+        {
+          "url": "https://github.com/frappe/erpnext",
+          "branch": "version-14"
+        },
+        {
+          "url": "https://github.com/frappe/hrms",
+          "branch": "version-14"
+        }
+]
+```
+Execute the following commands:
+```
+export APPS_JSON_BASE64=$(base64 -w 0 apps.json)
 
-kubectl apply -f hrm-ingress.yml
+docker build \
+  --build-arg=FRAPPE_PATH=https://github.com/frappe/frappe \
+  --build-arg=FRAPPE_BRANCH=version-14 \
+  --build-arg=PYTHON_VERSION=3.10.5 \
+  --build-arg=NODE_VERSION=16.18.0 \
+  --build-arg=APPS_JSON_BASE64=$APPS_JSON_BASE64 \
+  --tag=myerpnextimage:14.35.0 \
+  --file=images/custom/Containerfile .
+```
 
+Push the image to the docker registry.
+
+You can now install ERPNext by using the values.yml file from above with the uncommented lines.
 
 
 ## References
@@ -112,4 +139,4 @@ kubectl apply -f hrm-ingress.yml
 * Job creation details https://github.com/frappe/helm/blob/main/erpnext/README.md
 * SSO config hints https://discuss.frappe.io/t/using-a-custom-social-login-provider-authentik/94812
 * SSO first login flag docu https://docs.erpnext.com/docs/v13/user/manual/en/website/articles/disable-signup
-* Frappe HR install infos https://github.com/frappe/hrms
+* Frappe HR install infos [https://github.com/frappe/hrms](https://github.com/frappe/frappe_docker/issues/1129)
