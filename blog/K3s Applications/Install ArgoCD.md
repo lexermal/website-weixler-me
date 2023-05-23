@@ -59,7 +59,7 @@ server:
 ```
 
 Install ArgoCD with:
-````bash
+```bash
 helm upgrade --install argocd argo/argo-cd -f values.yml -n argocd --create-namespace
 ```
 
@@ -184,7 +184,7 @@ For the configuration of ArgoCD uncomment the values in values.yml from above. A
 
 Addply the changes with 
 
-````bash
+```bash
 helm upgrade --install argocd argo/argo-cd -f values.yml -n argocd --create-namespace
 ```
 
