@@ -83,6 +83,13 @@ Delete the PVC via Longhorn UI.
 Scale the deployment of your pod down to 0, mount the new PCV and copy all data into it.
 Scale the deployment up again.
 
+## Hint for servers running Ubuntu
+
+As [K3s mentions](https://docs.k3s.io/advanced#ubuntu) the firewall UFW should be dissabled. This can be done with:
+```
+ufw disable
+#```
+
 ## Troubleshoot "no relationship found between node 'X' and this object" error
 
 ```
