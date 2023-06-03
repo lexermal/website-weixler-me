@@ -25,7 +25,8 @@ PermitRootLogin yes
 PubkeyAuthentication yes
 ```
 Restart the SSH service with 
-```sudo systemctl restart sshd``` or ```sudo systemctl restart ssh```
+
+```sudo systemctl restart ssh && sudo systemctl reload ssh```
 
 ## Change hostname
 Change the hostname to something easily rememberable:
