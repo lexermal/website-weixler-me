@@ -120,20 +120,13 @@ configs:
       password: my-password   # <-- change
 ```
 
-## Setup firewall rules (needs to be adjusted)
+## Hint for Ubuntu server
 
-THIS DOES CURRENTLY NOT WORK, LOCAL IPS NEED TO BE ALLOWED TOO
+K3s recommends to disable ufw on ubuntu machines for K3s to work properly. This can be done with ```ufw disable```.
 
-In order to shrink the surface of attacks we add the following firewall rules to secure the master nodes ```sudo crontab -e```. Adapt the ip to the nodes ips:
-
-```
-@reboot /usr/sbin/iptables -A INPUT -p tcp --dport 6443 -s 1.2.3.4 -j ACCEPT
-@reboot /usr/sbin/iptables -A INPUT -p tcp --dport 6443 -j DROPDROP
-@reboot /usr/sbin/iptables -A INPUT -p tcp --dport 10250 -s 1.2.3.4 -j ACCEPT
-@reboot /usr/sbin/iptables -A INPUT -p tcp --dport 10250 -j DROPDROP
-```
 
 ## References
 * Rancher instructions on how to set up a HA K3s cluster: https://docs.k3s.io/installation/ha-embedded
 * Rancher instructions on how to add worker nodes: https://docs.k3s.io/quick-start
 * Source for K3s private repository configuration https://docs.k3s.io/installation/private-registry
+* K3s hint about Ubuntu https://docs.k3s.io/advanced#ubuntu
