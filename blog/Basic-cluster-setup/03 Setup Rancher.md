@@ -27,6 +27,7 @@ The next step is to install Rancher. Adapt the domain name to your likening.
 ```
 helm upgrade -i rancher rancher-stable/rancher -n cattle-system \
   --create-namespace \
+  --set global.cattle.psp.enabled=false \
   --set hostname=rancher.example.com
 ```
 
@@ -36,4 +37,5 @@ kubectl -n cattle-system rollout status deploy/rancher
 ```
 
 ## References
-Tutorial is based on TechnoTims Rancher HA tutorial [TechnoTim](https://docs.technotim.live/posts/rancher-ha-install/)!
+* Tutorial is based on TechnoTims Rancher HA tutorial [TechnoTim](https://docs.technotim.live/posts/rancher-ha-install/)!
+* Rancher install psp issue https://github.com/rancher/rancher/issues/41295
