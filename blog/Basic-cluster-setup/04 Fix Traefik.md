@@ -38,9 +38,8 @@ spec:
       # enable wildcards
       - "--entrypoints.websecure.http.tls=true"
       - "--entrypoints.websecure.http.tls.certResolver=le"
-      - "--entrypoints.websecure.http.tls.domains[0].main=my-domain.com"          # <- change to your domain(s)
+      - "--entrypoints.websecure.http.tls.domains[0].main=my-domain.com"          # <- change to your domain(s), can be removed if only subdomains will be hosted
       - "--entrypoints.websecure.http.tls.domains[0].sans=*.my-domain.com"        # <- change to your domain(s)
-      - "--entrypoints.websecure.http.tls.domains[1].main=sub.my-domain.com"      # <- change to your domain(s)
       - "--entrypoints.websecure.http.tls.domains[1].sans=*.sub.my-domain.com"    # <- change to your domain(s)
     env:
       - name: HOSTTECH_API_KEY   # <- change to your dns provider
@@ -49,7 +48,10 @@ spec:
 
 Apply the config with ```kubectl apply -f traefik-fix.yml```
 
-
+Apply the usage of the new certificate also for Rancher by running
+```
+kubectl patch ingress rancher -n cattle-system -p '{"spec":{"ca":{"secretName":null}}}'
+```
 
 ## Make Traefik accessible publically
 By default the Traefik dashboard is active but not exposed. To make it securly available we using basic auth.
