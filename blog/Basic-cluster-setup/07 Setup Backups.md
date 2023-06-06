@@ -101,20 +101,23 @@ initContainers:
         name: plugins
 configuration:
   features: EnableCSI
-  provider: aws
   backupStorageLocation:
-    provider: aws
-    bucket: my-bucket    # <-- change
-    config:
-      region: eu-west-1
-      s3ForcePathStyle: true
-      s3Url: https://my-bucket-endpoint     # <-- change
+    - name: idrive
+      provider: aws
+      bucket: my-bucket                          # <-- change
+      config:
+        region: eu-west-1
+        s3ForcePathStyle: true
+        s3Url: https://my-bucket-endpoint        # <-- change
+  volumeSnapshotLocation:
+    - name: idrive
+      provider: velero.io/aws
 credentials:
   secretContents:
     cloud: |
       [default]
-      aws_access_key_id: my-bucket-key     # <-- change
-      aws_secret_access_key: my-bucket-secret     # <-- change
+      aws_access_key_id: my-bucket-key           # <-- change
+      aws_secret_access_key: my-bucket-secret    # <-- change
 ```
 
 Run this command to set it up. Leave the namespace to velero.
