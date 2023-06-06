@@ -11,9 +11,6 @@ ingress:
   enabled: true
   className: traefik
   host: vaultwarden.my-domain.com
-  annotations: 
-    traefik.ingress.kubernetes.io/router.entrypoints: websecure
-    traefik.ingress.kubernetes.io/router.tls.certResolver: le
 persistence:
   enabled: true
 vaultwarden:
