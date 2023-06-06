@@ -16,9 +16,6 @@ ingress:
     enabled: true
     ingressClassName: traefik
     hostname: wp.my-domain.com   # <-- change
-    annotations:
-        traefik.ingress.kubernetes.io/router.entrypoints: websecure
-        traefik.ingress.kubernetes.io/router.tls.certResolver: le
 ```
 
 Install Wordpress with the following command:
