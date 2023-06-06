@@ -128,13 +128,17 @@ helm upgrade --install velero vmware-tanzu/velero -f values.yml -n velero --crea
 
 Wait till the pods are running.
 
+Set the default backup location with
+```
+velero backup-location set idrive --default
+```
+
 Congratulations, you have successfully setup Velero!
 
 ## Testing Velero
 
-Let's check out if Velero works by setting up an example nginx server. An example deployment is included in the downloaded Velero client folder. 
+To test Velero an example deployment is included in the downloaded Velero client folder we deploy for testing:
 
-It can be found at *velero-v1.9.6-linux-amd64/examples/nginx-app/with-pv.yaml*. Change the port in the service to 8000 and set it up with 
 ```
 kubectl apply -f velero-v1.9.6-linux-amd64/examples/nginx-app/with-pv.yaml
 kubectl delete service my-nginx -n nginx-example
@@ -142,7 +146,7 @@ kubectl delete service my-nginx -n nginx-example
 
 Check deployment success with ```kubectl get deployments --namespace=nginx-example```
 
-Now we create a file in a mounted folder to verify later restoring worked. To do that execute:
+Create a file in a mounted folder to verify later restoring worked by executing:
 ```
 kubectl exec -n nginx-example deploy/nginx-deployment -- bash -c "echo Hello World > /var/log/nginx/test.txt"
 kubectl exec -n nginx-example deploy/nginx-deployment -- bash -c "cat /var/log/nginx/test.txt"
