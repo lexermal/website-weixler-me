@@ -17,9 +17,6 @@ ingress:
   className: traefik
   hosts:
     - registry.my-domain.com
-  annotations:
-      traefik.ingress.kubernetes.io/router.entrypoints: websecure
-      traefik.ingress.kubernetes.io/router.tls.certResolver: le  
 ```
   
 ```helm upgrade --install registry twuni/docker-registry -f values.yml -n my-registry --create-namespace```
@@ -38,9 +35,6 @@ ui:
     enabled: true
     host: ui.registry.my-domain.com
     ingressClassName: traefik
-    annotations:
-      traefik.ingress.kubernetes.io/router.entrypoints: websecure
-      traefik.ingress.kubernetes.io/router.tls.certResolver: le
 ```
 
 ```helm upgrade --install registry-ui joxit/docker-registry-ui -f ui-values.yml -n my-registry-ui --create-namespace```
