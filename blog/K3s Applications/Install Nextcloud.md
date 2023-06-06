@@ -11,9 +11,6 @@ Create a file called values.yml for the deployment settings with the following c
 ingress:
     enabled: true
     className: traefik
-    annotations:
-      traefik.ingress.kubernetes.io/router.entrypoints: websecure
-      traefik.ingress.kubernetes.io/router.tls.certResolver: le
     tls:
       - hosts:
           - cloud.my-domain.com   # <-- change
