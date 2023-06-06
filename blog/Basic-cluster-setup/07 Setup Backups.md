@@ -11,7 +11,7 @@ Make sure the Longhorn is at least version 1.4.0.
 
 ### Installing the snapshot controller:
 
-Create a file called **kustomization.yaml** with this contend:
+Create a file called **kustomization.yml** with this contend:
 
 ```
 apiVersion: kustomize.config.k8s.io/v1beta1
@@ -48,18 +48,16 @@ Apply the file with ```kubectl apply -f volume-vsc.yml```
 
 First configure a bucket in the S3 platform you want to use. I recommend https://idrivee2.com/ currently they are the cheapest on the market.
 
-When the endpoint, access key and secret is configured encode them by using this command ```echo -n my-endpoint-or-access-key-or-access-secret | base64```
-
 Then create the file **s3-backup-secret.yml** with the following contend:
 
 ```
 apiVersion: v1
 kind: Secret
 metadata:
-  name: s3-backup-secret
+  name: s3-longhorn-backup-secret
   namespace: longhorn-system
 type: Opaque
-data:
+stringData:
   AWS_ACCESS_KEY_ID: my-encoded-key      # <-- change
   AWS_SECRET_ACCESS_KEY: my-encoded-secret      # <-- change
   AWS_ENDPOINTS: my-encoded-endoint      # <-- change
@@ -69,7 +67,7 @@ Apply the file with ```kubectl apply -f s3-backup-secret.yml```
 
 Open the settings of Longhorn and set the following:
 * Backup Target: s3://my-bucket@my-endpoint.com/  **DON'T forget the /**
-* Backup Target Credential Secret: s3-backup-secret
+* Backup Target Credential Secret: s3-longhorn-backup-secret
 
 Safe the settings and trigger your first backup by checking all volumes and clicking "Create backup". 
 You can see the progress in the backup tab.
