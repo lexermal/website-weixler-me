@@ -1,10 +1,6 @@
-# Setup of an always cheap Kubernetes cluster
+# Setup cheap Kubernetes cluster
 
-Hello everyone!
-
-Today I'm going to explain how to create a high available cheap Kubernetes cluster that is ready within minutes.
-
-I've tried out countless methods, and now I believe this is the best one.
+Today we are creating a high available cheap Kubernetes cluster that is ready within minutes.
 
 
 ## Rent cheap servers
@@ -85,7 +81,7 @@ Add a worker to a master node by executing
 curl -sfL https://get.k3s.io | K3S_URL=https://my-master-server:6443 K3S_TOKEN=my-master-token sh -
 ```
 
-## Removing a node
+## (optional) Removing a node
 When the cheap period of the v-server is over, or you want to have another server that has a better price to performance ratio you can remove a host the following way:
 
 > :warning: Keep in mind depending on the load running in the cluster it might sometimes be recommendable to first add another node before removing one.
@@ -101,7 +97,7 @@ When the cheap period of the v-server is over, or you want to have another serve
 The cluster needs some time to restructure itself.
 
 
-## Configure the usage of a private registry
+## (optional) Configure the usage of a private registry
 If you want to use a private docker registry in your cluster execute the following commands on every node that runs pods:
 ```
 mkdir /etc/rancher/k3s
