@@ -50,7 +50,7 @@ Apply the config with ```kubectl apply -f traefik-fix.yml```
 
 Apply the usage of the new certificate also for Rancher by running
 ```
-kubectl patch ingress rancher -n cattle-system -p '{"spec":{"ca":{"secretName":null}}}'
+kubectl patch ingress rancher -n cattle-system --type=json -p='[{"op": "remove", "path": "/spec/tls/0/secretName"}]'
 ```
 
 ## Make Traefik accessible publically
