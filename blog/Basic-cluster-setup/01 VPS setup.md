@@ -9,34 +9,35 @@ Make host only accessible via SSH Keys:
 
 ```ssh-keygen -t ed25519 -C "my-email@example.com"```
 
-**Always set a password! Otherwise someone can suimply copy the files and access the server like having the stolen password.**
+**Always set a password! Otherwise someone can simply copy the files and access the server like having the stolen password.**
 
 Log now into the host with ```ssh username@my--server-ip```.
 
-Open the file **./ssh/authorized_keys** and add at the bottom a new line with your public ssh key.
+Open the file **~/.ssh/authorized_keys** and add a new line with your public ssh key at the bottom.
 
 ### Disable password login
 Open the ssh settings with ```sudo nano /etc/ssh/sshd_config```
 
 Change the settings to these once:
 ```
+Port 2222
 PasswordAuthentication no
 PermitRootLogin yes
 PubkeyAuthentication yes
 ```
 Restart the SSH service with 
 
-```sudo systemctl restart ssh && sudo systemctl reload ssh```
+```sudo systemctl reload ssh```
 
 ## Change hostname
 Change the hostname to something easily rememberable:
 
 ```sudo hostnamectl set-hostname my-host-123```
 
-Check in **/etc/hosts** if the name is set there too to resolve to localhost!
+Check-in **/etc/hosts** if the name is set there too to resolve to localhost!
 
 ## Enable Fail2ban
-In order to prevent attacks we enable Fail2Ban.
+To prevent attacks, we enable Fail2Ban.
 
 
 ```
@@ -72,9 +73,6 @@ Status for the jail: sshd
    `- Banned IP list:   1.2.3.4
 
 ```
-
-
-
 
 
 
