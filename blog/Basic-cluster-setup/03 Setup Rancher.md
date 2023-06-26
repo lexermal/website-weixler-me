@@ -12,7 +12,7 @@ Now everything is prepared for installing Rancher and the certificate system.
 Check which version of [cert-manager](https://github.com/cert-manager/cert-manager/releases) is the current one, adapt the following commands and run them:
 
 ```
-kubectl apply --validate=false -f https://github.com/jetstack/cert-manager/releases/download/v1.7.1/cert-manager.crds.yaml
+kubectl apply --validate=false -f https://github.com/jetstack/cert-manager/releases/download/v1.12.2/cert-manager.crds.yaml
 
 cp /etc/rancher/k3s/k3s.yaml ~/.kube/config
 helm upgrade -i cert-manager jetstack/cert-manager -n cert-manager --create-namespace
