@@ -69,7 +69,7 @@ kubectl exec -n nginx-example deploy/nginx-deployment -- bash -c "echo Hello Wor
 kubectl exec -n nginx-example deploy/nginx-deployment -- bash -c "cat /var/log/nginx/test.txt"
 ```
 
-Now let's create a backup:
+Now let's create a **backup**:
 ```
 velero backup create nginx-backup --include-namespaces nginx-example --default-volumes-to-fs-backup --wait
 ```
