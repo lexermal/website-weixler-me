@@ -17,7 +17,7 @@ Create an application with the following values:
 ```helm repo add outline https://gitlab.com/api/v4/projects/30221184/packages/helm/stable/```
 
 
-Generate a secret key and utils key with ```openssl rand -hex 3```
+Generate a secret key and utils key with ```openssl rand -hex 32```
 
 ```
 secretKey: "my-secret-key"
