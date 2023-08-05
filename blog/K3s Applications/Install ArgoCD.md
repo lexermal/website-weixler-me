@@ -1,6 +1,6 @@
 # Setup ArgoCD
 
-In this tutorial ArgoCD gets setup using Helm on a K3s cluster. The usecase is that in a Github repository all argo application configuration files lay. The applications that should be deployed via ArgoCD are Helm charts being in a private Helm registry.
+In this tutorial, ArgoCD gets set up using Helm on a K3s cluster. The use case is that in a Github repository, all argo application configuration files lay. The applications that should be deployed via ArgoCD are Helm charts being in a private Helm registry.
 
 Add the repository with:
 ```bash
@@ -9,19 +9,6 @@ helm repo add argo https://argoproj.github.io/argo-helm
 
 Create a values.yml file that contains the following content. It configures 2 repositories as sources and template credentials for applications accessing the Application definition.
 ```yaml
-repositories:
-  my-helm-repo:
-    url: https://registry.my-domain.com
-    name: My_Registry
-    type: helm
-    username: my-user
-    password: my-password
-  my-git-repo:
-    type: git
-    url: https://github.com/my/repo.git
-    name: ArgoCD_config_sync
-    username: argocd
-    password: my-github-access-token
 server:
   ingress:
     enabled: true
@@ -33,7 +20,20 @@ server:
     - argocd.my-domain.com
   extraArgs:
     - --insecure
-#configs:
+configs:
+  repositories:
+    my-helm-repo:
+      url: https://registry.my-domain.com
+      name: My_Registry
+      type: helm
+      username: my-user
+      password: my-password
+    my-git-repo:
+      type: git
+      url: https://github.com/my/repo.git
+      name: ArgoCD_config_sync
+      username: argocd
+      password: my-github-access-token
 #  cm:
 #    url: https://argocd.my-domain.com
 #    dex.config: |
@@ -51,11 +51,6 @@ server:
 #          name: Authentik
 #          type: oidc
 #          id: authentik
-  credentialTemplates:
-    https-creds:
-      username: argocd
-      password: my-github-access-token
-      url: https://github.com/my/repo.git
 ```
 
 Install ArgoCD with:
@@ -99,6 +94,8 @@ spec:
 ```
 
 The configurations like ApplicationSets are now visible in the UI. 
+
+## (optional) Deployment of example ApplicationSet
 
 An example Helm deployment ApplicationSet can look like this. It deploys the helm chart of Tyk, an API Gateway to the staging and production cluster.
 
