@@ -1,27 +1,19 @@
 # Setup Rancher
 
-Run the following commands on one of the master nodes:
+Run the following commands on one of the master nodes installing Rancher and the certificate management system:
 
 ```
 curl https://raw.githubusercontent.com/helm/helm/master/scripts/get-helm-3 | bash
 helm repo add rancher-stable https://releases.rancher.com/server-charts/stable
 helm repo add jetstack https://charts.jetstack.io
-```
-Now everything is prepared for installing Rancher and the certificate system.
-
-Check which version of [cert-manager](https://github.com/cert-manager/cert-manager/releases) is the current one, adapt the following commands and run them:
-
-```
-kubectl apply --validate=false -f https://github.com/jetstack/cert-manager/releases/download/v1.12.2/cert-manager.crds.yaml
-
 cp /etc/rancher/k3s/k3s.yaml ~/.kube/config
-helm upgrade -i cert-manager jetstack/cert-manager -n cert-manager --create-namespace
+helm upgrade -i cert-manager jetstack/cert-manager -n cert-manager --create-namespace --set installCRDs=true 
 ```
 
-Now Cert Manager gets installed. You can check the progess with
+Now Cert Manager gets installed. You can check the progress with
 ```kubectl get pods --namespace cert-manager```
 
-Wait till it is finished!
+Wait till it's finished!
 
 The next step is to install Rancher. Adapt the domain name to your likening.
 ```
