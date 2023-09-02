@@ -21,9 +21,9 @@ Open the ssh settings with ```sudo nano /etc/ssh/sshd_config```
 Change the settings to these once:
 ```
 Port 2222
-PasswordAuthentication no
 PermitRootLogin yes
 PubkeyAuthentication yes
+PasswordAuthentication no
 ```
 Restart the SSH service with 
 
