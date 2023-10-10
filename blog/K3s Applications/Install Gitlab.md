@@ -1,6 +1,4 @@
-# Install Gitlab on a K3s Cluster with auth via Authentik
-
-This tutorial uses the helm charts of Pascaliske for installing Gitlab omnibus. They were chosen because the original Gitlab charts have a problem with CustomResourceDefinitions.
+# Install Gitlab with SSO
 
 ## Configure Authentik
 
@@ -23,111 +21,92 @@ Create an application with the following settings:
 * Slug: gitlab
 * Provider: Gitlab
 * Launch URL: https://git.my-domain.com
+
+
 ## Install Gitlab
-```helm repo add pascaliske https://charts.pascaliske.dev```
+We are going to install Gitlab in the gitlab namespace.
 
+Preparations for installing Gitlab.
+```bash
+echo "fs.inotify.max_user_instances=1280" | sudo tee -a /etc/sysctl.conf
+echo "fs.inotify.max_user_watches=655360" | sudo tee -a /etc/sysctl.conf
+sudo sysctl -p
+
+kubectl create namespace gitlab
+kubectl create secret generic gitlab-gitlab-initial-root-password --from-literal=password=<password> -n gitlab
 ```
-healthCheck:
+
+provider.yml
+```yaml
+name: saml
+label: Authentik
+args:
+  assertion_consumer_service_url: 'https://git.my-domain.com/users/auth/saml/callback'
+  idp_cert_fingerprint: my-sha1-fingerprint
+  idp_sso_target_url: 'https://auth.my-domain.com/application/saml/gitlab/sso/binding/redirect/'
+  issuer: 'https://git.my-domain.com'
+  name_identifier_format: 'urn:oasis:names:tc:SAML:1.1:nameid-format:emailAddress'
+  attribute_statements:
+    email:
+      - 'http://schemas.xmlsoap.org/ws/2005/05/identity/claims/emailaddress'
+    first_name:
+      - 'http://schemas.xmlsoap.org/ws/2005/05/identity/claims/name'
+    nickname:
+      - 'http://schemas.goauthentik.io/2021/02/saml/username'
+```
+
+```bash
+kubectl create secret generic -n gitlab saml-oauth2 --from-file=provider=provider.yml
+```
+
+values.yml
+```yaml
+global:
+  edition: ce
+  appConfig:
+    omniauth:
+      enabled: true
+      autoLinkSamlUser: true
+      blockAutoCreatedUsers: false
+      syncProfileFromProvider:
+      - saml
+      providers:
+       - secret: saml-oauth2
+  hosts:
+    domain: sumdays.org
+    gitlab:
+      name: git.sumdays.org
+      https: true
+  ingress:
+    class: traefik
+    provider: traefik
+    configureCertmanager: false
+certmanager:
+  install: false
+nginx-ingress:
+  # Disable the deployment of the in-chart NGINX Ingress provider.
   enabled: false
-configMap:
-  config: |
-      external_url 'https://git.my-domain.com'
-      gitlab_rails['initial_root_password'] = 'my-root-password'
-      nginx['listen_https'] = false
-      nginx['listen_port'] = 80
-      letsencrypt['enable'] = false
-      grafana['enable'] = false
-      gitlab_rails['gitlab_default_projects_features_issues'] = true
-      gitlab_rails['gitlab_default_projects_features_wiki'] = true
-      gitlab_rails['gitlab_default_projects_features_snippets'] = true
-      gitlab_rails['gitlab_default_projects_features_container_registry'] = false
-      prometheus_monitoring['enable'] = false
-      gitlab_rails['omniauth_enabled'] = true
-      gitlab_rails['omniauth_allow_single_sign_on'] = ['saml']
-      gitlab_rails['omniauth_sync_email_from_provider'] = 'saml'
-      gitlab_rails['omniauth_sync_profile_from_provider'] = ['saml']
-      gitlab_rails['omniauth_sync_profile_attributes'] = ['email']
-      gitlab_rails['omniauth_block_auto_created_users'] = false
-      gitlab_rails['omniauth_auto_link_saml_user'] = true
-      gitlab_rails['omniauth_providers'] = [
-       {
-          name: 'saml',
-           args: {
-        assertion_consumer_service_url: 'https://git.my-domain.com/users/auth/saml/callback',
-        idp_cert_fingerprint: 'my-sha1 fingerprint',
-        idp_sso_target_url: 'https://auth.my-domain.com/application/saml/gitlab/sso/binding/redirect/',
-        issuer: 'https://git.my-domain.com',
-        name_identifier_format: 'urn:oasis:names:tc:SAML:1.1:nameid-format:emailAddress',
-        attribute_statements: {
-          email: ['http://schemas.xmlsoap.org/ws/2005/05/identity/claims/emailaddress'],
-          first_name: ['http://schemas.xmlsoap.org/ws/2005/05/identity/claims/name'],
-          nickname: ['http://schemas.goauthentik.io/2021/02/saml/username']
-            }
-           },
-         label: 'Authentik'
-       }
-      ]
+registry:
+  enabled: false
+gitlab-runner:
+  install: false
+  runners:
+    privileged: true
+gitlab:
+  initialRootPassword:
+    secret: gitlab-initial-root-password
+    key: password
+prometheus:
+  install: false
 ```
 
-Install Gitlab with this command
-```
-helm upgrade --install gitlab pascaliske/gitlab -f values.yml -n gitlab --create-namespace
-```
-If you change settings in the values.yml file and run the upgrade command from above, you need to run this command in the pod to apply the changes ```gitlab-ctl reconfigure && update-permissions```.
-
-
-## Make Gitlab reachable
-Make sure the port 22 is not taken by other applications like the SSH server. You can remove the lower service map and service if you don't want to use ssh cloning.
-
-Createa a file called **ingress.yml** witht the following contend:
-```
-apiVersion: traefik.containo.us/v1alpha1
-kind: IngressRoute
-metadata:
-  name: gitlab-route
-  namespace: gitlab
-spec:
-  entryPoints:
-    - websecure
-  tls:
-    certResolver: le
-  routes:
-    - match: Host(`git.my-domain.com`)   # <--change domain
-      kind: Rule
-      services:
-        - name: gitlab
-          port: 80
----
-apiVersion: v1
-kind: Service
-metadata:
-  name: gitlab-service
-  namespace: gitlab
-spec:
-  type: LoadBalancer
-  ports:
-  - port: 22
-    protocol: TCP
-  selector:
-    app.kubernetes.io/instance: gitlab
-    app.kubernetes.io/name: gitlab
----
-apiVersion: v1
-kind: ConfigMap
-metadata:
-  name: gitlab-ssh
-  namespace: gitlab
-data:
-  22: "gitlab/gitlab-service:22"
+```bash
+helm repo add gitlab http://charts.gitlab.io/
+helm upgrade --install gitlab gitlab/gitlab -f values.yml -n gitlab --create-namespace
 ```
 
-Expose Gitlab with ```kubectl apply -f ingress.yml```
-
-### Remarks
-This installation of Gitlab is not perfect due to not using the original Gitlab helm charts. I would be happy if someone would show a way how to setup Gitlab on K3s with these charts.
-
-If you want to reduce the resource usage apply these [settings](https://docs.gitlab.com/omnibus/settings/memory_constrained_envs.html#configuration-with-all-the-changes). I recommend leaving out the once connected to cgroups.
 
 ## References
-* Helm chart infos https://artifacthub.io/packages/helm/pascaliske/gitlab
+* Helm chart infos https://artifacthub.io/packages/helm/gitlab/gitlab
+* Gitlab SSO provider configuration https://docs.gitlab.com/charts/charts/globals#providers
 * SSO integration with Authentik https://goauthentik.io/integrations/services/gitlab/
