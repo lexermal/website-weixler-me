@@ -1,5 +1,5 @@
 # Setup Backups
-In this tutorial we will configure automatic backups for a K3s cluster with Longhorn using Velero to backup resources to an S3 storage.
+In this tutorial, we will configure automatic backups for a K3s cluster with Longhorn using Velero to backup resources to an S3 storage.
 
 Hint: Longhorn has a backup feature for the volumes included, but when the whole cluster is lost, the backups do not seem to be restoreable.
 
@@ -11,12 +11,12 @@ Set up the Velero client by executing the following commands. Adapt the version 
 mkdir -p ~/kube/config
 cp /etc/rancher/k3s/k3s.yaml ~/kube/config
 
-wget https://github.com/vmware-tanzu/velero/releases/download/v1.9.6/velero-v1.9.6-linux-amd64.tar.gz -O velero.tar.gz
+wget https://github.com/vmware-tanzu/velero/releases/download/v1.12.0/velero-v1.12.0-linux-amd64.tar.gz -O velero.tar.gz
 tar -xvf velero.tar.gz
-cp velero-v1.9.6-linux-amd64/velero /usr/local/bin
+cp velero-v1.12.0-linux-amd64/velero /usr/local/bin
 ```
 
-Install Velero server by creating a values.yml file with the following content:
+Install the Velero server by creating a values.yml file with the following content:
 
 ```yaml
 deployNodeAgent: true
@@ -57,7 +57,7 @@ Congratulations, you have successfully set up Velero!
 To test Velero, an example deployment is included in the downloaded Velero client folder we deploy for testing:
 
 ```
-kubectl apply -f velero-v1.9.6-linux-amd64/examples/nginx-app/with-pv.yaml
+kubectl apply -f velero-v1.12.0-linux-amd64/examples/nginx-app/with-pv.yaml
 kubectl delete service my-nginx -n nginx-example
 ```
 
@@ -90,20 +90,20 @@ kubectl exec -n nginx-example deploy/nginx-deployment -- bash -c "cat /var/log/n
 ```
 You will see it reads out "Hello World".
 
-Ok, lets clean up with the following commands:
+Ok, let's clean up with the following commands:
 ```
 velero backup delete nginx-backup --confirm
 kubectl delete namespace nginx-example
 ```
 
 ## Configure scheduled backups
-For scheduling backups are many options on what to include, when to schedule it and how long it should be stored. 
+For scheduling backups are many options on what to include, when to schedule it, and how long it should be stored. 
 I recommend the following as basis:
 ```
 velero schedule create daily-full-backup --default-volumes-to-fs-backup=true --schedule="0 1 * * *" --ttl 168h0m0s
 velero schedule create weekly-full-backup --default-volumes-to-fs-backup=true --schedule="@every 168h" --ttl 1440h0m0s
 ```
-It's a daily backup at 1 am being saved for one week and a weekly backup held for two months.
+It's a daily backup at 1 a.m. being saved for one week and a weekly backup held for two months.
 
 With these backups, you can restore the whole cluster or single namespaces using the following:
 ```
