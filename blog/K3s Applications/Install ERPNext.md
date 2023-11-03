@@ -10,9 +10,6 @@ Create a values.yml file with the following content:
 ingress:
   enabled: true
   className: traefik
-  annotations:
-    traefik.ingress.kubernetes.io/router.entrypoints: websecure
-    traefik.ingress.kubernetes.io/router.tls.certResolver: le
   hosts:
   - host: erp.my-domain.com  # <-- change
     paths:
@@ -40,7 +37,7 @@ jobs:
 
 Install ERPNext with
 ```
-helm upgrade --install frappe-bench frappe/erpnext -f values.yml -n my-erpnext --create-namespace
+helm upgrade --install frappe-bench frappe/erpnext -f values.yml -n my-erpnext --create-namespace --version 6.0.96
 ```
 Wait till all pods are running and all jobs are finished.
 You can monitor the jobs with ```kubectl get jobs -w -n my-erpnext```
