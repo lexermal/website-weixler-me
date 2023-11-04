@@ -100,10 +100,10 @@ kubectl delete namespace nginx-example
 For scheduling backups are many options on what to include, when to schedule it, and how long it should be stored. 
 I recommend the following as basis:
 ```
-velero schedule create daily-full-backup --default-volumes-to-fs-backup=true --schedule="0 1 * * *" --ttl 168h0m0s
-velero schedule create weekly-full-backup --default-volumes-to-fs-backup=true --schedule="@every 168h" --ttl 1440h0m0s
+velero schedule create daily-full-backup --default-volumes-to-fs-backup=true --schedule="0 1 * * *" --ttl 336h0m0s
+velero schedule create weekly-full-backup --default-volumes-to-fs-backup=true --schedule="@every 168h" --ttl 2160h0m0s
 ```
-It's a daily backup at 1 a.m. being saved for one week and a weekly backup held for two months.
+It's a daily backup at 1 a.m. being saved for 2 weeks and a weekly backup held for 3 months.
 
 With these backups, you can restore the whole cluster or single namespaces using the following:
 ```
