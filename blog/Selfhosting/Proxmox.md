@@ -1,5 +1,19 @@
 # Proxmox tips
 
+## Setup up NAT
+Let's say your hoster gave you only one public up but you want your VMs to access the internet for e.g. downloading updates.
+
+1. Create network bridge vmbr1 with ip range 192.168.50.0/24
+
+2. Edit /etc/network/interfaces and add the following under "bridge-fd 0":
+
+        post-up   echo 1 > /proc/sys/net/ipv4/ip_forward
+        post-up   iptables -t nat -A POSTROUTING -s '192.168.50.0/24' -o vmbr0 -j MASQUERADE
+        post-down iptables -t nat -D POSTROUTING -s '192.168.50.0/24' -o vmbr0 -j MASQUERADE
+
+3. Comment out the "up ip route replace" route
+
+4. Restart the host 
 
 ## Troubleshooting
 
