@@ -13,7 +13,13 @@ Let's say your hoster gave you only one public up but you want your VMs to acces
 
 3. Comment out the "up ip route replace" route
 
-4. Restart the host 
+4. Restart the host
+5. In the VM set the following network settings
+
+* Subnet: 192.168.50.0/24
+* Address: 192.168.50.2
+* Gateway: 192.168.50.1
+* Name servers: 1.1.1.1
 
 ## Troubleshooting
 
