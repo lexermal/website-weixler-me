@@ -21,6 +21,16 @@ Let's say your hoster gave you only one public up but you want your VMs to acces
 * Gateway: 192.168.50.1
 * Name servers: 1.1.1.1
 
+## Setup port forwarding
+
+Edit /etc/network/interfaces and add the following under "bridge-fd 0":
+```
+        post-up   iptables -t nat -A PREROUTING -i vmbr0 -p tcp --match multiport --dports 1:8000 -j DNAT --to-destination 192.168.50.2
+        post-up   iptables -t nat -A POSTROUTING -o vmbr0 -p tcp --match multiport --dports 1:8000 -j MASQUERADE
+        post-down iptables -t nat -A PREROUTING -i vmbr0 -p tcp --match multiport --dports 1:8000 -j DNAT --to-destination 192.168.50.2
+        post-down iptables -t nat -A POSTROUTING -o vmbr0 -p tcp --match multiport --dports 1:8000 -j MASQUERADE
+```
+
 ## Troubleshooting
 
 ### VM is after cloning getting the same IP as the machine it got cloned from
