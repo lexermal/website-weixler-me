@@ -31,7 +31,7 @@ First of we set up the first master node.
 
 Install K3s with the following command:
 ```
-curl -sfL https://get.k3s.io | INSTALL_K3S_VERSION=v1.25.10+k3s1 sh -s - server --cluster-init
+curl -sfL https://get.k3s.io | INSTALL_K3S_VERSION=v1.26.10+k3s2 sh -s - server --cluster-init
 ```
 For the version number first look up [here](https://www.suse.com/suse-rancher/support-matrix/all-supported-versions/rancher-v2-7-3/) what version Rancher is compartible with(click left to select the latest version and click then on the right on K3s). Select the latest minor version based on the [releases](https://github.com/k3s-io/k3s/releases) page. 
 
