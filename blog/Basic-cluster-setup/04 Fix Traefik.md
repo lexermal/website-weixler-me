@@ -25,7 +25,8 @@ spec:
         tls:
           enabled: true
       web:
-        redirectTo: websecure
+        redirectTo:
+          port: websecure
 
     # enable tls challenges for whole subdomains
     additionalArguments:
