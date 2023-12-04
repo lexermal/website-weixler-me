@@ -43,7 +43,7 @@ service:
 helm upgrade -i dns-server obeone/technitium-dnsserver -f values.yml -n my-dns --create-namespace
 ```
 
-````yaml
+```yaml
 apiVersion: v1
 kind: Service
 metadata:
