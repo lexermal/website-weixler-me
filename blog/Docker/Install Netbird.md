@@ -25,3 +25,8 @@ NETBIRD_DISABLE_LETSENCRYPT=false
 NETBIRD_LETSENCRYPT_EMAIL="contact@my-domain.com"
 NETBIRD_MGMT_DNS_DOMAIN=vpn.local
 ```
+
+## Troubleshooting
+
+**You configured a DNS server for your domain my-domain.com where you host things in your private network. auth.my-domain.com is hosted publically but from within your network, the pods can not reach it via curl. DNS resolution via nslookup works.**
+Configure a public DNS server for all hosts in Netbird.
