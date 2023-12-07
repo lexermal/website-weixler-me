@@ -105,8 +105,35 @@ helm repo add gitlab http://charts.gitlab.io/
 helm upgrade --install gitlab gitlab/gitlab -f values.yml -n gitlab --create-namespace
 ```
 
+## (optional) Setup Gitlab runner
+
+```bash
+helm repo add gitlab http://charts.gitlab.io/
+```
+
+```yaml
+gitlabUrl: https://git.my-domain.com       # <-- change
+runnerToken: your-token       # <-- change
+logLevel: debug
+runners:
+  config: |
+    [[runners]]
+      [runners.kubernetes]
+        image = "ubuntu:23.04"
+        privileged = true
+      [[runners.kubernetes.volumes.empty_dir]]
+        name = "docker-certs"
+        mount_path = "/certs/client"
+        medium = "Memory"
+```
+
+```
+helm install -n gitlab gitlab-runner -f values.yml gitlab/gitlab-runner --create-namespace
+```
+
 
 ## References
 * Helm chart infos https://artifacthub.io/packages/helm/gitlab/gitlab
 * Gitlab SSO provider configuration https://docs.gitlab.com/charts/charts/globals#providers
 * SSO integration with Authentik https://goauthentik.io/integrations/services/gitlab/
+* Instructions for Runner https://docs.gitlab.com/runner/install/kubernetes.html
