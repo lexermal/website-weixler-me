@@ -1,10 +1,10 @@
-# Install RocketChat with SSO
+# Setup RocketChat
 
 ```bash
 helm repo add rocketchat https://rocketchat.github.io/helm-charts
 ```
 
-````yaml
+```yaml
 host: chat.my-domain.com
 mongodb:
   auth:
@@ -30,7 +30,7 @@ helm upgrade -i rocketchat rocketchat/rocketchat -f values.yml -n my-rocketchat 
 ```
 
 
-(optional) Configure SSO
+## (optional) Configure SSO
 
 Configure it like defined here https://goauthentik.io/integrations/services/rocketchat/
 
