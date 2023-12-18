@@ -25,9 +25,6 @@ redis:
 ingress:
   enabled: true
   ingressClassName: traefik
-  annotations:
-    traefik.ingress.kubernetes.io/router.entrypoints: websecure
-    traefik.ingress.kubernetes.io/router.tls.certResolver: le
   hosts:
     - host: auth.my-domain.com    # <-- change 
       paths:
