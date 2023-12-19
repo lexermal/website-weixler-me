@@ -1,7 +1,9 @@
 # Install Mattermost
 
 
-```helm repo add mattermost https://helm.mattermost.com```
+```
+helm repo add mattermost https://helm.mattermost.com
+```
 
 
 ```
@@ -9,13 +11,11 @@ ingress:
   enabled: true
   annotations:
     kubernetes.io/ingress.class: traefik
-    traefik.ingress.kubernetes.io/router.entrypoints: websecure
-    traefik.ingress.kubernetes.io/router.tls.certResolver: le  
   hosts:
     - chat.my-domain.com
   tls:
     - hosts:
-	    - chat.my-domain.com
+      - chat.my-domain.com
 mysql:
   mysqlUser: msadmin
   mysqlRootPassword: my-password
