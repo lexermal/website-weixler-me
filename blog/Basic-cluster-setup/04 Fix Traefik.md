@@ -2,8 +2,6 @@
 In order to use Traefik in a comfortable way the following we will configure:
 * External ip to internal routing
 * Automatic http to https forward
-* TLS certificates using DNS challenge from Let's encrypt
-* Wildcard certificates for all domains
 
 To do this create the file **traefik-fix.yml** with the following content:
 ```yaml
@@ -31,20 +29,6 @@ spec:
     # enable tls challenges for whole subdomains
     additionalArguments:
       - "--log.level=DEBUG"
-      - "--certificatesresolvers.le.acme.email=contact@my-domain.com"  # <- your contact email adress
-      - "--certificatesresolvers.le.acme.storage=/data/acme.json"
-      - "--certificatesresolvers.le.acme.tlschallenge=true"
-      - "--certificatesresolvers.le.acme.dnschallenge.provider=hosttech" # <- change to your dns provider
-      - "--certificatesresolvers.le.acme.dnschallenge.delaybeforecheck=0"
-      # enable wildcards
-      - "--entrypoints.websecure.http.tls=true"
-      - "--entrypoints.websecure.http.tls.certResolver=le"
-      - "--entrypoints.websecure.http.tls.domains[0].main=my-domain.com"          # <- change to your domain(s), can be removed if only subdomains will be hosted
-      - "--entrypoints.websecure.http.tls.domains[0].sans=*.my-domain.com"        # <- change to your domain(s)
-      - "--entrypoints.websecure.http.tls.domains[1].sans=*.sub.my-domain.com"    # <- change to your domain(s)
-    env:
-      - name: HOSTTECH_API_KEY   # <- change to your dns provider
-        value: my-api-token      # <- change to your access token
 ```
 
 Apply the config with ```kubectl apply -f traefik-fix.yml```
