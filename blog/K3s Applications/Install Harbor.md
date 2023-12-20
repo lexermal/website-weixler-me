@@ -6,13 +6,14 @@
 
 ```
 expose:
-  tls:
-    certSource: none
-  ingress:
-    annotations:
-      kubernetes.io/ingress.class: traefik
-      traefik.ingress.kubernetes.io/router.entrypoints: websecure
-      traefik.ingress.kubernetes.io/router.tls.certResolver: le
+    tls:
+        certSource: secret
+        secret:
+            secretName: harbor-ssl
+    ingress:
+        annotations:
+            kubernetes.io/ingress.class: traefik
+            cert-manager.io/cluster-issuer: letsencrypt-production
     hosts:
       core: registry.my-domain.com
       notary: notary.my-domain.com
