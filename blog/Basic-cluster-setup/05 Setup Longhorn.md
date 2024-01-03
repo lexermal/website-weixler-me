@@ -16,25 +16,25 @@ Watch how it installs
 kubectl get pods --namespace longhorn-system --watch
 ```
 
-Open longhorn over the UI interface of Rancher by choosing the cluster and then is on the left side "Longhorn". Open the webinterface.
+Open Longhorn over the UI interface of Rancher by choosing the cluster and then on the left side "Longhorn". Open the webinterface.
 
-There are multiple nodes in this cluster. Some have not much space but large computing power. These hosts should not save any data colums of longhorn at their disk.
+There are multiple nodes in this cluster. Some do not have much space but large computing power. These hosts should not save any data columns of Longhorn on their disk.
 
 This can be disabled by navigating to *Node*, clicking on edit at that nodes and disabling the *scheduling*.
 
 ### Adjust the default storage class
 
-When you install Longhorn it is by default set to be the default storage class, but local-path is so too. This results often in volume mounting errors.
+When you install Longhorn it is by default set to be the default storage class, but local-path is so too. This often results in volume mounting errors.
 
 Therefore, it is required to deactivate local-path from being a default storage class. 
 
-Run the following commands
+Run the following commands:
 ```
 cd /var/lib/rancher/k3s/server/manifests
 cp local-storage.yaml custom-local-storage.yaml
 nano custom-local-storage.yaml
+sudo sed -i -e "s/storageclass.kubernetes.io\/is-default-class: \"true\"/storageclass.kubernetes.io\/is-default-class: \"false\"/g" custom-local-storage.yaml
 ```
-At around line 90 change ```storageclass.kubernetes.io/is-default-class: "true"``` to ```storageclass.kubernetes.io/is-default-class: "false"```.
 
 Adapt the file **/etc/systemd/system/k3s.service**, so it looks at the end like this:
 ```
@@ -44,13 +44,13 @@ ExecStart=/usr/local/bin/k3s \
         '--disable=local-storage'
 ```
 
-Restart the node and the storage is fixed.
+Restart the node, and the storage is fixed.
 **These steps need to be done on every master node!**
 
 ## Troubleshoot Attach and Detach loop
-If it happends that the Longhorn UI shows that a PVC gets attached and seconds later detached in a loop the following helps.
+If it happens that the Longhorn UI shows that a PVC gets attached and seconds later detached in a loop, the following helps.
 
-The issue why the PVC does not get mounted is because the volume size does not match. You can find the error message in the **longhron-manager* pod
+The issue why the PVC does not get mounted is because the volume size does not match. You can find the error message in the **longhorn-manager* pod
 ```
 time="2022-11-17T16:24:02Z" level=warning msg="pvc-0646006d-ea7b-4dee-abed-6d6cde9a5137-e-3d30d9e2: time=\"2022-11-17T15:05:54Z\" level=warning msg=\"backend tcp://10.42.1.101:10015 size does not match 5368709120 != 32212254720 in the engine initiation phase\""
 ```
@@ -66,7 +66,7 @@ cd <pvc-name>
 
 Then you need to find out the size of the volume by reading it out of the file **volume.meta**.
 
-Then run the following command to be able to mount the volume. Adjust the pvc and size before executing:
+Then run the following command to mount the volume. Adjust the PVC and size before executing:
 ```
 docker run -v /dev:/host/dev -v /proc:/host/proc -v /var/lib/longhorn/replicas/my-pvc-directory:/volume --privileged -d longhornio/longhorn-engine:v1.3.0 launch-simple-longhorn my-pvc-name my-found-size
 ```
@@ -99,8 +99,8 @@ kubectl scale --replicas=0 deployment my-deployment-name -n my-namespace
 kubectl scale --replicas=1 deployment my-deployment-name -n my-namespace
 ```
 
-## Troubleshoot read only file system
-If you encounter an error in the pod logs that says the file system is read only, this is the solution.
+## Troubleshoot read-only file system
+If you encounter an error in the pod logs that says the file system is read-only, this is the solution.
 
 Like in the troubleshooting point from above you simply need to scale the deployment to 0 and scale back up:
 ```
