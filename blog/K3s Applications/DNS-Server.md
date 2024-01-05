@@ -67,6 +67,7 @@ I changed the port in the web interface to also run the DNS server on port 5053.
 
 Under Settings -> Recursion I allowed recursion.
 
+Under Proxy & Forwarders it's good to set under "Forwarders" a public DNS server like 1.1.1.1 to resolve all DNS entries that your DNS server can not answer.
 
 ## References
 * Deployment configuration https://artifacthub.io/packages/helm/obeone/technitium-dnsserver?modal=values
