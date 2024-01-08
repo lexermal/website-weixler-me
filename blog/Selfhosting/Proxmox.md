@@ -31,6 +31,17 @@ Edit /etc/network/interfaces and add the following under "bridge-fd 0":
         post-down iptables -t nat -A POSTROUTING -o vmbr0 -p tcp --match multiport --dports 1:8000 -j MASQUERADE
 ```
 
+## Setup NAT hairpinning
+This enables internal services to reach themselves over the public IP.
+
+```my-public-ip``` needs to be adapted.
+```
+        post-up iptables -t nat -A PREROUTING -s 192.168.50.0/24 -d my-public-ip -p tcp --match multiport --dports 1:8000 -j DNAT --to-destination 192.168.50.2
+        post-up iptables -t nat -A PREROUTING -s 192.168.50.0/24 -d my-public-ip -p udp --match multiport --dports 1:8000 -j DNAT --to-destination 192.168.50.2
+        post-up iptables -t nat -A POSTROUTING -s 192.168.50.0/24 -d 192.168.50.2 -p tcp --match multiport --dports 1:8000 -j MASQUERADE
+        post-up iptables -t nat -A POSTROUTING -s 192.168.50.0/24 -d 192.168.50.2 -p udp --match multiport --dports 1:8000 -j MASQUERADE
+```
+
 ## Troubleshooting
 
 ### VM is after cloning getting the same IP as the machine it got cloned from
