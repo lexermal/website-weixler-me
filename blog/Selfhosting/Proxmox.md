@@ -6,11 +6,11 @@ Let's say your hoster gave you only one public up but you want your VMs to acces
 1. Create network bridge vmbr1 with ip range 192.168.50.0/24
 
 2. Edit /etc/network/interfaces and add the following under "bridge-fd 0":
-
+```
         post-up   echo 1 > /proc/sys/net/ipv4/ip_forward
         post-up   iptables -t nat -A POSTROUTING -s '192.168.50.0/24' -o vmbr0 -j MASQUERADE
         post-down iptables -t nat -D POSTROUTING -s '192.168.50.0/24' -o vmbr0 -j MASQUERADE
-
+```
 3. Comment out the "up ip route replace" route
 
 4. Restart the host
@@ -30,6 +30,7 @@ Edit /etc/network/interfaces and add the following under "bridge-fd 0":
         post-down iptables -t nat -A PREROUTING -i vmbr0 -p tcp --match multiport --dports 1:8000 -j DNAT --to-destination 192.168.50.2
         post-down iptables -t nat -A POSTROUTING -o vmbr0 -p tcp --match multiport --dports 1:8000 -j MASQUERADE
 ```
+This forwards all ports from 1-8000.
 
 ## Setup NAT hairpinning
 This enables internal services to reach themselves over the public IP.
@@ -42,11 +43,12 @@ This enables internal services to reach themselves over the public IP.
         post-up iptables -t nat -A POSTROUTING -s 192.168.50.0/24 -d 192.168.50.2 -p udp --match multiport --dports 1:8000 -j MASQUERADE
 ```
 
+
 ## Troubleshooting
 
-### VM is after cloning getting the same IP as the machine it got cloned from
+### VM is, after cloning, getting the same IP as the machine it got cloned from
 
-Reset the machine id:
+Reset the machine ID:
 ```bash
 echo -n >/etc/machine-id
 rm /var/lib/dbus/machine-id
