@@ -4,7 +4,7 @@
 ```helm repo add harbor https://helm.goharbor.io```
 
 
-```
+```yaml
 expose:
     tls:
         certSource: secret
@@ -19,17 +19,13 @@ expose:
       notary: notary.my-domain.com
 externalURL: https://registry.my-domain.com
 harborAdminPassword: my-password
-secretKey: my-password
+secretKey: my-password  # has to be 16 characters
 registry:
   credentials:
     username: reg_admin
     password: my-password
 database:
   internal:
-    password: my-password
-database:
-  external:
-    username: db_user
     password: my-password
 ```    
 
@@ -38,7 +34,7 @@ database:
 
 ## Configure SSO
 
-Create a OAuth2/OpenID Provider in Authentik with the following config:
+Create an OAuth2/OpenID Provider in Authentik with the following config:
 * Name: Harbor
 * Authorization flow: Implicit
 * Copy Client ID
@@ -52,7 +48,7 @@ Create an application with the following config:
 * Provider: Harbor
 * Launch URL: https://registry.my-domain.com
 
-In the administration of Harbor set in the Configuration the following setting:
+In the administration of Harbor, set in the Configuration the following settings:
 * Auth mode: OIDC
 * Provider Name: authentik
 * OIDC Endpoint: https://auth.my-domain.com/application/o/harbor/
