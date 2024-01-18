@@ -1,9 +1,9 @@
 # Enhance Traefik
-In order to use Traefik in a comfortable way the following we will configure:
-* External ip to internal routing
-* Automatic http to https forward
+To use Traefik in a comfortable way the following we will configure:
+* External IP to internal routing
+* Automatic HTTP to HTTPS forward
 
-To do this create the file **traefik-fix.yml** with the following content:
+To do this, create the file **traefik-fix.yml** with the following content:
 ```yaml
 apiVersion: helm.cattle.io/v1
 kind: HelmChartConfig
@@ -33,15 +33,10 @@ spec:
 
 Apply the config with ```kubectl apply -f traefik-fix.yml```
 
-Apply the usage of the new certificate also for Rancher by running
-```
-kubectl patch ingress rancher -n cattle-system --type=json -p='[{"op": "remove", "path": "/spec/tls/0/secretName"}]'
-```
+## (optional) Make Traefik dashboard accessible
+By default, the Traefik dashboard is active but not exposed. To make it securely available we use basic auth.
 
-## Make Traefik accessible publically
-By default the Traefik dashboard is active but not exposed. To make it securly available we using basic auth.
-
-First generate a secret called
+First, generate a secret called
 ```htpasswd -nb my-admin-user my-password | openssl base64```
 
 Insert the password hash in the following config file and adapt the domain name on which Traefik will be available.
@@ -87,5 +82,5 @@ Apply the config with ```kubectl apply -f .```.
 
 
 ## References
-* The way on how to redirect all http traffic to https is based on this answer https://stackoverflow.com/a/71989847/808723
+* The way how to redirect all HTTP traffic to HTTPS is based on this answer https://stackoverflow.com/a/71989847/808723
 * TLS config with external provider https://doc.traefik.io/traefik/https/acme/#dnschallenge
