@@ -14,7 +14,7 @@ spec:
   valuesContent: |-
     service:
       spec:
-        # this forwards the real source ip to internal services
+        # this forwards the real source IP to internal services
         externalTrafficPolicy: Local
 
     # enable https forwarding
@@ -26,7 +26,7 @@ spec:
         redirectTo:
           port: websecure
 
-    # enable tls challenges for whole subdomains
+    # enables detailed logs
     additionalArguments:
       - "--log.level=DEBUG"
 ```
