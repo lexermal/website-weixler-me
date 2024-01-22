@@ -32,11 +32,10 @@ Run the following commands:
 ```
 cd /var/lib/rancher/k3s/server/manifests
 cp local-storage.yaml custom-local-storage.yaml
-nano custom-local-storage.yaml
 sudo sed -i -e "s/storageclass.kubernetes.io\/is-default-class: \"true\"/storageclass.kubernetes.io\/is-default-class: \"false\"/g" custom-local-storage.yaml
 ```
 
-Adapt the file **/etc/systemd/system/k3s.service**, so it looks at the end like this:
+Edit the file **/etc/systemd/system/k3s.service**, so it looks at the end like this:
 ```
 ExecStart=/usr/local/bin/k3s \
     server \
