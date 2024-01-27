@@ -63,5 +63,23 @@ Congratulations you can now login to your Mattermost instance via Gitlab!
 
 Make sure you make one OAuth user admin!
 
+# (optional) Enable Jitsi plugin
+
+Add the following to the values.yml file and deploy the application again.
+```
+extraEnvVars:
+   - name: MM_PLUGINSETTINGS_ENABLEUPLOADS
+     value: "TRUE"
+```
+Build the plugin like described [here](https://github.com/mattermost/mattermost-plugin-jitsi).
+
+Upload the gz file in Mattermost Settings under "Plugins".
+
+Enable it and you can make your first calls!
+
+
+
+
+
 ## References
 * Docu for installation of Mattermost: https://artifacthub.io/packages/helm/mattermost/mattermost-team-edition
