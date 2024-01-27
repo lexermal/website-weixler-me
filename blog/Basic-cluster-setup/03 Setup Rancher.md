@@ -79,6 +79,18 @@ spec:
               apiUrl: https://api.ns1.hosttech.eu/api/user/v1
 ```
 
+Upgrade the Rancher installation with the following command to get there a valid certificate
+
+```
+helm upgrade -i rancher rancher-stable/rancher -n cattle-system \
+  --set global.cattle.psp.enabled=false \
+  --set hostname=rancher.my-domain.com \
+  --set ingress.tls.source=secret \
+  --set ingress.extraAnnotations.'cert-manager\.io/cluster-issuer'=letsencrypt-production
+```
+
+It takes around 2 min for the certificate to be ready.
+
 ## (optional) Testing cert generation
 
 We will deploy an nginx webserver to check if the certificates get generated.
@@ -114,3 +126,4 @@ If the flag READY is TRUE, you can access the Nginx via https://test.my-domain.c
 * Rancher install psp issue https://github.com/rancher/rancher/issues/41295
 * Instruction for the hosttech cert-manager connector https://github.com/piccobit/cert-manager-webhook-hosttech/tree/main
 * Nginx values.yml https://artifacthub.io/packages/helm/bitnami/nginx?modal=values&path=ingress.enabled
+* DNS challenge for rancher https://github.com/rancher/rancher/issues/26850
