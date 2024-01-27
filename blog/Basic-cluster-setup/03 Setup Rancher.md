@@ -79,9 +79,13 @@ spec:
               apiUrl: https://api.ns1.hosttech.eu/api/user/v1
 ```
 
-Upgrade the Rancher installation with the following command to get there a valid certificate
+Reinstall Rancher with the following command to get a valid certificate.
+
+_Don't forget to adapt the URL!_
 
 ```
+helm uninstall rancher -n cattle-system
+
 helm upgrade -i rancher rancher-stable/rancher -n cattle-system \
   --set global.cattle.psp.enabled=false \
   --set hostname=rancher.my-domain.com \
