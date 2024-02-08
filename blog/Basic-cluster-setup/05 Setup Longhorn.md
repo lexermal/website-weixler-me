@@ -67,7 +67,7 @@ Then you need to find out the size of the volume by reading it out of the file *
 
 Then run the following command to mount the volume. Adjust the PVC and size before executing:
 ```
-docker run -v /dev:/host/dev -v /proc:/host/proc -v /var/lib/longhorn/replicas/my-pvc-directory:/volume --privileged -d longhornio/longhorn-engine:v1.3.0 launch-simple-longhorn my-pvc-name my-found-size
+docker run -v /dev:/host/dev -v /proc:/host/proc -v /var/lib/longhorn/replicas/my-pvc-directory:/volume --privileged -d longhornio/longhorn-engine:v1.4.0 launch-simple-longhorn my-pvc-name my-found-size
 ```
 
 Now you can mount the vollume with
