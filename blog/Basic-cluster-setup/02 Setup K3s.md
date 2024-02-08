@@ -25,6 +25,7 @@ Change the hostname to something easily rememberable:
 ```
 sudo hostnamectl set-hostname my-host-123
 ```
+Check-in **/etc/hosts** if the name is set there too to resolve to localhost!
 
 ## Setup K3s
 First of we set up the first master node.
