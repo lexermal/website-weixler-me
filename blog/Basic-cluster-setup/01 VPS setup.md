@@ -29,13 +29,6 @@ Restart the SSH service with
 
 ```sudo systemctl reload ssh```
 
-## Change hostname
-Change the hostname to something easily rememberable:
-
-```sudo hostnamectl set-hostname my-host-123```
-
-Check-in **/etc/hosts** if the name is set there too to resolve to localhost!
-
 ## Enable Fail2ban
 To prevent attacks, we enable Fail2Ban.
 
@@ -46,6 +39,7 @@ sudo nano /etc/fail2ban/jail.conf
 ```
 
 At around line 280 in the section [sshd] add:
+
 enabled = true
 
 ```
@@ -58,21 +52,9 @@ sudo systemctl status fail2ban
 This should state "Server ready".
 
 
-See the blocked IPs:
-```fail2ban-client status sshd```
+You can see the blocked IPs with ```fail2ban-client status sshd```
 
-```bash
-Status for the jail: sshd
-|- Filter
-|  |- Currently failed: 1
-|  |- Total failed:     81
-|  `- File list:        /var/log/auth.log
-`- Actions
-   |- Currently banned: 2
-   |- Total banned:     8
-   `- Banned IP list:   1.2.3.4
 
-```
 
 
 
