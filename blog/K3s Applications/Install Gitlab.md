@@ -102,7 +102,7 @@ prometheus:
 
 ```bash
 helm repo add gitlab http://charts.gitlab.io/
-helm upgrade --install gitlab gitlab/gitlab -f values.yml -n gitlab --create-namespace
+helm upgrade -i gitlab gitlab/gitlab -f values.yml -n gitlab
 ```
 
 ## (optional) Setup Gitlab runner
