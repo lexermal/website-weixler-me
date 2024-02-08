@@ -76,10 +76,14 @@ mkdir /tmp/my-pvc-data
 mount /dev/longhorn/my-pvc-name /tmp/my-pvc-data
 ```
 
-Copy all data.
+Copy all data. If copying does not work it might be a [multipath issue](https://longhorn.io/kb/troubleshooting-volume-with-multipath/).
+
 Stop the docker container.
+
 Delete the PVC via Longhorn UI.
+
 Scale the deployment of your pod down to 0, mount the new PCV and copy all data into it.
+
 Scale the deployment up again.
 
 
