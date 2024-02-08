@@ -10,6 +10,41 @@
 7. Compress ```tar czvf ../${PWD##*/}.tar.gz .```
 8. Copy tared files to new server
 
+Or you use this script to do it automatically
+```
+#!/bin/bash
+
+# call with: bash pvc-export.sh my-pvc-id my-pvc-name
+
+# Take in parameters
+PVC="$1"
+PVCNAME="$2"
+
+echo "Working with PVC $PVC having the name '$PVCNAME'"
+
+cd /mnt/longhorn-storage/replicas
+PVCDIR=$(find "/mnt/longhorn-storage/replicas" -type d -name "${PVC}*" -exec basename {} \;)
+cd $PVCDIR
+
+SIZE=$(cat volume.meta | jq '.Size')
+
+docker run --name longhorn -v /dev:/host/dev -v /proc:/host/proc -v /mnt/longhorn-storage/replicas/$PVCDIR:/volume --privileged -d longhornio/longhorn-engine:v1.3.0 launch-simple-longhorn $PVC $SIZE
+
+mkdir /tmp/$PVCNAME
+sleep 2
+mount /dev/longhorn/$PVC /tmp/$PVCNAME
+cd /tmp/$PVCNAME
+tar czvf ../${PWD##*/}.tar.gz .
+cd /tmp
+
+umount /tmp/$PVCNAME
+
+docker stop longhorn
+docker remove longhorn
+
+echo "Done with PVC $PVCNAME"
+```
+
 ## On new server
 1. Install the application with the same settings as on the old server but different url
 2. Visit Applications site to check if it works
