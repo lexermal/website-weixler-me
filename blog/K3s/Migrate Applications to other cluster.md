@@ -61,7 +61,7 @@ echo "Done with PVC $PVCNAME"
 14. Scale application up again
 
 ### Or
-1. Get all PVC ids with ````kubecctl get pvc -A```
+1. Get all PVC ids with ```kubecctl get pvc -A```
 2. Shutdown k3s with ```service k3s stop``` or scale down all deployment of the namespace with ```kubectl scale --replicas=0 deployment my-deployment-name -n my-namespace```
 3. Execute the script with ```bash migrate.sh my-pvc-id my-pvc-name```
 
