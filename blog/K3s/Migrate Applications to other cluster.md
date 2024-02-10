@@ -60,3 +60,52 @@ echo "Done with PVC $PVCNAME"
 13. Change DNS entry to point to new server
 14. Scale application up again
 
+### Or
+1. Get all PVC ids with ````kubecctl get pvc -A```
+2. Shutdown k3s with ```service k3s stop``` or scale down all deployment of the namespace with ```kubectl scale --replicas=0 deployment my-deployment-name -n my-namespace```
+3. Execute the script with ```bash migrate.sh my-pvc-id my-pvc-name```
+
+````bash
+#!/bin/bash
+
+# Take in parameters
+PVC="$1"
+PVCNAME="$2"
+
+if [[ -z "$PVC" || -z "$PVCNAME" ]]; then
+    echo "Execute the file with: bash migrate.sh my-pvc-id my-pvc-name"
+fi
+
+echo "Working with PVC $PVC having the name '$PVCNAME'"
+
+if ! (command -v docker >/dev/null 2>&1 && command -v jq >/dev/null 2>&1); then
+    echo "Docker or jq is not installed."
+fi
+
+cd /var/lib/longhorn/replicas
+PVCDIR=$(find "/var/lib/longhorn/replicas" -type d -name "${PVC}*" -exec basename {} \;)
+cd $PVCDIR
+
+SIZE=$(cat volume.meta | jq '.Size')
+
+docker run --name longhorn -v /dev:/host/dev -v /proc:/host/proc -v /var/lib/longhorn/replicas/$PVCDIR:/volume --privileged -d longhornio/longhorn-engine:v1.4.0 launch-simple-longhorn $PVC $SIZE
+sleep 30
+
+mkdir /tmp/$PVCNAME
+mount /dev/longhorn/$PVC /tmp/$PVCNAME
+cd /tmp/$PVCNAME
+echo -e "\033[0;33mThe following command will complain about not being able to delete . and .. this is normal\033[0m"
+
+rm -Rf * .*
+tar xpf "../${PVCNAME}.tar.gz" --same-owner
+cd /tmp
+
+umount /tmp/$PVCNAME
+
+docker stop longhorn
+docker remove longhorn
+
+echo "Done with PVC $PVCNAME"
+```
+
+5. Scale all services up or start k3s again.
