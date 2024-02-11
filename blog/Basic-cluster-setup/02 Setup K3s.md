@@ -110,7 +110,7 @@ Insert the following config for your private repository:
 mirrors:
   registry.my-domain.com:    # <-- change
     endpoint:
-      - "https://url-of-docker-restiry"    # <-- change 
+      - "https://url-of-docker-registry"    # <-- change 
 configs:
   "registry.my-domain.com":    # <-- change
     auth:
