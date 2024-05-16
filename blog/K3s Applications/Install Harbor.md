@@ -1,7 +1,9 @@
 # Install Harbor
 
 
-```helm repo add harbor https://helm.goharbor.io```
+```
+helm repo add harbor https://helm.goharbor.io
+```
 
 
 ```yaml
@@ -27,10 +29,18 @@ registry:
 database:
   internal:
     password: my-password
+
+# optional
+trivy:
+    enabled: false
+notary:
+    enabled: false
 ```    
 
 
-```helm upgrade --install harbor harbor/harbor -f values.yml -n harbor --create-namespace```
+```
+helm upgrade --install harbor harbor/harbor -f values.yml -n harbor --create-namespace
+```
 
 ## Configure SSO
 
