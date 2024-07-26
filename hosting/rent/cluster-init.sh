@@ -49,7 +49,7 @@ fi
 
 
 # Install K3S
-curl -sfL https://get.k3s.io | INSTALL_K3S_VERSION=v1.26.10+k3s2 sh -s - server 
+curl -sfL https://get.k3s.io | INSTALL_K3S_VERSION=v1.27.15+k3s2 sh -s - server 
 
 sleep 90
 
@@ -154,7 +154,7 @@ kubectl apply -f traefik-enhancement.yml
 
 # Install Longhorn
 helm repo add longhorn https://charts.longhorn.io
-helm install longhorn longhorn/longhorn -n longhorn-system --create-namespace --version 1.6.0
+helm install longhorn longhorn/longhorn -n longhorn-system --create-namespace --version 1.6.2
 
 waitForAllPods longhorn-system
 
