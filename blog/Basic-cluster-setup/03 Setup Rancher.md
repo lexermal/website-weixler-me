@@ -34,12 +34,12 @@ kubectl -n cattle-system rollout status deploy/rancher
 
 ## (optional) Configure automatic certificate generation with DNS challenges
 
-For that, we need to configure Cert-Manager. I'm doing that using an example of the DNS provider Hosttech. Other providers like Cloudflare are similar and even easier to configure. [Here](https://levelup.gitconnected.com/easy-steps-to-install-k3s-with-ssl-certificate-by-traefik-cert-manager-and-lets-encrypt-d74947fe7a8) is an easy tutorial for HTTP challenges.
+For that, we need to configure Cert-Manager. I'm doing that using an example of the DNS provider Hetzner. Other providers like Cloudflare are similar and even easier to configure. [Here](https://levelup.gitconnected.com/easy-steps-to-install-k3s-with-ssl-certificate-by-traefik-cert-manager-and-lets-encrypt-d74947fe7a8) is an easy tutorial for HTTP challenges.
 
 ```yaml
-helm repo add piccobit https://piccobit.github.io/helm-charts
+helm repo add cert-manager-webhook-hetzner https://vadimkim.github.io/cert-manager-webhook-hetzner
 # Replace the groupName value with your domain.
-helm install -n cert-manager cm-hosttech piccobit/cert-manager-webhook-hosttech --set groupName=acme.my-domain.com
+helm install -n cert-manager cert-manager-webhook-hetzner cert-manager-webhook-hetzner/cert-manager-webhook-hetzner --set groupName=acme.my-domain.com
 ```
 
 api-secret.yml
@@ -48,13 +48,14 @@ api-secret.yml
 apiVersion: v1
 kind: Secret
 metadata:
-  name: hosttech-secret
+  name: hetzner-secret
   namespace: cert-manager
 type: Opaque
 stringData:
-  token: your-hosttech-api-token  # <-- change
+  api-key: your-api-key  # <-- change
 ```
 
+issuer.yml
 ```yaml
 apiVersion: cert-manager.io/v1
 kind: ClusterIssuer
@@ -73,10 +74,10 @@ spec:
       - dns01:
           webhook:
             groupName: acme.my-domain.com   # <-- change
-            solverName: hosttech
+            solverName: hetzner
             config:
-              secretName: hosttech-secret
-              apiUrl: https://api.ns1.hosttech.eu/api/user/v1
+              secretName: hetzner-secret
+              apiUrl: https://dns.hetzner.com/api/v1
 ```
 
 Reinstall Rancher with the following command to get a valid certificate.
@@ -128,6 +129,6 @@ If the flag READY is TRUE, you can access the Nginx via https://test.my-domain.c
 ## References
 * Tutorial is based on TechnoTims Rancher HA tutorial [TechnoTim](https://docs.technotim.live/posts/rancher-ha-install/)!
 * Rancher install psp issue https://github.com/rancher/rancher/issues/41295
-* Instruction for the hosttech cert-manager connector https://github.com/piccobit/cert-manager-webhook-hosttech/tree/main
+* Instruction for the Hetzner cert-manager connector [https://github.com/piccobit/cert-manager-webhook-hosttech/tree/main](https://github.com/vadimkim/cert-manager-webhook-hetzner)
 * Nginx values.yml https://artifacthub.io/packages/helm/bitnami/nginx?modal=values&path=ingress.enabled
 * DNS challenge for rancher https://github.com/rancher/rancher/issues/26850
