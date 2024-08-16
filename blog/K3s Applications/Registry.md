@@ -35,6 +35,12 @@ ui:
     enabled: true
     host: ui.registry.my-domain.com
     ingressClassName: traefik
+    annotations:
+      "cert-manager.io/cluster-issuer": letsencrypt-production
+    tls:
+      - hosts:
+          - ui.registry.my-domain.com
+        secretName: ui-registry-cert
 ```
 
 ```helm upgrade --install registry-ui joxit/docker-registry-ui -f ui-values.yml -n my-registry-ui --create-namespace```
