@@ -36,4 +36,18 @@ fetch("https://data.iana.org/TLD/tlds-alpha-by-domain.txt").then(e=>e.text()).th
 });
 ```
 
+Create a file called package.json and paste in the following
+```json
+{
+  "name": "domain lookup",
+  "version": "1.0.0",
+  "type": "module",
+  "dependencies": {
+    "node-fetch": "^2.6.1"
+  }
+}
+```
+
+Run ```npm i```
+
 It can be executed with ```node ./domain-lookup.js```
