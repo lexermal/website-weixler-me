@@ -16,6 +16,9 @@ ingress:
     enabled: true
     ingressClassName: traefik
     hostname: wp.my-domain.com   # <-- change
+    tls: true
+    annotations:
+        cert-manager.io/cluster-issuer: letsencrypt-production
 ```
 
 Install Wordpress with the following command:
