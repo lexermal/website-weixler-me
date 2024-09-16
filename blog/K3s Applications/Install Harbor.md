@@ -75,4 +75,5 @@ In the administration of Harbor, set in the Configuration the following settings
 * Habor SSO https://goharbor.io/docs/1.10/administration/configure-authentication/oidc-auth/
 * Authentik docu for Harbor https://goauthentik.io/integrations/services/harbor/
 * Inspiration for fixing SSL issue: https://github.com/goharbor/harbor-helm/issues/582
+* Helm values https://github.com/goharbor/harbor-helm/blob/main/values.yaml
 
