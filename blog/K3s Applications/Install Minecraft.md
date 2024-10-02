@@ -11,7 +11,7 @@ minecraftServer:
     eula: "TRUE"
     type: "PAPER"
     paperDownloadUrl: "https://api.papermc.io/v2/projects/paper/versions/1.19.2/builds/191/downloads/paper-1.19.2-191.jar"
-    difficults: normal
+    difficulty: normal
     spawnProtection: 0
     motd: "My Minecraft Server"
     resourcePackUrl: "https://github.com/FaithfulTeam/Faithful/raw/releases/1.18.zip"
