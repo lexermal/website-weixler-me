@@ -17,9 +17,13 @@ ingress:
   className: traefik
   hosts:
     - registry.my-domain.com
+  tls:
+    - secretName: registry-tls
+      hosts:
+        - registry.my-domain.com
 ```
   
-```helm upgrade --install registry twuni/docker-registry -f values.yml -n my-registry --create-namespace```
+```helm upgrade -i registry twuni/docker-registry -f values.yml -n my-registry --create-namespace```
 
 ## (optional) Install Registry UI
 
