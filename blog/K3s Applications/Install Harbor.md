@@ -16,9 +16,9 @@ expose:
     className: traefik
     annotations:
       cert-manager.io/cluster-issuer: letsencrypt-production
-  hosts:
-    core: registry.my-domain.com
-    notary: notary.my-domain.com
+    hosts:
+      core: registry.my-domain.com
+      notary: notary.my-domain.com
 externalURL: 'https://registry.my-domain.com'
 harborAdminPassword: my-password
 secretKey: my-password
