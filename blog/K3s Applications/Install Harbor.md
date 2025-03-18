@@ -8,20 +8,20 @@ helm repo add harbor https://helm.goharbor.io
 
 ```yaml
 expose:
-    tls:
-        certSource: secret
-        secret:
-            secretName: harbor-ssl
-    ingress:
-        annotations:
-            kubernetes.io/ingress.class: traefik
-            cert-manager.io/cluster-issuer: letsencrypt-production
-    hosts:
-      core: registry.my-domain.com
-      notary: notary.my-domain.com
-externalURL: https://registry.my-domain.com
+  tls:
+    certSource: secret
+    secret:
+      secretName: harbor-ssl
+  ingress:
+    className: traefik
+    annotations:
+      cert-manager.io/cluster-issuer: letsencrypt-production
+  hosts:
+    core: registry.my-domain.com
+    notary: notary.my-domain.com
+externalURL: 'https://registry.my-domain.com'
 harborAdminPassword: my-password
-secretKey: my-password  # has to be 16 characters
+secretKey: my-password
 registry:
   credentials:
     username: reg_admin
@@ -29,12 +29,10 @@ registry:
 database:
   internal:
     password: my-password
-
-# optional
 trivy:
-    enabled: false
+  enabled: false
 notary:
-    enabled: false
+  enabled: false
 ```    
 
 
