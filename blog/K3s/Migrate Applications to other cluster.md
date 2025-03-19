@@ -10,7 +10,8 @@
 7. Compress ```tar czvf ../${PWD##*/}.tar.gz .```
 8. Copy tared files to new server
 
-Or you use this script to do it automatically
+Or you use this script to do it automatically:
+Hint: Make sure the PVC is "attached" in Longhorn.
 ```
 #!/bin/bash
 
@@ -22,18 +23,20 @@ PVCNAME="$2"
 
 echo "Working with PVC $PVC having the name '$PVCNAME'"
 
-cd /mnt/longhorn-storage/replicas
-PVCDIR=$(find "/mnt/longhorn-storage/replicas" -type d -name "${PVC}*" -exec basename {} \;)
+cd /var/lib/longhorn/replicas
+PVCDIR=$(find "/var/lib/longhorn/replicas" -type d -name "${PVC}*" -exec basename {} \;)
 cd $PVCDIR
 
 SIZE=$(cat volume.meta | jq '.Size')
 
-docker run --name longhorn -v /dev:/host/dev -v /proc:/host/proc -v /mnt/longhorn-storage/replicas/$PVCDIR:/volume --privileged -d longhornio/longhorn-engine:v1.3.0 launch-simple-longhorn $PVC $SIZE
+docker run --name longhorn -v /dev:/host/dev -v /proc:/host/proc -v /var/lib/longhorn/replicas/$PVCDIR:/volume --privileged -d longhornio/longhorn-engine:v1.3.0 launch-simple-longhorn $PVC $SIZE
 
 mkdir /tmp/$PVCNAME
-sleep 2
+echo "Waiting for the PVC to be mounted"
+sleep 10
 mount /dev/longhorn/$PVC /tmp/$PVCNAME
 cd /tmp/$PVCNAME
+sleep 10
 tar czvf ../${PWD##*/}.tar.gz .
 cd /tmp
 
