@@ -11,6 +11,7 @@
 8. Copy tared files to new server
 
 Or you use this script to do it automatically:
+
 Hint: Make sure the PVC is "attached" in Longhorn.
 ```
 #!/bin/bash
@@ -29,7 +30,7 @@ cd $PVCDIR
 
 SIZE=$(cat volume.meta | jq '.Size')
 
-docker run --name longhorn -v /dev:/host/dev -v /proc:/host/proc -v /var/lib/longhorn/replicas/$PVCDIR:/volume --privileged -d longhornio/longhorn-engine:v1.3.0 launch-simple-longhorn $PVC $SIZE
+docker run --name longhorn -v /dev:/host/dev -v /proc:/host/proc -v /var/lib/longhorn/replicas/$PVCDIR:/volume --privileged -d longhornio/longhorn-engine:v1.7.1 launch-simple-longhorn $PVC $SIZE
 
 mkdir /tmp/$PVCNAME
 echo "Waiting for the PVC to be mounted"
@@ -53,20 +54,12 @@ echo "Done with PVC $PVCNAME"
 2. Visit Applications site to check if it works
 3. Scale the application down to 0. This can be done with ```kubectl scale --replicas=0 deployment my-deployment-name -n my-namespace```
 5. Attach PVCs to the server via Longhorn UI
-6. Create a folder in tmp for mounting, it should be explainable like mount-gitlab-30gb
-7. Mount all PVCs with ```mount /dev/longhorn/pvc-name /tmp/mount-gitlab-30gb/```
-8. Go in the folder with ```cd mount-gitlab-30gb```
-9. Delete all files with ```rm -Rf * .*```
-10. Uncompress files with ```tar xpf  ../mount-gitlab-30gb.tar.gz --same-owner```
-11. Unmount the folders with ```ùmount /tmp/mount-gitlab-30gb```
-12. Detach volumes via Longhorn UI
-13. Change DNS entry to point to new server
-14. Scale application up again
 
-### Or
+Hint: I'm not sure if the following works when k3s is scaled down. With the last try i needed to connect the PVC to the host via the Longhorn UI.
+
 1. Get all PVC ids with ```kubecctl get pvc -A```
 2. Shutdown k3s with ```service k3s stop``` or scale down all deployment of the namespace with ```kubectl scale --replicas=0 deployment my-deployment-name -n my-namespace```
-3. Execute the script with ```bash migrate.sh my-pvc-id my-pvc-name```
+3. Execute the script with ```bash migrate.sh my-pv-id my-pvc-name```
 
 ````bash
 #!/bin/bash
@@ -76,7 +69,7 @@ PVC="$1"
 PVCNAME="$2"
 
 if [[ -z "$PVC" || -z "$PVCNAME" ]]; then
-    echo "Execute the file with: bash migrate.sh my-pvc-id my-pvc-name"
+    echo "Execute the file with: bash migrate.sh my-pv-id my-pvc-name"
 fi
 
 echo "Working with PVC $PVC having the name '$PVCNAME'"
@@ -91,11 +84,11 @@ cd $PVCDIR
 
 SIZE=$(cat volume.meta | jq '.Size')
 
-docker run --name longhorn -v /dev:/host/dev -v /proc:/host/proc -v /var/lib/longhorn/replicas/$PVCDIR:/volume --privileged -d longhornio/longhorn-engine:v1.4.0 launch-simple-longhorn $PVC $SIZE
+docker run --name longhorn -v /dev:/host/dev -v /proc:/host/proc -v /var/lib/longhorn/replicas/$PVCDIR:/volume --privileged -d longhornio/longhorn-engine:v1.7.1 launch-simple-longhorn $PVC $SIZE
 sleep 30
 
 mkdir /tmp/$PVCNAME
-mount /dev/longhorn/$PVC /tmp/$PVCNAME
+mount /dev/longhorn/$PVC /tmp/$PVCNAME || exit 1
 cd /tmp/$PVCNAME
 echo -e "\033[0;33mThe following command will complain about not being able to delete . and .. this is normal\033[0m"
 
