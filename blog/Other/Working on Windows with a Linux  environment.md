@@ -10,14 +10,12 @@ It will take a while.
 Then you have a full Debian or Ubuntu VM running on your PC. You can now close the command promt.
 
 ## Give WSL more power
-Out of the box for the Ubuntu WSL host little resources are allocated.
+By default has the Ubuntu WSL hostOut little resources allocated.
 
-To change this open Powershell as admin and enter the following commands:
+To change this open Powershell as admin and enter the following commands: ```wsl --shutdown``` to shutdown the WSL host.
 
-```wsl --shutdown``` to shutdown the WSL host.
+Enter ```notepad "$env:USERPROFILE\.wslconfig"``` to open Notepad and it will ask you to create the file, say yes.
 
-```notepad "$env:USERPROFILE\.wslconfig"````
-It will open Notepad and ask you to create the file, say yes.
 Past in it the following lines:
 ```
 [wsl2]
@@ -25,17 +23,17 @@ memory=6GB
 processors=6
 ```
 
-Safe the file and start wsl with ```wsl```. You can close Powershell. WSL will run in the background.
+Save the file and start wsl with ```wsl```. You can close Powershell. WSL will run in the background.
 
 ## Configure VSCode
 
-Install (this extension)[https://marketplace.visualstudio.com/items?itemName=ms-vscode-remote.vscode-remote-extensionpack], it's from Microsoft to ensure VSCode works well with WSL.
+Install [this extension](https://marketplace.visualstudio.com/items?itemName=ms-vscode-remote.vscode-remote-extensionpack), it's from Microsoft to ensure VSCode works well with WSL.
 
 Click on the bottom left icon showing two arrows.
 Select **WSL: New WSL Window**. Your window will now load in WSL. 
 
 Have fun developing.
-For additional performance boost I would clone the gir repos into /home/user/my-vscode-folder and not use the one from /mnt. The IO performance of WSL2 is poor. You can still access ports from outside of WSL, the are all exposed.
+For additional performance boost I would clone the git repos into /home/user/my-vscode-folder and not use the one from /mnt. The IO performance of WSL2 is poor. You can still access ports from outside of WSL, the are all exposed.
 
 ## References
 * Tutorial for WSL performance https://dev.to/abhijithganesh/how-to-configure-your-wsl-resources-594m
