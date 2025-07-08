@@ -13,23 +13,28 @@ Create a file named **values.yaml** and adapt the values:
 
 ```yaml
 authentik:
-    log_level: debug
-    secret_key: "my-secret-key"
-     postgresql:
-        password: "my-db-password"
+  log_level: debug
+  secret_key: my-secret-key       # change
+  postgresql:
+    password: my-db-password      # change
 postgresql:
-    enabled: true
-    postgresqlPassword: "my-db-password"
-redis:
-    enabled: true
-ingress:
   enabled: true
-  ingressClassName: traefik
-  hosts:
-    - host: auth.my-domain.com    # <-- change 
-      paths:
-        - path: "/"
-          pathType: Prefix
+  auth:
+    password: my-db-password      # change
+redis:
+  enabled: true
+server:
+  ingress:
+    enabled: true
+    ingressClassName: traefik
+    annotations:
+      cert-manager.io/cluster-issuer: letsencrypt-production
+    hosts:
+      - auth.my-domain.com        # change
+    tls:
+      - secretName: authentik-tls
+        hosts:
+          - auth.my-domain.com    # change
 ```
 
 Install Authentik with this command
