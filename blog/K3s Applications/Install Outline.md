@@ -14,62 +14,73 @@ Create an application with the following values:
 
 ## Install Outline
 
-```helm repo add outline https://gitlab.com/api/v4/projects/30221184/packages/helm/stable/```
-
-
-Generate a secret key and utils key with ```openssl rand -hex 32```
-
 ```
-secretKey: "my-secret-key"
-utilsSecret: "my-utils-key"
-ingress:
-  host: outline.my-domain.com
-  annotations:
-    kubernetes.io/ingress.class: traefik
-    traefik.ingress.kubernetes.io/router.entrypoints: websecure
-    traefik.ingress.kubernetes.io/router.tls.certResolver: le
-  tls:
-    enabled: true
-env:
-  OIDC_CLIENT_ID: outline
-  OIDC_CLIENT_SECRET: my-client-secret
-  OIDC_AUTH_URI: https://auth.my-domain.com/application/o/authorize/
-  OIDC_TOKEN_URI: https://auth.my-domain.com/application/o/token/
-  OIDC_USERINFO_URI: https://auth.my-domain.com/application/o/userinfo/
-  OIDC_USERNAME_CLAIM: email
-  OIDC_DISPLAY_NAME: Authentik
+helm repo add community-charts https://community-charts.github.io/helm-charts
+```
+
+Create a values.yml file with the following content:
+```
+autoUpdate:
+  enabled: true
 postgresql:
-  postgresqlPassword: "my-database-password"
-  postgresqlPostgresPassword: "my-database-admin-password"
-  persistence:
-    storageClass: "longhorn"
-    size: 6Gi
+  enabled: true
+  auth:
+    username: outline
+    password: my-password          # change
+    database: outline
+  primary:
+    persistence:
+      enabled: true
+      size: 8Gi
+      storageClass: longhorn
 redis:
-  persistence:
-    storageClass: "longhorn"
-    size: 3Gi
-minio:
-  ingress:
-    hostname: "data.outline.my-domain.com"
-    tls: true
-    certManager: true
-    annotations:
-      kubernetes.io/ingress.class: traefik
-      traefik.ingress.kubernetes.io/router.entrypoints: websecure
-      traefik.ingress.kubernetes.io/router.tls.certResolver: le
-  secretKey:
-    password: "my-secret-key"
-  accessKey:
-    password: "my-access-key"
-  persistence:
-    storageClass: "longhorn"
-    size: 30Gi
+  enabled: true
+  auth:
+    enabled: true
+  master:
+    persistence:
+      enabled: true
+      size: 8Gi
+      storageClass: longhorn
+fileStorage:
+  mode: local
+  local:
+    persistence:
+      enabled: true
+      size: 8Gi
+      storageClass: longhorn
+auth:
+  oidc:
+    enabled: true
+    clientId: my-client-id          # change
+    clientSecret: my-client-secret  # change
+    authUri: https://auth.my-domain.com/application/o/authorize/       # change domain
+    tokenUri: https://auth.my-domain.com/application/o/token/          # change domain
+    userInfoUri: https://auth.my-domain.com/application/o/userinfo/    # change domain
+    displayName: Authentik
+    usernameClaim: email
+ingress:
+  enabled: true
+  className: traefik
+  annotations:
+    cert-manager.io/cluster-issuer: letsencrypt-production
+  hosts:
+    - host: outline.my-domain.com  # change domain
+      paths:
+        - path: /
+          pathType: ImplementationSpecific
+  tls:
+    - secretName: outline-tls
+      hosts:
+        - outline.my-domain.com  # change domain
 ```
 
+Install Outline with:
+
 ```
-helm upgrade --install outline outline/outline -f values.yml -n outline --create-namespace
+helm upgrade --install outline community-charts/outline -f values.yml -n outline --create-namespace
 ```
 
 
 ## References
-* Helm info https://artifacthub.io/packages/helm/outline/outline
+* Helm info https://artifacthub.io/packages/helm/community-charts/outline
