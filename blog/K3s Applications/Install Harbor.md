@@ -21,7 +21,7 @@ expose:
       notary: notary.my-domain.com
 externalURL: 'https://registry.my-domain.com'
 harborAdminPassword: my-password
-secretKey: my-password
+secretKey: my-password  # has to be 16 characters
 registry:
   credentials:
     username: reg_admin
