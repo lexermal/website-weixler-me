@@ -36,49 +36,7 @@ kubectl -n cattle-system rollout status deploy/rancher
 
 For that, we need to configure Cert-Manager. I'm doing that using an example of the DNS provider Hetzner. Other providers like Cloudflare are similar and even easier to configure. [Here](https://levelup.gitconnected.com/easy-steps-to-install-k3s-with-ssl-certificate-by-traefik-cert-manager-and-lets-encrypt-d74947fe7a8) is an easy tutorial for HTTP challenges.
 
-```yaml
-helm repo add cert-manager-webhook-hetzner https://vadimkim.github.io/cert-manager-webhook-hetzner
-# Replace the groupName value with your domain.
-helm install -n cert-manager cert-manager-webhook-hetzner cert-manager-webhook-hetzner/cert-manager-webhook-hetzner --set groupName=acme.my-domain.com
-```
-
-api-secret.yml
-
-```yaml
-apiVersion: v1
-kind: Secret
-metadata:
-  name: hetzner-secret
-  namespace: cert-manager
-type: Opaque
-stringData:
-  api-key: your-api-key  # <-- change
-```
-
-issuer.yml
-```yaml
-apiVersion: cert-manager.io/v1
-kind: ClusterIssuer
-metadata:
-  name: letsencrypt-production
-spec:
-  acme:
-    server: https://acme-v02.api.letsencrypt.org/directory
-    email: dns@my-domain.com      # <-- change
-
-    # Name of a secret used to store the ACME account private key
-    privateKeySecretRef:
-      name: letsencrypt-production
-
-    solvers:
-      - dns01:
-          webhook:
-            groupName: acme.my-domain.com   # <-- change
-            solverName: hetzner
-            config:
-              secretName: hetzner-secret
-              apiUrl: https://dns.hetzner.com/api/v1
-```
+Follow the steps from here to create the Hetzner dns challenge setup: [Here](https://github.com/hetzner/cert-manager-webhook-hetzner/blob/main/docs/guides/quickstart.md)
 
 Reinstall Rancher with the following command to get a valid certificate.
 
