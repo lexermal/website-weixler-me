@@ -4,11 +4,11 @@ Welcome to my GitHub! I’m passionate about creating impactful software solutio
 
 ## 📚 What I'm Working On:
 
-1. **[Rimori](https://github.com/lexermal/Rimori)**  
-   My biggest project to date, Rimori is an AI-driven study assistant designed to help students prepare for oral exams. Users face AI opponents that simulate different personas, enhancing learning through dynamic interactions. Rimori integrates **ChatGPT**, **ElevenLabs**, and **Claude3**, and is built using **Next.js**, **TailwindCSS**, and **Express**.
+1. **[Rimori](https://github.com/rimori-org/rimori)**  
+   My biggest project to date, Rimori is an AI-driven Swedish language and culture learning platform designed to help internationals integrate faster into Swedish society. Users study the culture though language exercises like flashcards, writing, discussions, role-plays and stories. Rimori integrates **GLM**, **ElevenLabs**, and **Supabase**, and is built using **Next.js**, **TailwindCSS**, and **Express**.
 
 2. **[Reflection Assistant](https://github.com/lexermal/reflection-assistant)**  
-   My newest project, the Reflection Assistant, processes daily entries from Dailio, guiding users through weekly reflections with personalized conversations using AI. This tool offers a unique blend of conversational AI that provides meaningful insights and self-improvement suggestions.
+   My favorite project, the Reflection Assistant, processes daily entries from Dailio, guiding users through weekly reflections with personalized conversations using AI. This tool offers a unique blend of conversational AI that provides meaningful insights and self-improvement suggestions.
 
 3. **[Basic K3s Cluster Setup](https://github.com/lexermal/website-weixler-me/tree/master/blog/Basic-cluster-setup)**  
    A detailed guide on setting up a K3s Kubernetes cluster on a VPS, including security configurations.
