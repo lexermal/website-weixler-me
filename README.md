@@ -4,7 +4,7 @@ Welcome to my GitHub! I’m passionate about creating impactful software solutio
 
 ## 📚 What I'm Working On:
 
-1. **[Rimori](https://github.com/rimori-org/rimori)**  
+1. **[Rimori](https://github.com/rimori-org)**  
    My biggest project to date, Rimori is an AI-driven Swedish language and culture learning platform designed to help internationals integrate faster into Swedish society. Users study the culture though language exercises like flashcards, writing, discussions, role-plays and stories. Rimori integrates **GLM**, **ElevenLabs**, and **Supabase**, and is built using **Next.js**, **TailwindCSS**, and **Express**.
 
 2. **[Reflection Assistant](https://github.com/lexermal/reflection-assistant)**  
