@@ -98,6 +98,7 @@ spec:
     app: minecraft-minecraft
 ----
 kind: IngressRoute
+apiVersion: traefik.io/v1alpha1
 metadata:
   name: family-minecraft-route
   namespace: minecraft
